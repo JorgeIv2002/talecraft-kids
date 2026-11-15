@@ -1,0 +1,22 @@
+{
+  "name": "TaleCraft Kids - Cuentos Interactivos",
+  "short_name": "TaleCraft",
+  "description": "Cuentos interactivos estilo 'Elige tu propia aventura' para niños con valores educativos.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FDFBF7",
+  "theme_color": "#D9532F",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-jakarta: 'Plus Jakarta Sans', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+}
+
+body {
+  background-color: #FDFBF7;
+  color: #1F2421;
+  font-family: var(--font-inter);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Scrollbar invisible para listas horizontales en móvil */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Efecto táctil suave para botones infantiles */
+.touch-press {
+  transition: transform 0.12s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.touch-press:active {
+  transform: scale(0.97);
+}
