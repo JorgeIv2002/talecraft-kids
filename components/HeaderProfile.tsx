@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Star, Crown, ChevronDown } from "lucide-react";
+import { Star, Crown, ChevronDown, Sparkles } from "lucide-react";
 import { ChildProfile } from "@/lib/types";
 
 interface HeaderProfileProps {
@@ -11,6 +11,7 @@ interface HeaderProfileProps {
   isNightMode: boolean;
   isPro: boolean;
   onOpenPersonalize: () => void;
+  onOpenShop: () => void;
 }
 
 export default function HeaderProfile({
@@ -20,7 +21,18 @@ export default function HeaderProfile({
   isNightMode,
   isPro,
   onOpenPersonalize,
+  onOpenShop,
 }: HeaderProfileProps) {
+  // Accesorio equipado
+  const accessoryEmoji =
+    profile.equippedAccessory === "acc-crown"
+      ? "👑"
+      : profile.equippedAccessory === "acc-cape"
+      ? "🧣"
+      : profile.equippedAccessory === "acc-compass"
+      ? "🧭"
+      : null;
+
   return (
     <header className="flex items-center justify-between pb-3 pt-1">
       {/* Información del Niño y Selector Multi-Hijo */}
@@ -35,6 +47,11 @@ export default function HeaderProfile({
           title="Editar perfil infantil"
         >
           {profile.avatarEmoji || "🦊"}
+          {accessoryEmoji && (
+            <div className="absolute -top-2 -left-1 text-sm drop-shadow">
+              {accessoryEmoji}
+            </div>
+          )}
           {isPro && (
             <div className="absolute -top-1 -right-1 bg-[#D97706] text-white p-0.5 rounded-full shadow-xs">
               <Crown className="w-2.5 h-2.5 fill-current" />
@@ -101,20 +118,25 @@ export default function HeaderProfile({
         </div>
       </div>
 
-      {/* Contador de Estrellas Mágicas */}
-      <div
-        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border shadow-xs select-none transition-all ${
+      {/* Botón Táctil: Bazar de Estrellas Mágicas */}
+      <button
+        onClick={onOpenShop}
+        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border shadow-xs select-none touch-press transition-all hover:scale-105 ${
           isNightMode
-            ? "bg-[#282218] border-[#78541D] text-[#FBBF24]"
-            : "bg-[#FEF9EE] border-[#FDE8B3] text-[#B45309]"
+            ? "bg-[#282218] border-[#78541D] text-[#FBBF24] hover:bg-[#382B18]"
+            : "bg-[#FEF9EE] border-[#FDE8B3] text-[#B45309] hover:bg-[#FEF3C7]"
         }`}
+        title="Toca para abrir el Bazar de las Estrellas Mágicas"
       >
         <Star className="w-4 h-4 fill-current animate-pulse text-[#E5A93C]" />
         <span className="font-display font-bold text-xs tracking-tight">
           {profile.starsCount}
         </span>
         <span className="text-[10px] opacity-80 font-semibold">★</span>
-      </div>
+        <span className="text-[9px] px-1 py-0.2 rounded-md bg-[#D97706]/20 text-[#B45309] font-bold">
+          Bazar
+        </span>
+      </button>
     </header>
   );
 }

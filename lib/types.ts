@@ -6,6 +6,15 @@ export type ValueCategory =
   | "Generosidad" 
   | "Curiosidad";
 
+export interface RewardItem {
+  id: string;
+  name: string;
+  type: "pet" | "accessory" | "sound";
+  costStars: number;
+  emoji: string;
+  description: string;
+}
+
 export interface ChildProfile {
   id: string;
   name: string;
@@ -14,6 +23,9 @@ export interface ChildProfile {
   starsCount: number;
   favoriteValue: ValueCategory;
   avatarEmoji?: string;
+  equippedAccessory?: string;
+  equippedSound?: string;
+  unlockedRewards: string[]; // IDs de ítems desbloqueados
 }
 
 export interface StoryChoice {

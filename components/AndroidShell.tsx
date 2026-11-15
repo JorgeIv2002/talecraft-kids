@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Sparkles, Moon, Sun, BookOpen, Crown, User } from "lucide-react";
+import { Sparkles, Moon, Sun, BookOpen, Crown, ShoppingBag } from "lucide-react";
 import { ChildProfile } from "@/lib/types";
 
 interface AndroidShellProps {
@@ -9,8 +9,8 @@ interface AndroidShellProps {
   profile: ChildProfile;
   isNightMode: boolean;
   onToggleNightMode: () => void;
-  activeTab: "library" | "create" | "pro";
-  onTabChange: (tab: "library" | "create" | "pro") => void;
+  activeTab: "library" | "create" | "pro" | "shop";
+  onTabChange: (tab: "library" | "create" | "pro" | "shop") => void;
 }
 
 export default function AndroidShell({
@@ -46,10 +46,10 @@ export default function AndroidShell({
             : "bg-[#FDFBF7] text-[#1F2421]"
         }`}
       >
-        {/* Notch / Cámara Frontal Punch Hole (sólo en marcos) */}
+        {/* Notch / Cámara Frontal Punch Hole */}
         <div className="hidden sm:block absolute top-2.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-[#1F2421] z-50 pointer-events-none" />
 
-        {/* Barra de Estado Android Superior (Status Bar) */}
+        {/* Barra de Estado Android Superior */}
         <div
           className={`pt-3 px-6 pb-2 flex items-center justify-between text-[11px] font-semibold tracking-tight z-40 select-none border-b transition-colors ${
             isNightMode
@@ -72,13 +72,13 @@ export default function AndroidShell({
 
         {/* Barra de Navegación Inferior Nativa Android */}
         <nav
-          className={`absolute bottom-0 left-0 right-0 h-16 px-6 flex items-center justify-around z-40 border-t backdrop-blur-md transition-colors ${
+          className={`absolute bottom-0 left-0 right-0 h-16 px-4 flex items-center justify-around z-40 border-t backdrop-blur-md transition-colors ${
             isNightMode
               ? "bg-[#161F2E]/95 border-[#2D3748] text-[#94A3B8]"
               : "bg-white/95 border-[#EFE9DF] text-[#635F59]"
           }`}
         >
-          {/* Tab 1: Cuentos (Biblioteca) */}
+          {/* Tab 1: Cuentos */}
           <button
             onClick={() => onTabChange("library")}
             className={`flex flex-col items-center gap-1 touch-press ${
@@ -91,7 +91,7 @@ export default function AndroidShell({
             <span className="text-[10px]">Cuentos</span>
           </button>
 
-          {/* Tab 2: Crear / Personalizar */}
+          {/* Tab 2: Héroe / Crear */}
           <button
             onClick={() => onTabChange("create")}
             className={`flex flex-col items-center gap-1 touch-press ${
@@ -101,7 +101,20 @@ export default function AndroidShell({
             }`}
           >
             <Sparkles className="w-5 h-5" strokeWidth={activeTab === "create" ? 2.2 : 1.75} />
-            <span className="text-[10px]">Héroe</span>
+            <span className="text-[10px]">Crear</span>
+          </button>
+
+          {/* Tab 3: Bazar de Estrellas */}
+          <button
+            onClick={() => onTabChange("shop")}
+            className={`flex flex-col items-center gap-1 touch-press ${
+              activeTab === "shop"
+                ? "text-storybook-coral font-bold"
+                : "hover:text-[#1F2421]"
+            }`}
+          >
+            <ShoppingBag className="w-5 h-5" strokeWidth={activeTab === "shop" ? 2.2 : 1.75} />
+            <span className="text-[10px]">Bazar ⭐</span>
           </button>
 
           {/* Botón Central: Modo Noche / Dormir */}
@@ -112,14 +125,14 @@ export default function AndroidShell({
             }`}
           >
             {isNightMode ? (
-              <Sun className="w-5 h-5 animate-spin-slow" strokeWidth={2} />
+              <Sun className="w-5 h-5" strokeWidth={2} />
             ) : (
               <Moon className="w-5 h-5" strokeWidth={1.75} />
             )}
             <span className="text-[10px]">{isNightMode ? "Día" : "Noche"}</span>
           </button>
 
-          {/* Tab 3: Membresía Familiar */}
+          {/* Tab 4: Membresía Familiar */}
           <button
             onClick={() => onTabChange("pro")}
             className={`flex flex-col items-center gap-1 touch-press ${
