@@ -25,7 +25,7 @@ export interface ChildProfile {
   avatarEmoji?: string;
   equippedAccessory?: string;
   equippedSound?: string;
-  unlockedRewards: string[]; // IDs de ítems desbloqueados
+  unlockedRewards: string[];
 }
 
 export interface StoryChoice {
@@ -63,5 +63,9 @@ export interface Story {
   decisionsCount: number;
   startNodeId: string;
   isPremium?: boolean;
+  isAudioOnly?: boolean;
+  collection: "popular" | "bedtime" | "values" | "audio";
+  gradientBg: string;
+  coverImageDesc?: string;
   nodes: Record<string, StoryNode>;
 }

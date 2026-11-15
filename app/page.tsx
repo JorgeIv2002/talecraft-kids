@@ -3,7 +3,9 @@
 import React, { useState, useEffect } from "react";
 import AndroidShell from "@/components/AndroidShell";
 import HeaderProfile from "@/components/HeaderProfile";
-import StoryCard from "@/components/StoryCard";
+import VooksHeroBanner from "@/components/VooksHeroBanner";
+import VooksCategoryCircles from "@/components/VooksCategoryCircles";
+import VooksSectionRow from "@/components/VooksSectionRow";
 import StoryReader from "@/components/StoryReader";
 import PersonalizeModal from "@/components/PersonalizeModal";
 import ProMembershipModal from "@/components/ProMembershipModal";
@@ -11,14 +13,14 @@ import StoryCreatorModal from "@/components/StoryCreatorModal";
 import StarShopModal from "@/components/StarShopModal";
 import { INITIAL_STORIES } from "@/lib/storiesData";
 import { Story, ChildProfile, RewardItem } from "@/lib/types";
-import { ArrowRight, Wand2, Crown, Sparkles, ShoppingBag } from "lucide-react";
+import { Crown, Sparkles, Wand2, Headphones, Star } from "lucide-react";
 
 export default function Home() {
   const [stories, setStories] = useState<Story[]>(INITIAL_STORIES);
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
   const [isNightMode, setIsNightMode] = useState(false);
   const [activeTab, setActiveTab] = useState<"library" | "create" | "pro" | "shop">("library");
-  const [filterCategory, setFilterCategory] = useState<string>("Todos");
+  const [activeFilterCategory, setActiveFilterCategory] = useState<string>("Todos");
 
   // Estado del Pase Pro Familiar
   const [isPro, setIsPro] = useState(false);
@@ -180,7 +182,6 @@ export default function Home() {
     });
   };
 
-  // Equipar ítem desbloqueado
   const handleEquipReward = (item: RewardItem) => {
     setProfilesList((prev) => {
       const next = prev.map((p) => {
@@ -228,11 +229,11 @@ export default function Home() {
     }
   };
 
-  // Filtrado de cuentos
-  const filteredStories =
-    filterCategory === "Todos"
-      ? stories
-      : stories.filter((s) => s.valueCategory === filterCategory);
+  // Colecciones estilo Vooks
+  const popularStories = stories.filter((s) => s.collection === "popular");
+  const bedtimeStories = stories.filter((s) => s.collection === "bedtime");
+  const valueStories = stories.filter((s) => s.collection === "values");
+  const audioStories = stories.filter((s) => s.collection === "audio" || s.isAudioOnly);
 
   const featuredStory = stories[0];
 
@@ -254,189 +255,142 @@ export default function Home() {
           onAwardStars={handleAwardStars}
         />
       ) : (
-        /* VISTA B: BIBLIOTECA Y EXPLORADOR DE CUENTOS */
-        <div className="space-y-4">
-          {/* Header con Perfil del Niño y Botón del Bazar */}
-          <HeaderProfile
+        /* VISTA B: BIBLIOTECA ESTILO VOOKS */
+        <div className="space-y-5">
+          {/* Header Superior con Logo Estilo Vooks y Perfil */}
+          <div className="flex items-center justify-between pt-1">
+            <HeaderProfile
+              profile={currentProfile}
+              profilesList={profilesList}
+              onSelectChild={handleSelectChild}
+              isNightMode={isNightMode}
+              isPro={isPro}
+              onOpenPersonalize={() => setIsPersonalizeOpen(true)}
+              onOpenShop={() => setIsShopOpen(true)}
+            />
+          </div>
+
+          {/* Logo Central de la Marca Estilo Vooks */}
+          <div className="text-center py-0.5">
+            <span className="font-display font-black text-2xl tracking-wider text-storybook-coral uppercase drop-shadow-2xs">
+              TALECRAFT
+            </span>
+            <span className="block text-[10px] font-display font-bold text-[#786C60] dark:text-slate-400 tracking-wide uppercase">
+              Cuentos que cobran vida
+            </span>
+          </div>
+
+          {/* 1. Tarjeta Cinematográfica Hero Estilo Vooks */}
+          <VooksHeroBanner
+            story={featuredStory}
             profile={currentProfile}
-            profilesList={profilesList}
-            onSelectChild={handleSelectChild}
             isNightMode={isNightMode}
-            isPro={isPro}
-            onOpenPersonalize={() => setIsPersonalizeOpen(true)}
-            onOpenShop={() => setIsShopOpen(true)}
+            onStartStory={(s) => setSelectedStory(s)}
           />
 
-          {/* Banner de Estado Pro Activo */}
-          {isPro ? (
-            <div className="rounded-3xl p-3.5 bg-gradient-to-r from-[#FEF3C7] to-[#FED7AA] dark:from-[#372614] dark:to-[#451A03] border-2 border-[#FDE68A] dark:border-[#78350F] flex items-center justify-between text-xs shadow-sm">
-              <div className="flex items-center gap-2.5">
-                <span className="p-2 rounded-2xl bg-[#F59E0B] text-white shadow-xs">
-                  <Crown className="w-4 h-4 fill-current" />
+          {/* 2. Círculos de Categorías Rápidas Estilo Vooks */}
+          <VooksCategoryCircles
+            activeCategory={activeFilterCategory}
+            onSelectCategory={(cat) => setActiveFilterCategory(cat)}
+            onOpenShop={() => setIsShopOpen(true)}
+            onOpenAudio={() => {
+              const firstAudio = stories.find((s) => s.isAudioOnly);
+              if (firstAudio) setSelectedStory(firstAudio);
+            }}
+            isNightMode={isNightMode}
+          />
+
+          {/* 3. Filas de Desplazamiento Horizontal estilo Vooks / Netflix Kids */}
+          <div className="space-y-6 pt-1">
+            {/* Fila 1: Populares y Destacados */}
+            <VooksSectionRow
+              title="Cuentos Populares"
+              subtitle="Las historias más queridas por los niños"
+              stories={popularStories}
+              isNightMode={isNightMode}
+              isPro={isPro}
+              onSelectStory={(s) => setSelectedStory(s)}
+              onRequestPro={() => setIsProOpen(true)}
+            />
+
+            {/* Fila 2: Cuentos para Dormir (Bedtime Stories) */}
+            <VooksSectionRow
+              title="Para la Hora de Dormir"
+              subtitle="Historias relajantes con luz suave para descansar"
+              stories={bedtimeStories}
+              isNightMode={isNightMode}
+              isPro={isPro}
+              onSelectStory={(s) => setSelectedStory(s)}
+              onRequestPro={() => setIsProOpen(true)}
+            />
+
+            {/* Fila 3: Audioteca Sin Pantalla (Screen-Free Audio) */}
+            <div className="rounded-[30px] p-4 bg-gradient-to-r from-[#0284C7] to-[#0369A1] text-white space-y-3 shadow-md border-2 border-white/20">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="p-2 rounded-2xl bg-white/20 text-xl">🎧</span>
+                  <div>
+                    <h3 className="font-display font-bold text-sm">Audioteca Mágica</h3>
+                    <p className="text-[11px] text-white/80 font-body">
+                      Escucha con los ojos cerrados antes de dormir
+                    </p>
+                  </div>
+                </div>
+                <span className="px-2.5 py-1 rounded-full bg-yellow-400 text-yellow-950 font-display font-black text-[10px] uppercase">
+                  NUEVO
                 </span>
-                <div>
-                  <span className="font-display font-bold text-amber-950 dark:text-amber-100 block text-xs">
-                    Pase Familiar Pro Activo
-                  </span>
-                  <span className="text-[11px] font-body text-amber-900/80 dark:text-amber-200">
-                    Todos los cuentos y generador ilimitado desbloqueados
-                  </span>
-                </div>
               </div>
-              <button
-                onClick={() => setIsCreatorOpen(true)}
-                className="btn-toy-coral px-3 py-1.5 rounded-xl bg-storybook-coral text-white font-display font-bold text-xs shadow-xs flex items-center gap-1"
-              >
-                <Wand2 className="w-3.5 h-3.5" />
-                <span>Crear Cuento</span>
-              </button>
-            </div>
-          ) : (
-            <div
-              onClick={() => setIsShopOpen(true)}
-              className="rounded-3xl p-3 bg-gradient-to-r from-[#FFFBEB] to-[#FEF3C7] dark:from-[#231E12] dark:to-[#382D13] border-2 border-[#FDE68A] dark:border-[#78541D] flex items-center justify-between text-xs cursor-pointer shadow-xs transition-transform hover:scale-[1.01] active:scale-[0.99]"
-            >
-              <div className="flex items-center gap-2.5">
-                <span className="text-2xl animate-bounce">🎁</span>
-                <div>
-                  <span className="font-display font-bold text-[#92400E] dark:text-[#FBBF24] block text-xs">
-                    ¡Tienes {currentProfile.starsCount} Estrellas Mágicas!
-                  </span>
-                  <span className="text-[11px] font-body text-[#B45309] dark:text-amber-200">
-                    Canjea por coronas, capas y nuevas mascotas
-                  </span>
-                </div>
-              </div>
-              <span className="btn-toy-amber px-3 py-1.5 rounded-xl bg-[#D97706] text-white font-display font-bold text-xs">
-                Abrir Bazar →
-              </span>
-            </div>
-          )}
 
-          {/* Banner Cuento Destacado Ilustrado */}
-          <section
-            className={`rounded-[32px] p-5 border-2 shadow-storybook relative overflow-hidden transition-all ${
-              isNightMode
-                ? "bg-gradient-to-b from-[#1C2035] to-[#15192B] border-[#2D3352] text-white"
-                : "bg-gradient-to-b from-[#FFFDF9] to-[#FFF5EB] border-[#FFDFD2] text-[#2D231B]"
-            }`}
-          >
-            <div className="flex items-center justify-between pb-1.5">
-              <span
-                className={`px-3 py-1 rounded-full text-xs font-display font-bold uppercase tracking-wider border ${
-                  isNightMode
-                    ? "bg-[#252C48] text-[#34D399] border-[#38436B]"
-                    : "bg-emerald-100 text-emerald-800 border-emerald-200"
-                }`}
-              >
-                🌿 Cuento de 4 Capítulos
-              </span>
-              <span
-                className={`text-xs font-display font-bold ${
-                  isNightMode ? "text-slate-400" : "text-[#786C60]"
-                }`}
-              >
-                ⏱ {featuredStory.estimatedMinutes} min lectura
-              </span>
-            </div>
-
-            <div className="space-y-1 mt-2.5">
-              <h2 className="font-display font-bold text-lg leading-tight">
-                {featuredStory.title}
-              </h2>
-              <p
-                className={`text-xs leading-relaxed font-body font-medium ${
-                  isNightMode ? "text-slate-300" : "text-[#6E6259]"
-                }`}
-              >
-                {featuredStory.synopsis}
-              </p>
-            </div>
-
-            <button
-              onClick={() => setSelectedStory(featuredStory)}
-              className="w-full mt-4 py-3 rounded-2xl btn-toy-coral bg-storybook-coral hover:bg-[#F05735] text-white font-display font-bold text-xs shadow-sm flex items-center justify-center gap-2"
-            >
-              <span>Comenzar Aventura con {currentProfile.name}</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </section>
-
-          {/* Filtros de Categorías Lúdicos */}
-          <div className="space-y-2 pt-1">
-            <div className="flex items-center justify-between">
-              <h3
-                className={`font-display font-bold text-xs tracking-tight ${
-                  isNightMode ? "text-slate-300" : "text-[#2D231B]"
-                }`}
-              >
-                Elegir por valor o emoción
-              </h3>
-              <span
-                className={`text-xs font-display font-bold ${
-                  isNightMode ? "text-slate-400" : "text-[#786C60]"
-                }`}
-              >
-                {filteredStories.length} cuentos
-              </span>
-            </div>
-
-            <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
-              {["Todos", "Amistad", "Perseverancia", "Naturaleza", "Generosidad"].map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setFilterCategory(cat)}
-                  className={`px-3.5 py-1.5 rounded-2xl text-xs font-display font-bold whitespace-nowrap transition-all border-2 active:scale-95 ${
-                    filterCategory === cat
-                      ? "bg-storybook-coral text-white border-[#D94524] shadow-xs"
-                      : isNightMode
-                      ? "bg-[#1C2035] border-[#2D3352] text-slate-300 hover:text-white"
-                      : "bg-white border-[#EFE6DA] text-[#6E6259] hover:border-storybook-coral"
-                  }`}
+              {audioStories.map((audioStory) => (
+                <div
+                  key={audioStory.id}
+                  onClick={() => setSelectedStory(audioStory)}
+                  className="p-3 rounded-2xl bg-white/10 hover:bg-white/20 transition-all flex items-center justify-between cursor-pointer border border-white/15"
                 >
-                  {cat === "Todos" && "🌟 Todos"}
-                  {cat === "Amistad" && "🤝 Amistad"}
-                  {cat === "Perseverancia" && "🚀 Perseverancia"}
-                  {cat === "Naturaleza" && "🌿 Naturaleza"}
-                  {cat === "Generosidad" && "🎁 Generosidad"}
-                </button>
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-2xl">{audioStory.coverEmoji}</span>
+                    <div>
+                      <h4 className="font-display font-bold text-xs">{audioStory.title}</h4>
+                      <span className="text-[10px] text-white/80 font-body">⏱ 10 min • Sonido de bosque y arpa</span>
+                    </div>
+                  </div>
+                  <span className="w-8 h-8 rounded-full bg-white text-[#0284C7] flex items-center justify-center font-display font-bold text-xs shadow-sm">
+                    ▶
+                  </span>
+                </div>
               ))}
             </div>
+
+            {/* Fila 4: Aventuras y Valores */}
+            <VooksSectionRow
+              title="Aventuras de Valentía y Empatía"
+              subtitle="Decisiones que despiertan el gran corazón de los niños"
+              stories={valueStories}
+              isNightMode={isNightMode}
+              isPro={isPro}
+              onSelectStory={(s) => setSelectedStory(s)}
+              onRequestPro={() => setIsProOpen(true)}
+            />
           </div>
 
-          {/* Listado de Cuentos */}
-          <div className="space-y-3.5 pt-1">
-            {filteredStories.map((story) => (
-              <StoryCard
-                key={story.id}
-                story={story}
-                isNightMode={isNightMode}
-                isPro={isPro}
-                onSelect={(s) => setSelectedStory(s)}
-                onRequestPro={() => setIsProOpen(true)}
-              />
-            ))}
-          </div>
-
-          {/* Banner Club Pro Familiar si no es Pro */}
+          {/* Banner de Membresía Familiar Estilo Vooks ("Hundreds of stories kids love") */}
           {!isPro ? (
             <div
               onClick={() => setIsProOpen(true)}
-              className="rounded-[30px] p-4.5 bg-[#1F2421] text-white border-2 border-[#38433B] shadow-md cursor-pointer transition-transform hover:scale-[1.01] flex items-center justify-between mt-2"
+              className="rounded-[34px] p-5 bg-gradient-to-br from-[#FF6B4A] via-[#F05735] to-[#D94524] text-white shadow-lg cursor-pointer transition-transform hover:scale-[1.01] flex items-center justify-between border-2 border-white/20 mt-3"
             >
-              <div className="space-y-0.5">
-                <span className="text-[11px] font-display font-extrabold uppercase tracking-wider text-storybook-coral flex items-center gap-1">
-                  <Crown className="w-3.5 h-3.5 fill-current" />
-                  Club de Cuentos Mágicos
+              <div className="space-y-1 max-w-[240px]">
+                <span className="px-2.5 py-0.5 rounded-full bg-white/20 text-[10px] font-display font-bold uppercase tracking-wider">
+                  Membresía Familiar Pro
                 </span>
-                <h4 className="font-display font-bold text-sm">
-                  Desbloquea todos los cuentos y perfiles
+                <h4 className="font-display font-bold text-base leading-tight">
+                  Cientos de Cuentos que a tus Hijos les Encantarán
                 </h4>
-                <p className="text-xs text-slate-300 font-body">
-                  Prueba 7 días gratis. Alterna cuando quieras.
+                <p className="text-[11px] text-white/90 font-body">
+                  Biblioteca ilimitada, multi-hijo y creador mágico. Prueba 7 días gratis.
                 </p>
               </div>
-              <span className="btn-toy-coral px-3 py-1.5 rounded-xl bg-storybook-coral text-white font-display font-bold text-xs shrink-0">
+              <span className="btn-toy-coral px-3.5 py-2.5 rounded-2xl bg-white text-storybook-coral hover:bg-[#FFF5EB] font-display font-extrabold text-xs shrink-0 shadow-md">
                 Ver Pro →
               </span>
             </div>

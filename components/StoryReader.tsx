@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Volume2, VolumeX, ArrowLeft, Star, Sparkles, CheckCircle2 } from "lucide-react";
+import { Volume2, VolumeX, ArrowLeft, Star, Sparkles, CheckCircle2, RotateCcw, Headphones } from "lucide-react";
 import { Story, StoryNode, ChildProfile } from "@/lib/types";
 
 interface StoryReaderProps {
@@ -25,17 +25,22 @@ export default function StoryReader({
 
   const currentNode: StoryNode = story.nodes[currentNodeId] || story.nodes[story.startNodeId];
 
-  // Reemplazar dinámicamente nombres por el héroe personalizado
+  // Reemplazar nombres dinámicos
   const personalizedText = currentNode.text
     .replace(/Barnaby/g, `Barnaby (con ${profile.name})`)
     .replace(/Mateo/g, profile.name)
     .replace(/Chispas/g, profile.petName);
 
-  // Narración por voz (Web Speech API)
+  // Divide el texto en oraciones para simular el "Highlighted read-along text" de Vooks
+  const sentences = personalizedText.split(". ").filter(Boolean);
+  const [activeSentenceIndex, setActiveSentenceIndex] = useState(0);
+
+  // Narración por voz (Web Speech API) con sincronización de lectura
   useEffect(() => {
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel();
       setIsNarrating(false);
+      setActiveSentenceIndex(0);
     }
     return () => {
       if (typeof window !== "undefined" && "speechSynthesis" in window) {
@@ -46,7 +51,7 @@ export default function StoryReader({
 
   const toggleNarration = () => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) {
-      alert("La narración por voz no está disponible en este navegador.");
+      alert("La narración no está disponible en este navegador.");
       return;
     }
 
@@ -56,9 +61,22 @@ export default function StoryReader({
     } else {
       const utterance = new SpeechSynthesisUtterance(personalizedText);
       utterance.lang = "es-ES";
-      utterance.rate = 0.88; // Ritmo pausado y relajante para niños
+      utterance.rate = 0.88;
       utterance.pitch = 1.05;
-      utterance.onend = () => setIsNarrating(false);
+
+      utterance.onboundary = (event) => {
+        // Estimar el avance de oración para el resaltado interactivo estilo Vooks
+        if (event.name === "sentence" || event.charIndex > 0) {
+          const ratio = event.charIndex / personalizedText.length;
+          const idx = Math.min(Math.floor(ratio * sentences.length), sentences.length - 1);
+          setActiveSentenceIndex(idx);
+        }
+      };
+
+      utterance.onend = () => {
+        setIsNarrating(false);
+        setActiveSentenceIndex(sentences.length - 1);
+      };
       utterance.onerror = () => setIsNarrating(false);
 
       window.speechSynthesis.speak(utterance);
@@ -83,8 +101,8 @@ export default function StoryReader({
   };
 
   return (
-    <div className="space-y-4 pb-8">
-      {/* Barra Superior del Cuento */}
+    <div className="space-y-4 pb-12">
+      {/* Barra Superior estilo Vooks Reader */}
       <div
         className={`flex items-center justify-between pb-3 border-b-2 ${
           isNightMode ? "border-[#252C48]" : "border-[#EFE6DA]"
@@ -99,7 +117,7 @@ export default function StoryReader({
           }`}
         >
           <ArrowLeft className="w-4 h-4 text-storybook-coral" />
-          <span>Volver</span>
+          <span>Biblioteca</span>
         </button>
 
         <div className="text-center">
@@ -115,7 +133,7 @@ export default function StoryReader({
           </span>
         </div>
 
-        {/* Botón de Audio Narrador */}
+        {/* Botón de Narración con Ondas Sonoras */}
         <button
           onClick={toggleNarration}
           className={`w-10 h-10 rounded-2xl flex items-center justify-center border-2 shadow-xs transition-all active:scale-95 ${
@@ -135,26 +153,30 @@ export default function StoryReader({
         </button>
       </div>
 
-      {/* Escena Ilustrada Activa tipo Página de Libro */}
+      {/* Escena Ilustrada Activa: Pantalla Vooks */}
       <div
-        className={`rounded-[36px] p-6 border-2 text-center space-y-4 shadow-storybook transition-colors relative overflow-hidden ${
+        className={`rounded-[36px] p-5 md:p-6 border-2 text-center space-y-4 shadow-storybook relative overflow-hidden transition-all ${
           isNightMode
             ? "bg-[#1C2035] border-[#2D3352] text-white"
             : "bg-gradient-to-b from-[#FFFDF9] to-[#FBF6ED] border-[#EFE6DA] text-[#2D231B]"
         }`}
       >
-        {/* Ilustración / Emoji con efecto de burbuja flotante */}
+        {/* Banner Ilustrado con Fondo de Color Vivo de la Historia */}
         <div
-          className={`w-24 h-24 mx-auto rounded-3xl flex items-center justify-center text-5xl shadow-sm border-2 transition-transform sparkle-float ${
-            isNightMode
-              ? "bg-[#252C48] border-[#38436B]"
-              : "bg-gradient-to-br from-[#FFF5EB] to-[#FFE5D4] border-[#FFD0B5]"
-          }`}
+          className={`w-full h-36 rounded-3xl bg-gradient-to-br ${story.gradientBg} flex items-center justify-center text-6xl shadow-md border-2 border-white/30 relative overflow-hidden sparkle-float`}
         >
-          <span>{currentNode.sceneEmoji}</span>
+          <span className="drop-shadow-lg transform hover:scale-110 transition-transform">
+            {currentNode.sceneEmoji}
+          </span>
+          {/* Badge Read-Along */}
+          <div className="absolute top-2.5 right-3 bg-black/30 backdrop-blur-md px-2.5 py-0.5 rounded-full text-white text-[10px] font-display font-bold flex items-center gap-1">
+            <Headphones className="w-2.5 h-2.5" />
+            <span>Read-Along Text</span>
+          </div>
         </div>
 
-        <div className="space-y-2.5 text-left">
+        {/* Texto con Resaltado Guiado (Highlighted Read-Along Text de Vooks) */}
+        <div className="space-y-3 text-left">
           <div className="flex items-center justify-between">
             <span
               className={`text-[11px] font-display font-bold uppercase tracking-wider px-3 py-1 rounded-full border ${
@@ -167,21 +189,34 @@ export default function StoryReader({
             </span>
             <span className="text-[11px] font-display font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1">
               <Sparkles className="w-3.5 h-3.5 fill-current" />
-              Tu decisión
+              Tu turno de elegir
             </span>
           </div>
 
-          <p
-            className={`text-base md:text-lg leading-relaxed font-body font-semibold ${
-              isNightMode ? "text-slate-100" : "text-[#3A2E24]"
-            }`}
-          >
-            {personalizedText}
-          </p>
+          {/* Oraciones interactivas */}
+          <div className="space-y-1.5 text-base md:text-lg leading-relaxed font-body font-semibold">
+            {sentences.map((sentence, idx) => {
+              const isHighlight = isNarrating && activeSentenceIndex === idx;
+              return (
+                <span
+                  key={idx}
+                  className={`transition-all duration-200 inline ${
+                    isHighlight
+                      ? "bg-amber-200/80 dark:bg-amber-900/60 text-[#2D231B] dark:text-amber-100 px-1 rounded-lg shadow-2xs font-bold"
+                      : isNightMode
+                      ? "text-slate-100"
+                      : "text-[#3A2E24]"
+                  }`}
+                >
+                  {sentence}.{" "}
+                </span>
+              );
+            })}
+          </div>
         </div>
       </div>
 
-      {/* Opciones de Decisión Táctiles estilo Juego Infantil */}
+      {/* Decisiones Táctiles Grandes Estilo Vooks */}
       {!currentNode.isEnding && currentNode.choices && (
         <div className="space-y-3 pt-2">
           <div
@@ -190,7 +225,7 @@ export default function StoryReader({
             }`}
           >
             <Sparkles className="w-4 h-4 text-storybook-coral animate-bounce" />
-            <span>¿Qué camino eliges para {profile.name}?</span>
+            <span>¿Qué decides que haga {profile.name}?</span>
           </div>
 
           <div className="space-y-2.5">
@@ -200,7 +235,7 @@ export default function StoryReader({
                 <button
                   key={choice.id}
                   onClick={() => handleChoice(choice.nextNodeId)}
-                  className={`w-full text-left p-4 rounded-3xl border-2 transition-all flex items-center justify-between group shadow-sm ${
+                  className={`w-full text-left p-4 rounded-3xl border-2 transition-all flex items-center justify-between group shadow-sm active:scale-98 ${
                     isFirst
                       ? "btn-toy-coral bg-gradient-to-r from-[#FF7A59] to-[#FF6B4A] border-[#D94524] text-white"
                       : "btn-toy-mint bg-gradient-to-r from-[#10B981] to-[#059669] border-[#047857] text-white"
@@ -229,7 +264,7 @@ export default function StoryReader({
         </div>
       )}
 
-      {/* Pantalla Final: Gran Moraleja y Celebración con Estrellas */}
+      {/* Pantalla Final: Moraleja y Estrellas */}
       {currentNode.isEnding && (
         <div className="space-y-3.5 pt-2">
           {currentNode.moralLesson && (

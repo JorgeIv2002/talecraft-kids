@@ -1,10 +1,11 @@
 import { Story } from "./types";
 
 export const INITIAL_STORIES: Story[] = [
+  // 1. POPULARES (HISTORIAS DESTACADAS)
   {
     id: "buho-linterna",
-    title: "El Búho que perdió su Linterna Mágica",
-    synopsis: "En el Bosque Susurrante, Barnaby no encuentra su linterna dorada. Una aventura de 4 capítulos donde descubrirá que los amigos hacen que la noche sea cálida y luminosa.",
+    title: "El Búho y la Linterna Mágica",
+    synopsis: "Barnaby busca su linterna dorada en el gran roble. Un cuento interactivo de 4 capítulos para vencer el miedo a la oscuridad con amigos.",
     valueCategory: "Amistad",
     estimatedMinutes: 8,
     coverEmoji: "🦉",
@@ -12,6 +13,8 @@ export const INITIAL_STORIES: Story[] = [
     decisionsCount: 4,
     startNodeId: "b-node-1",
     isPremium: false,
+    collection: "popular",
+    gradientBg: "from-[#2DD4BF] via-[#0D9488] to-[#115E59]",
     nodes: {
       "b-node-1": {
         id: "b-node-1",
@@ -136,14 +139,16 @@ export const INITIAL_STORIES: Story[] = [
   {
     id: "cohete-mateo",
     title: "El Cohete de Cartón de Mateo",
-    synopsis: "Mateo soñaba con tocar la Luna de Algodón. Un cuento de 4 capítulos sobre la paciencia, la creatividad y el valor de no rendirse cuando las cosas salen torcidas.",
+    synopsis: "Mateo y su perrito construyen una nave para tocar las estrellas. Cuando el alerón se rompe, aprenden que los inventores nunca se rinden.",
     valueCategory: "Perseverancia",
     estimatedMinutes: 9,
     coverEmoji: "🚀",
-    accentColor: "#D9532F",
+    accentColor: "#EA580C",
     decisionsCount: 4,
     startNodeId: "c-node-1",
     isPremium: false,
+    collection: "popular",
+    gradientBg: "from-[#F97316] via-[#EA580C] to-[#C2410C]",
     nodes: {
       "c-node-1": {
         id: "c-node-1",
@@ -238,17 +243,101 @@ export const INITIAL_STORIES: Story[] = [
       },
     },
   },
+
+  // 2. CUENTOS PARA DORMIR (BEDTIME STORIES - RELAJANTES)
   {
-    id: "dragon-flores",
-    title: "El Dragón que no quería quemar flores",
-    synopsis: "Flama es un dragón de escamas esmeralda que en vez de fuego exhala rocío perfumado. Un cuento de 4 capítulos sobre la valentía de ser diferente y cuidar la vida.",
+    id: "unicornio-cristal",
+    title: "El Secreto del Valle de Cristal",
+    synopsis: "Suri la unicornio descubre el poder de compartir sus manzanas mágicas bajo un manto de estrellas plateadas.",
+    valueCategory: "Generosidad",
+    estimatedMinutes: 7,
+    coverEmoji: "🦄",
+    accentColor: "#8B5CF6",
+    decisionsCount: 4,
+    startNodeId: "u-node-1",
+    isPremium: true,
+    collection: "bedtime",
+    gradientBg: "from-[#8B5CF6] via-[#6D28D9] to-[#4C1D95]",
+    nodes: {
+      "u-node-1": {
+        id: "u-node-1",
+        chapterNumber: 1,
+        totalChapters: 4,
+        sceneEmoji: "🍎",
+        text: "En el Valle de Cristal, cada siete años madura el Árbol de las Manzanas de Caramelo. Suri la unicornio de crines plateadas fue la primera en llegar y recolectó la cesta más hermosa y reluciente. Pero mientras caminaba hacia su cabaña, vio al pequeño conejito Gaspar buscando moras secas entre la nieve.",
+        choices: [
+          {
+            id: "u-1a",
+            label: "Detenerse y ofrecerle la manzana más grande y roja de la cesta",
+            hint: "Dar lo mejor que tenemos llena el corazón de calidez.",
+            nextNodeId: "u-node-2",
+          },
+          {
+            id: "u-1b",
+            label: "Invitar a Gaspar a caminar juntos y compartir la cesta completa",
+            hint: "La compañía sincera es más dulce que cualquier fruta.",
+            nextNodeId: "u-node-2",
+          },
+        ],
+      },
+      "u-node-2": {
+        id: "u-node-2",
+        chapterNumber: 2,
+        totalChapters: 4,
+        sceneEmoji: "🐇",
+        text: "Gaspar no podía creer lo deliciosa que era la manzana. '¡Gracias Suri! En la colina nevada viven tres ardillitas y una familia de pajaritos que no pudieron llegar al árbol por el hielo en sus alitas'.",
+        choices: [
+          {
+            id: "u-2a",
+            label: "Organizar una expedición de reparto para llevar fruta a todos los nidos",
+            hint: "La generosidad se multiplica cuando se pone en acción.",
+            nextNodeId: "u-node-3",
+          },
+        ],
+      },
+      "u-node-3": {
+        id: "u-node-3",
+        chapterNumber: 3,
+        totalChapters: 4,
+        sceneEmoji: "❄️",
+        text: "A medida que Suri entregaba cada fruta, notó algo asombroso: cada vez que su cesta quedaba casi vacía, el cuerno de su frente brillaba con un destello azul zafiro y una nueva manzana dorada aparecía mágicamente en su lugar.",
+        choices: [
+          {
+            id: "u-3a",
+            label: "Cantar el himno de la gratitud junto a todos los animales reunidos",
+            hint: "Celebrar en comunidad fortalece el lazo del amor.",
+            nextNodeId: "u-node-end",
+          },
+        ],
+      },
+      "u-node-end": {
+        id: "u-node-end",
+        chapterNumber: 4,
+        totalChapters: 4,
+        sceneEmoji: "✨",
+        text: "El Hada Guardiana del Valle descendió en una lluvia de purpurina: 'Suri, el Árbol de Cristal solo bendice a quienes entienden su ley secreta: lo que guardas para ti solo se marchita, pero lo que entregas de corazón nunca se agota'. Esa noche, ningún animalito del valle se fue a dormir con frío o hambre.",
+        isEnding: true,
+        moralLesson: {
+          title: "La Ley Dorada de la Generosidad",
+          description: "Compartir lo que tenemos no nos hace más pobres; nos enriquece con la alegría de ver sonreír a los demás.",
+          starsAwarded: 6,
+        },
+      },
+    },
+  },
+  {
+    id: "flama-dragon",
+    title: "El Dragón que Cuidaba las Flores",
+    synopsis: "Flama no lanza fuego, sino nubes tibias de rocío perfumado. Una historia dulce y balsámica sobre proteger la naturaleza.",
     valueCategory: "Naturaleza",
     estimatedMinutes: 8,
     coverEmoji: "🐲",
-    accentColor: "#059669",
+    accentColor: "#10B981",
     decisionsCount: 4,
     startNodeId: "d-node-1",
     isPremium: true,
+    collection: "values",
+    gradientBg: "from-[#10B981] via-[#059669] to-[#047857]",
     nodes: {
       "d-node-1": {
         id: "d-node-1",
@@ -322,80 +411,49 @@ export const INITIAL_STORIES: Story[] = [
       },
     },
   },
+
+  // 3. AUDIOTECA SIN PANTALLA (SCREEN-FREE AUDIO STORYBOOKS)
   {
-    id: "unicornio-cristal",
-    title: "El Misterio del Valle de Cristal",
-    synopsis: "Suri la unicornio descubre el secreto de los árboles de fruta encantada en 4 capítulos llenos de magia sobre la generosidad y el compartir.",
-    valueCategory: "Generosidad",
-    estimatedMinutes: 8,
-    coverEmoji: "🦄",
-    accentColor: "#9333EA",
-    decisionsCount: 4,
-    startNodeId: "u-node-1",
-    isPremium: true,
+    id: "audio-bosque-duerme",
+    title: "La Nana del Bosque que se Duerme",
+    synopsis: "Audiocuento relajante con sonido de grillitos y arpa de madera para cerrar los ojos y deslizarse al mundo de los sueños.",
+    valueCategory: "Curiosidad",
+    estimatedMinutes: 10,
+    coverEmoji: "🌙",
+    accentColor: "#3B82F6",
+    decisionsCount: 2,
+    startNodeId: "aud-node-1",
+    isPremium: false,
+    isAudioOnly: true,
+    collection: "audio",
+    gradientBg: "from-[#38BDF8] via-[#0284C7] to-[#0369A1]",
     nodes: {
-      "u-node-1": {
-        id: "u-node-1",
+      "aud-node-1": {
+        id: "aud-node-1",
         chapterNumber: 1,
-        totalChapters: 4,
-        sceneEmoji: "🍎",
-        text: "En el Valle de Cristal, cada siete años madura el Árbol de las Manzanas de Caramelo. Suri la unicornio de crines plateadas fue la primera en llegar y recolectó la cesta más hermosa y reluciente. Pero mientras caminaba hacia su cabaña, vio al pequeño conejito Gaspar buscando moras secas entre la nieve.",
+        totalChapters: 2,
+        sceneEmoji: "🌌",
+        text: "Cierra suavemente tus ojitos... Siente cómo la almohada abraza tu cabeza como una nube tibia. En la espesura del bosque, los ciervos se recuestan sobre musgo suave. El arroyo murmura una canción de cuna que dice: todo está bien, estás a salvo.",
         choices: [
           {
-            id: "u-1a",
-            label: "Detenerse y ofrecerle la manzana más grande y roja de la cesta",
-            hint: "Dar lo mejor que tenemos llena el corazón de calidez.",
-            nextNodeId: "u-node-2",
-          },
-          {
-            id: "u-1b",
-            label: "Invitar a Gaspar a caminar juntos y compartir la cesta completa",
-            hint: "La compañía sincera es más dulce que cualquier fruta.",
-            nextNodeId: "u-node-2",
+            id: "aud-choice-1",
+            label: "Respirar profundo como las olas del mar y seguir escuchando",
+            hint: "Inhala calma, exhala tranquilidad.",
+            nextNodeId: "aud-node-end",
           },
         ],
       },
-      "u-node-2": {
-        id: "u-node-2",
+      "aud-node-end": {
+        id: "aud-node-end",
         chapterNumber: 2,
-        totalChapters: 4,
-        sceneEmoji: "🐇",
-        text: "Gaspar no podía creer lo deliciosa que era la manzana. '¡Gracias Suri! En la colina nevada viven tres ardillitas y una familia de pajaritos que no pudieron llegar al árbol por el hielo en sus alitas'.",
-        choices: [
-          {
-            id: "u-2a",
-            label: "Organizar una expedición de reparto para llevar fruta a todos los nidos",
-            hint: "La generosidad se multiplica cuando se pone en acción.",
-            nextNodeId: "u-node-3",
-          },
-        ],
-      },
-      "u-node-3": {
-        id: "u-node-3",
-        chapterNumber: 3,
-        totalChapters: 4,
-        sceneEmoji: "❄️",
-        text: "A medida que Suri entregaba cada fruta, notó algo asombroso: cada vez que su cesta quedaba casi vacía, el cuerno de su frente brillaba con un destello azul zafiro y una nueva manzana dorada aparecía mágicamente en su lugar.",
-        choices: [
-          {
-            id: "u-3a",
-            label: "Cantar el himno de la gratitud junto a todos los animales reunidos",
-            hint: "Celebrar en comunidad fortalece el lazo del amor.",
-            nextNodeId: "u-node-end",
-          },
-        ],
-      },
-      "u-node-end": {
-        id: "u-node-end",
-        chapterNumber: 4,
-        totalChapters: 4,
-        sceneEmoji: "✨",
-        text: "El Hada Guardiana del Valle descendió en una lluvia de purpurina: 'Suri, el Árbol de Cristal solo bendice a quienes entienden su ley secreta: lo que guardas para ti solo se marchita, pero lo que entregas de corazón nunca se agota'. Esa noche, ningún animalito del valle se fue a dormir con frío o hambre.",
+        totalChapters: 2,
+        sceneEmoji: "😴",
+        text: "Una a una, las estrellitas del cielo titilan y te desean buenas noches. Tu respiración es suave, tu corazón está lleno de paz. Dulces sueños, pequeño gran héroe.",
         isEnding: true,
         moralLesson: {
-          title: "La Ley Dorada de la Generosidad",
-          description: "Compartir lo que tenemos no nos hace más pobres; nos enriquece con la alegría de ver sonreír a los demás.",
-          starsAwarded: 6,
+          title: "Paz Interior y Gratitud Nocturna",
+          description: "Agradecer por las cosas bonitas del día prepara nuestro descanso para despertar llenos de alegría.",
+          starsAwarded: 5,
         },
       },
     },
