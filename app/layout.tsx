@@ -69,6 +69,17 @@ export default function RootLayout({
     <html lang="es" suppressHydrationWarning className={`${fredoka.variable} ${nunito.variable}`}>
       <body suppressHydrationWarning className="bg-[#FAF7F2] text-[#2C241D] min-h-screen antialiased selection:bg-[#FFE3B3] font-body">
         {children}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/sw.js').catch(function() {});
+                });
+              }
+            `,
+          }}
+        />
       </body>
     </html>
   );

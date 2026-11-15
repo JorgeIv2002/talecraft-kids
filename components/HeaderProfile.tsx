@@ -95,6 +95,13 @@ export default function HeaderProfile({
             <span className="text-[11px] font-display font-bold px-2 py-0.5 rounded-full bg-[#FFEAE3] text-storybook-coral border border-[#FFD5C8]">
               {profile.age} años
             </span>
+            <span
+              className="text-[10px] font-display font-bold px-2 py-0.5 rounded-full bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] flex items-center gap-0.5 shadow-2xs"
+              title="Racha de lectura antes de dormir"
+            >
+              <span>🔥</span>
+              <span>3 noches</span>
+            </span>
           </div>
 
           <p

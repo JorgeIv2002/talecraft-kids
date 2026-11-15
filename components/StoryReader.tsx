@@ -11,6 +11,7 @@ import {
   Play,
   Pause,
   Music,
+  Moon,
 } from "lucide-react";
 import { Story, StoryNode, ChildProfile } from "@/lib/types";
 
@@ -58,6 +59,8 @@ export default function StoryReader({
   const [progressPercent, setProgressPercent] = useState(0);
   const [activeSentenceIndex, setActiveSentenceIndex] = useState(0);
   const [isBgMusicEnabled, setIsBgMusicEnabled] = useState(true);
+  const [sleepTimerMinutes, setSleepTimerMinutes] = useState<number>(0);
+  const [timerSecondsLeft, setTimerSecondsLeft] = useState<number>(0);
 
   // Controladores de audio y peticiones concurrentes
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -202,6 +205,44 @@ export default function StoryReader({
       stopAudio();
     };
   }, [currentNodeId, stopAudio]);
+
+  // Temporizador de sueño para la hora de dormir
+  useEffect(() => {
+    if (sleepTimerMinutes === 0) {
+      setTimerSecondsLeft(0);
+      return;
+    }
+    setTimerSecondsLeft(sleepTimerMinutes * 60);
+  }, [sleepTimerMinutes]);
+
+  useEffect(() => {
+    if (timerSecondsLeft <= 0 || audioState !== "playing") return;
+
+    const interval = setInterval(() => {
+      setTimerSecondsLeft((prev) => {
+        if (prev <= 1) {
+          stopAudio();
+          setSleepTimerMinutes(0);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timerSecondsLeft, audioState, stopAudio]);
+
+  const handleCycleSleepTimer = () => {
+    const cycle = [0, 5, 15, 30];
+    const nextIdx = (cycle.indexOf(sleepTimerMinutes) + 1) % cycle.length;
+    setSleepTimerMinutes(cycle[nextIdx]);
+  };
+
+  const formatTimer = (secs: number) => {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m}:${s < 10 ? "0" : ""}${s}`;
+  };
 
   // Ejecutor de audio con protección de concurrencia
   const playAudioWithVoice = async (voiceId: string) => {
@@ -435,18 +476,37 @@ export default function StoryReader({
             <span>📖</span>
             <span>Narradora del Cuento:</span>
           </span>
-          <button
-            onClick={() => setIsBgMusicEnabled(!isBgMusicEnabled)}
-            className={`text-[11px] flex items-center gap-1 px-2 py-0.5 rounded-full border transition-colors ${
-              isBgMusicEnabled
-                ? "bg-amber-100 border-amber-300 text-amber-800 dark:bg-amber-950 dark:text-amber-200"
-                : "bg-slate-100 border-slate-200 text-slate-500 dark:bg-slate-800 dark:text-slate-400"
-            }`}
-            title="Activar/desactivar música suave de fondo"
-          >
-            <Music className="w-3 h-3" />
-            <span>{isBgMusicEnabled ? "Fondo musical activo" : "Sin música"}</span>
-          </button>
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={handleCycleSleepTimer}
+              className={`text-[11px] flex items-center gap-1 px-2.5 py-0.5 rounded-full border transition-all active:scale-95 ${
+                sleepTimerMinutes > 0
+                  ? "bg-indigo-100 border-indigo-300 text-indigo-900 dark:bg-indigo-950 dark:text-indigo-200 font-bold"
+                  : "bg-slate-100 border-slate-200 text-slate-500 dark:bg-slate-800 dark:text-slate-400"
+              }`}
+              title="Temporizador de apagado de cuna para dormir"
+            >
+              <Moon className="w-3 h-3 text-indigo-500" />
+              <span>
+                {sleepTimerMinutes > 0
+                  ? `Apagar: ${formatTimer(timerSecondsLeft)}`
+                  : "Sueño"}
+              </span>
+            </button>
+
+            <button
+              onClick={() => setIsBgMusicEnabled(!isBgMusicEnabled)}
+              className={`text-[11px] flex items-center gap-1 px-2 py-0.5 rounded-full border transition-colors ${
+                isBgMusicEnabled
+                  ? "bg-amber-100 border-amber-300 text-amber-800 dark:bg-amber-950 dark:text-amber-200"
+                  : "bg-slate-100 border-slate-200 text-slate-500 dark:bg-slate-800 dark:text-slate-400"
+              }`}
+              title="Activar/desactivar música suave de fondo"
+            >
+              <Music className="w-3 h-3" />
+              <span>{isBgMusicEnabled ? "Música" : "Muda"}</span>
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-3 gap-2">
