@@ -7,42 +7,79 @@ import StoryCard from "@/components/StoryCard";
 import StoryReader from "@/components/StoryReader";
 import PersonalizeModal from "@/components/PersonalizeModal";
 import ProMembershipModal from "@/components/ProMembershipModal";
+import StoryCreatorModal from "@/components/StoryCreatorModal";
 import { INITIAL_STORIES } from "@/lib/storiesData";
-import { Story, ChildProfile, ValueCategory } from "@/lib/types";
-import { Sparkles, Moon, Sun, ArrowRight, ShieldCheck, Flame } from "lucide-react";
+import { Story, ChildProfile } from "@/lib/types";
+import { ArrowRight, Wand2, Crown, Sparkles, CheckCircle2 } from "lucide-react";
 
 export default function Home() {
-  const [stories] = useState<Story[]>(INITIAL_STORIES);
+  const [stories, setStories] = useState<Story[]>(INITIAL_STORIES);
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
   const [isNightMode, setIsNightMode] = useState(false);
   const [activeTab, setActiveTab] = useState<"library" | "create" | "pro">("library");
   const [filterCategory, setFilterCategory] = useState<string>("Todos");
 
-  // Perfil Infantil en Estado Local persistente
-  const [profile, setProfile] = useState<ChildProfile>({
-    name: "Leo",
-    age: 7,
-    petName: "Chispas el perrito",
-    starsCount: 14,
-    favoriteValue: "Amistad",
-  });
+  // Estado del Pase Pro Familiar
+  const [isPro, setIsPro] = useState(false);
+
+  // Lista de perfiles familiares (Multi-Hijo Pro)
+  const [profilesList, setProfilesList] = useState<ChildProfile[]>([
+    {
+      id: "child-1",
+      name: "Leo",
+      age: 7,
+      petName: "Chispas el perrito",
+      starsCount: 14,
+      favoriteValue: "Amistad",
+      avatarEmoji: "🦊",
+    },
+    {
+      id: "child-2",
+      name: "Sofía",
+      age: 5,
+      petName: "Mishi el gatito",
+      starsCount: 19,
+      favoriteValue: "Generosidad",
+      avatarEmoji: "🦁",
+    },
+  ]);
+
+  const [activeChildId, setActiveChildId] = useState<string>("child-1");
 
   const [isPersonalizeOpen, setIsPersonalizeOpen] = useState(false);
   const [isProOpen, setIsProOpen] = useState(false);
+  const [isCreatorOpen, setIsCreatorOpen] = useState(false);
+
+  // Perfil activo actual
+  const currentProfile =
+    profilesList.find((p) => p.id === activeChildId) || profilesList[0];
 
   // Cargar estado guardado al iniciar
   useEffect(() => {
     try {
-      const savedProfile = localStorage.getItem("talecraft_profile");
-      if (savedProfile) {
-        setProfile(JSON.parse(savedProfile));
+      const savedPro = localStorage.getItem("talecraft_is_pro");
+      if (savedPro) {
+        setIsPro(JSON.parse(savedPro));
+      }
+      const savedProfiles = localStorage.getItem("talecraft_profiles_list");
+      if (savedProfiles) {
+        setProfilesList(JSON.parse(savedProfiles));
+      }
+      const savedActiveChild = localStorage.getItem("talecraft_active_child");
+      if (savedActiveChild) {
+        setActiveChildId(savedActiveChild);
       }
       const savedNight = localStorage.getItem("talecraft_night");
       if (savedNight) {
         setIsNightMode(JSON.parse(savedNight));
       }
+      const savedCustomStories = localStorage.getItem("talecraft_custom_stories");
+      if (savedCustomStories) {
+        const customs = JSON.parse(savedCustomStories);
+        setStories([...INITIAL_STORIES, ...customs]);
+      }
     } catch {
-      // Ignorar errores de localStorage en SSR
+      // Ignorar errores en SSR
     }
   }, []);
 
@@ -56,26 +93,70 @@ export default function Home() {
     });
   };
 
-  const handleSaveProfile = (updated: ChildProfile) => {
-    setProfile(updated);
+  const handleTogglePro = (active: boolean) => {
+    setIsPro(active);
     try {
-      localStorage.setItem("talecraft_profile", JSON.stringify(updated));
+      localStorage.setItem("talecraft_is_pro", JSON.stringify(active));
+    } catch {}
+  };
+
+  const handleSaveProfile = (updated: ChildProfile) => {
+    setProfilesList((prev) => {
+      const next = prev.map((p) => (p.id === updated.id ? updated : p));
+      try {
+        localStorage.setItem("talecraft_profiles_list", JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+  };
+
+  const handleAddChild = (newChild: ChildProfile) => {
+    setProfilesList((prev) => {
+      const next = [...prev, newChild];
+      try {
+        localStorage.setItem("talecraft_profiles_list", JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+    setActiveChildId(newChild.id);
+  };
+
+  const handleSelectChild = (id: string) => {
+    setActiveChildId(id);
+    try {
+      localStorage.setItem("talecraft_active_child", id);
     } catch {}
   };
 
   const handleAwardStars = (count: number) => {
-    setProfile((prev) => {
-      const updated = { ...prev, starsCount: prev.starsCount + count };
+    setProfilesList((prev) => {
+      const next = prev.map((p) =>
+        p.id === currentProfile.id
+          ? { ...p, starsCount: p.starsCount + count }
+          : p
+      );
       try {
-        localStorage.setItem("talecraft_profile", JSON.stringify(updated));
+        localStorage.setItem("talecraft_profiles_list", JSON.stringify(next));
       } catch {}
-      return updated;
+      return next;
     });
+  };
+
+  const handleStoryCreated = (newStory: Story) => {
+    setStories((prev) => {
+      const next = [newStory, ...prev];
+      try {
+        const customOnly = next.filter((s) => s.id.startsWith("custom-"));
+        localStorage.setItem("talecraft_custom_stories", JSON.stringify(customOnly));
+      } catch {}
+      return next;
+    });
+    setSelectedStory(newStory);
   };
 
   const handleTabChange = (tab: "library" | "create" | "pro") => {
     if (tab === "create") {
-      setIsPersonalizeOpen(true);
+      setIsCreatorOpen(true);
     } else if (tab === "pro") {
       setIsProOpen(true);
     } else {
@@ -94,7 +175,7 @@ export default function Home() {
 
   return (
     <AndroidShell
-      profile={profile}
+      profile={currentProfile}
       isNightMode={isNightMode}
       onToggleNightMode={handleToggleNightMode}
       activeTab={activeTab}
@@ -104,7 +185,7 @@ export default function Home() {
       {selectedStory ? (
         <StoryReader
           story={selectedStory}
-          profile={profile}
+          profile={currentProfile}
           isNightMode={isNightMode}
           onExit={() => setSelectedStory(null)}
           onAwardStars={handleAwardStars}
@@ -112,12 +193,41 @@ export default function Home() {
       ) : (
         /* VISTA B: BIBLIOTECA Y EXPLORADOR DE CUENTOS */
         <div className="space-y-4">
-          {/* Header con Perfil del Niño */}
+          {/* Header con Perfil del Niño y Selector Multi-Hijo */}
           <HeaderProfile
-            profile={profile}
+            profile={currentProfile}
+            profilesList={profilesList}
+            onSelectChild={handleSelectChild}
             isNightMode={isNightMode}
+            isPro={isPro}
             onOpenPersonalize={() => setIsPersonalizeOpen(true)}
           />
+
+          {/* Banner de Estado Pro Activo o Promoción */}
+          {isPro ? (
+            <div className="rounded-2xl p-3 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/40 dark:to-orange-950/30 border border-amber-200 dark:border-amber-800/50 flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2">
+                <span className="p-1.5 rounded-xl bg-amber-500 text-white shadow-xs">
+                  <Crown className="w-4 h-4 fill-current" />
+                </span>
+                <div>
+                  <span className="font-display font-bold text-amber-900 dark:text-amber-200 block">
+                    Pase Familiar Pro Activo
+                  </span>
+                  <span className="text-[10px] text-amber-700 dark:text-amber-300">
+                    Todos los cuentos y generador ilimitado desbloqueados
+                  </span>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsCreatorOpen(true)}
+                className="px-2.5 py-1 rounded-xl bg-storybook-coral text-white font-bold text-[11px] touch-press shadow-xs flex items-center gap-1"
+              >
+                <Wand2 className="w-3 h-3" />
+                <span>Crear Cuento</span>
+              </button>
+            </div>
+          ) : null}
 
           {/* Banner Cuento Recomendado de la Noche */}
           <section
@@ -163,7 +273,7 @@ export default function Home() {
               onClick={() => setSelectedStory(featuredStory)}
               className="w-full mt-3.5 py-2.5 rounded-2xl bg-storybook-coral hover:bg-storybook-coralHover text-white font-display font-bold text-xs shadow-sm touch-press flex items-center justify-center gap-2"
             >
-              <span>Comenzar Aventura con {profile.name}</span>
+              <span>Comenzar Aventura con {currentProfile.name}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </section>
@@ -188,7 +298,7 @@ export default function Home() {
             </div>
 
             <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
-              {["Todos", "Amistad", "Perseverancia", "Naturaleza"].map((cat) => (
+              {["Todos", "Amistad", "Perseverancia", "Naturaleza", "Generosidad"].map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setFilterCategory(cat)}
@@ -204,43 +314,49 @@ export default function Home() {
                   {cat === "Amistad" && "🤝 Amistad"}
                   {cat === "Perseverancia" && "🦁 Perseverancia"}
                   {cat === "Naturaleza" && "🌿 Naturaleza"}
+                  {cat === "Generosidad" && "🎁 Generosidad"}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Listado de Cuentos */}
+          {/* Listado de Cuentos (con candado reactivo a Pro) */}
           <div className="space-y-3 pt-1">
             {filteredStories.map((story) => (
               <StoryCard
                 key={story.id}
                 story={story}
                 isNightMode={isNightMode}
+                isPro={isPro}
                 onSelect={(s) => setSelectedStory(s)}
+                onRequestPro={() => setIsProOpen(true)}
               />
             ))}
           </div>
 
-          {/* Banner Club Pro Familiar */}
-          <div
-            onClick={() => setIsProOpen(true)}
-            className="rounded-3xl p-4 bg-[#1F2421] text-white border border-[#2F3732] shadow-md cursor-pointer touch-press flex items-center justify-between mt-2"
-          >
-            <div className="space-y-0.5">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-storybook-coral">
-                Club de Cuentos Mágicos
+          {/* Banner Club Pro Familiar si no es Pro */}
+          {!isPro ? (
+            <div
+              onClick={() => setIsProOpen(true)}
+              className="rounded-3xl p-4 bg-[#1F2421] text-white border border-[#2F3732] shadow-md cursor-pointer touch-press flex items-center justify-between mt-2"
+            >
+              <div className="space-y-0.5">
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-storybook-coral flex items-center gap-1">
+                  <Crown className="w-3 h-3 fill-current" />
+                  Club de Cuentos Mágicos
+                </span>
+                <h4 className="font-display font-bold text-xs">
+                  Desbloquea todos los cuentos y perfiles
+                </h4>
+                <p className="text-[10px] text-slate-300">
+                  Prueba 7 días gratis. Alterna cuando quieras.
+                </p>
+              </div>
+              <span className="px-2.5 py-1.5 rounded-xl bg-storybook-coral text-white font-display font-bold text-[11px] shrink-0">
+                Ver Pro →
               </span>
-              <h4 className="font-display font-bold text-xs">
-                Desbloquea más de 50 aventuras
-              </h4>
-              <p className="text-[10px] text-slate-300">
-                Historias ilimitadas sin anuncios por $6.99/mes
-              </p>
             </div>
-            <span className="px-2.5 py-1.5 rounded-xl bg-storybook-coral text-white font-display font-bold text-[11px] shrink-0">
-              Ver Pro →
-            </span>
-          </div>
+          ) : null}
         </div>
       )}
 
@@ -248,15 +364,37 @@ export default function Home() {
       <PersonalizeModal
         isOpen={isPersonalizeOpen}
         onClose={() => setIsPersonalizeOpen(false)}
-        profile={profile}
+        profile={currentProfile}
+        profilesList={profilesList}
         onSave={handleSaveProfile}
+        onAddChild={handleAddChild}
+        onSelectChild={handleSelectChild}
         isNightMode={isNightMode}
+        isPro={isPro}
+        onRequestPro={() => {
+          setIsPersonalizeOpen(false);
+          setIsProOpen(true);
+        }}
       />
 
       <ProMembershipModal
         isOpen={isProOpen}
         onClose={() => setIsProOpen(false)}
         isNightMode={isNightMode}
+        isPro={isPro}
+        onTogglePro={handleTogglePro}
+      />
+
+      <StoryCreatorModal
+        isOpen={isCreatorOpen}
+        onClose={() => setIsCreatorOpen(false)}
+        isNightMode={isNightMode}
+        isPro={isPro}
+        onRequestPro={() => {
+          setIsCreatorOpen(false);
+          setIsProOpen(true);
+        }}
+        onStoryCreated={handleStoryCreated}
       />
     </AndroidShell>
   );

@@ -11,6 +11,7 @@ export const INITIAL_STORIES: Story[] = [
     accentColor: "#3A7D6B",
     decisionsCount: 3,
     startNodeId: "node-1",
+    isPremium: false,
     nodes: {
       "node-1": {
         id: "node-1",
@@ -126,6 +127,7 @@ export const INITIAL_STORIES: Story[] = [
     accentColor: "#D9532F",
     decisionsCount: 3,
     startNodeId: "c-node-1",
+    isPremium: false,
     nodes: {
       "c-node-1": {
         id: "c-node-1",
@@ -203,6 +205,7 @@ export const INITIAL_STORIES: Story[] = [
     accentColor: "#059669",
     decisionsCount: 2,
     startNodeId: "d-node-1",
+    isPremium: true,
     nodes: {
       "d-node-1": {
         id: "d-node-1",
@@ -235,7 +238,55 @@ export const INITIAL_STORIES: Story[] = [
         moralLesson: {
           title: "Autenticidad y Amor por la Naturaleza",
           description: "No tienes que ser igual a todos los demás para ser extraordinario. Tu bondad y tus talentos únicos son tu mayor tesoro.",
-          starsAwarded: 2,
+          starsAwarded: 3,
+        },
+      },
+    },
+  },
+  {
+    id: "unicornio-cristal",
+    title: "El Misterio del Valle de Cristal",
+    synopsis: "Suri la unicornio perdió el brillo de su cuerno porque olvidó compartir sus manzanas mágicas con sus vecinos.",
+    valueCategory: "Generosidad",
+    estimatedMinutes: 5,
+    coverEmoji: "🦄",
+    accentColor: "#9333EA",
+    decisionsCount: 3,
+    startNodeId: "u-node-1",
+    isPremium: true,
+    nodes: {
+      "u-node-1": {
+        id: "u-node-1",
+        chapterNumber: 1,
+        totalChapters: 2,
+        sceneEmoji: "🍎",
+        text: "Suri guardó la última manzana mágica de la temporada debajo de una hoja gigante. De pronto vio a un cervatillo temblando de hambre en el camino.",
+        choices: [
+          {
+            id: "u-1a",
+            label: "Partir la manzana a la mitad y ofrecérsela con una sonrisa",
+            hint: "Lo que se comparte de corazón se multiplica.",
+            nextNodeId: "u-node-end",
+          },
+          {
+            id: "u-1b",
+            label: "Buscar bayas silvestres juntos para tener un festín aún más grande",
+            hint: "La generosidad une a quienes estaban solos.",
+            nextNodeId: "u-node-end",
+          },
+        ],
+      },
+      "u-node-end": {
+        id: "u-node-end",
+        chapterNumber: 2,
+        totalChapters: 2,
+        sceneEmoji: "✨",
+        text: "Al compartir su alimento, el cuerno de Suri resplandeció con todos los colores del arcoíris. ¡Todo el valle floreció con árboles repletos de frutas dulces!",
+        isEnding: true,
+        moralLesson: {
+          title: "La Riqueza de Compartir",
+          description: "Quien comparte nunca se queda sin nada: gana la compañía y el cariño sincero de los demás.",
+          starsAwarded: 3,
         },
       },
     },

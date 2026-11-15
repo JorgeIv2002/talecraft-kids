@@ -7,11 +7,13 @@ export type ValueCategory =
   | "Curiosidad";
 
 export interface ChildProfile {
+  id: string;
   name: string;
   age: number;
   petName: string;
   starsCount: number;
   favoriteValue: ValueCategory;
+  avatarEmoji?: string;
 }
 
 export interface StoryChoice {
@@ -48,5 +50,6 @@ export interface Story {
   accentColor: string;
   decisionsCount: number;
   startNodeId: string;
+  isPremium?: boolean;
   nodes: Record<string, StoryNode>;
 }
