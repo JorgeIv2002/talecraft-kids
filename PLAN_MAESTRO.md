@@ -47,3 +47,9 @@
 - [x] Generación de kit de marketing en `/marketing/REDES_SOCIALES.md` y `/marketing/ANUNCIOS.md`
 - [x] Inicialización y commit en repositorio Git local
 - [x] Entrega del Reporte Final de Lanzamiento
+
+### Etapa 6: Expansión, Distribución y Retención V2
+- [x] Guiones virales verticales (9:16) y prompts para TikTok/Reels/Shorts (`/marketing/videos/GUIONES_Y_PROMPTS.md`)
+- [x] Guía de registro en directorios con copy optimizado (`/marketing/automatizacion/DIRECTORIOS_LANZAMIENTO.md`)
+- [x] Script automatizado de distribución por Webhooks (`/marketing/automatizacion/webhook-publicador.js`)
+- [x] Auditoría de producto, retención parental y plan de escalabilidad (`ROADMAP_V2.md`)
