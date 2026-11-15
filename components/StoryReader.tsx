@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Volume2, VolumeX, ArrowLeft, Star, Sparkles, CheckCircle2, RotateCcw, Headphones } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Volume2, VolumeX, ArrowLeft, Star, Sparkles, CheckCircle2, RotateCcw, Headphones, Music2, Heart } from "lucide-react";
 import { Story, StoryNode, ChildProfile } from "@/lib/types";
 
 interface StoryReaderProps {
@@ -11,6 +11,8 @@ interface StoryReaderProps {
   onExit: () => void;
   onAwardStars: (count: number) => void;
 }
+
+type VoiceStyle = "hada" | "mama" | "nana";
 
 export default function StoryReader({
   story,
@@ -22,6 +24,9 @@ export default function StoryReader({
   const [currentNodeId, setCurrentNodeId] = useState<string>(story.startNodeId);
   const [isNarrating, setIsNarrating] = useState(false);
   const [hasCompleted, setHasCompleted] = useState(false);
+  const [voiceStyle, setVoiceStyle] = useState<VoiceStyle>("hada");
+  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [selectedVoice, setSelectedVoice] = useState<SpeechSynthesisVoice | null>(null);
 
   const currentNode: StoryNode = story.nodes[currentNodeId] || story.nodes[story.startNodeId];
 
@@ -31,11 +36,83 @@ export default function StoryReader({
     .replace(/Mateo/g, profile.name)
     .replace(/Chispas/g, profile.petName);
 
-  // Divide el texto en oraciones para simular el "Highlighted read-along text" de Vooks
+  // Divide el texto en oraciones para el Read-Along de Vooks
   const sentences = personalizedText.split(". ").filter(Boolean);
   const [activeSentenceIndex, setActiveSentenceIndex] = useState(0);
 
-  // Narración por voz (Web Speech API) con sincronización de lectura
+  // Cargar y seleccionar la mejor voz femenina en español
+  useEffect(() => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+
+    const findBestFemaleVoice = (voices: SpeechSynthesisVoice[]) => {
+      const spanishVoices = voices.filter((v) => v.lang.startsWith("es"));
+      if (spanishVoices.length === 0) return null;
+
+      // 1. Voces femeninas naturales de alta calidad (Microsoft Natural / Google)
+      const naturalFemale = spanishVoices.find((v) => {
+        const name = v.name.toLowerCase();
+        return (
+          (name.includes("natural") || name.includes("online") || name.includes("google")) &&
+          (name.includes("dalia") ||
+            name.includes("elvira") ||
+            name.includes("sabina") ||
+            name.includes("monica") ||
+            name.includes("laura") ||
+            name.includes("paulina") ||
+            name.includes("español"))
+        );
+      });
+      if (naturalFemale) return naturalFemale;
+
+      // 2. Nombres femeninos comunes de voces TTS en español
+      const femaleNames = [
+        "dalia",
+        "elvira",
+        "sabina",
+        "helena",
+        "laura",
+        "monica",
+        "paulina",
+        "lucia",
+        "penelope",
+        "conchita",
+        "maria",
+        "maría",
+        "rosa",
+        "carmen",
+        "zira",
+        "google español",
+      ];
+      const matched = spanishVoices.find((v) => {
+        const name = v.name.toLowerCase();
+        return femaleNames.some((fn) => name.includes(fn)) || name.includes("female") || name.includes("mujer");
+      });
+      if (matched) return matched;
+
+      // 3. Fallback: primera voz en español disponible
+      return spanishVoices[0];
+    };
+
+    const updateVoices = () => {
+      const voices = window.speechSynthesis.getVoices();
+      setAvailableVoices(voices);
+      const best = findBestFemaleVoice(voices);
+      if (best) {
+        setSelectedVoice(best);
+      }
+    };
+
+    updateVoices();
+    window.speechSynthesis.onvoiceschanged = updateVoices;
+
+    return () => {
+      if (window.speechSynthesis) {
+        window.speechSynthesis.onvoiceschanged = null;
+      }
+    };
+  }, []);
+
+  // Cancelar narración al cambiar de capítulo
   useEffect(() => {
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel();
@@ -61,11 +138,28 @@ export default function StoryReader({
     } else {
       const utterance = new SpeechSynthesisUtterance(personalizedText);
       utterance.lang = "es-ES";
-      utterance.rate = 0.88;
-      utterance.pitch = 1.05;
+
+      // Asignar voz femenina dulce seleccionada
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+      }
+
+      // Parámetros de voz según el estilo elegido para máxima dulzura infantil
+      if (voiceStyle === "hada") {
+        // Tono cantarino, dulce y cariñoso de hada de cuentos
+        utterance.pitch = 1.25;
+        utterance.rate = 0.85;
+      } else if (voiceStyle === "mama") {
+        // Tono cálido, protector y maternal
+        utterance.pitch = 1.12;
+        utterance.rate = 0.82;
+      } else {
+        // Nana relajante para dormir
+        utterance.pitch = 1.04;
+        utterance.rate = 0.78;
+      }
 
       utterance.onboundary = (event) => {
-        // Estimar el avance de oración para el resaltado interactivo estilo Vooks
         if (event.name === "sentence" || event.charIndex > 0) {
           const ratio = event.charIndex / personalizedText.length;
           const idx = Math.min(Math.floor(ratio * sentences.length), sentences.length - 1);
@@ -122,7 +216,7 @@ export default function StoryReader({
 
         <div className="text-center">
           <span
-            className={`font-display font-bold text-sm block truncate max-w-[180px] ${
+            className={`font-display font-bold text-sm block truncate max-w-[170px] ${
               isNightMode ? "text-white" : "text-[#2D231B]"
             }`}
           >
@@ -133,24 +227,68 @@ export default function StoryReader({
           </span>
         </div>
 
-        {/* Botón de Narración con Ondas Sonoras */}
+        {/* Botón de Narración con Dulce Voz Femenina */}
         <button
           onClick={toggleNarration}
-          className={`w-10 h-10 rounded-2xl flex items-center justify-center border-2 shadow-xs transition-all active:scale-95 ${
+          className={`w-11 h-11 rounded-2xl flex items-center justify-center border-2 shadow-xs transition-all active:scale-95 relative ${
             isNarrating
-              ? "bg-[#FEF9EE] border-amber-400 text-amber-600 animate-pulse"
+              ? "bg-[#FEF9EE] border-amber-400 text-amber-600 animate-pulse scale-105"
               : isNightMode
               ? "bg-[#1E243A] border-[#313B5E] text-slate-300"
               : "bg-white border-[#EFE6DA] text-[#6E6259]"
           }`}
-          title={isNarrating ? "Pausar narración" : "Escuchar narración en voz alta"}
+          title={isNarrating ? "Pausar narración" : "Escuchar voz dulce de cuentacuentos"}
         >
           {isNarrating ? (
             <VolumeX className="w-5 h-5 text-storybook-coral" />
           ) : (
-            <Volume2 className="w-5 h-5" />
+            <Volume2 className="w-5 h-5 text-storybook-coral" />
           )}
+          <span className="absolute -top-1 -right-1 text-xs">🧚‍♀️</span>
         </button>
+      </div>
+
+      {/* Selector de Estilo de Voz Dulce Femenina */}
+      <div className="flex items-center justify-between gap-1.5 p-1.5 rounded-2xl bg-[#FAF7F2] dark:bg-[#15192B] border-2 border-[#EFE6DA] dark:border-[#2D3352] text-xs">
+        <span className="text-[11px] font-display font-bold pl-2 text-storybook-coral flex items-center gap-1">
+          <span>🧚‍♀️</span>
+          <span className="hidden sm:inline">Voz de Mujer:</span>
+        </span>
+
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => setVoiceStyle("hada")}
+            className={`px-2.5 py-1 rounded-xl font-display font-bold text-[11px] transition-all ${
+              voiceStyle === "hada"
+                ? "bg-storybook-coral text-white shadow-2xs"
+                : "text-[#786C60] dark:text-slate-300 hover:text-[#2D231B]"
+            }`}
+          >
+            ✨ Dulce Hada
+          </button>
+
+          <button
+            onClick={() => setVoiceStyle("mama")}
+            className={`px-2.5 py-1 rounded-xl font-display font-bold text-[11px] transition-all ${
+              voiceStyle === "mama"
+                ? "bg-storybook-coral text-white shadow-2xs"
+                : "text-[#786C60] dark:text-slate-300 hover:text-[#2D231B]"
+            }`}
+          >
+            🌸 Mamá Sabia
+          </button>
+
+          <button
+            onClick={() => setVoiceStyle("nana")}
+            className={`px-2.5 py-1 rounded-xl font-display font-bold text-[11px] transition-all ${
+              voiceStyle === "nana"
+                ? "bg-storybook-coral text-white shadow-2xs"
+                : "text-[#786C60] dark:text-slate-300 hover:text-[#2D231B]"
+            }`}
+          >
+            🌙 Nana Relajante
+          </button>
+        </div>
       </div>
 
       {/* Escena Ilustrada Activa: Pantalla Vooks */}
@@ -169,9 +307,9 @@ export default function StoryReader({
             {currentNode.sceneEmoji}
           </span>
           {/* Badge Read-Along */}
-          <div className="absolute top-2.5 right-3 bg-black/30 backdrop-blur-md px-2.5 py-0.5 rounded-full text-white text-[10px] font-display font-bold flex items-center gap-1">
-            <Headphones className="w-2.5 h-2.5" />
-            <span>Read-Along Text</span>
+          <div className="absolute top-2.5 right-3 bg-black/35 backdrop-blur-md px-3 py-1 rounded-full text-white text-[10px] font-display font-bold flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Voz Femenina Activa</span>
           </div>
         </div>
 
@@ -202,7 +340,7 @@ export default function StoryReader({
                   key={idx}
                   className={`transition-all duration-200 inline ${
                     isHighlight
-                      ? "bg-amber-200/80 dark:bg-amber-900/60 text-[#2D231B] dark:text-amber-100 px-1 rounded-lg shadow-2xs font-bold"
+                      ? "bg-amber-200/90 dark:bg-amber-900/70 text-[#2D231B] dark:text-amber-100 px-1.5 py-0.5 rounded-lg shadow-2xs font-bold"
                       : isNightMode
                       ? "text-slate-100"
                       : "text-[#3A2E24]"
