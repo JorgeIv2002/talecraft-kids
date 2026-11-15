@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Volume2, VolumeX, ArrowLeft, Star, Sparkles, CheckCircle2, RotateCcw, Headphones, Music2, Heart } from "lucide-react";
+import { Volume2, VolumeX, ArrowLeft, Star, Sparkles, CheckCircle2, RotateCcw, Headphones, Loader2 } from "lucide-react";
 import { Story, StoryNode, ChildProfile } from "@/lib/types";
 
 interface StoryReaderProps {
@@ -12,7 +12,29 @@ interface StoryReaderProps {
   onAwardStars: (count: number) => void;
 }
 
-type VoiceStyle = "hada" | "mama" | "nana";
+const NEURAL_VOICES = [
+  {
+    id: "es-MX-DaliaNeural",
+    name: "✨ Dalia (Hada Dulce)",
+    desc: "Cálida, dulce y expresiva de actriz de doblaje",
+    rate: "-4%",
+    pitch: "+8Hz",
+  },
+  {
+    id: "es-ES-ElviraNeural",
+    name: "🌸 Elvira (Voz Maternal)",
+    desc: "Suave, pausada y reconfortante para la noche",
+    rate: "-6%",
+    pitch: "+2Hz",
+  },
+  {
+    id: "es-ES-AbrilNeural",
+    name: "🌟 Abril (Voz Alegre)",
+    desc: "Jovial, dulce y llena de ternura",
+    rate: "-2%",
+    pitch: "+6Hz",
+  },
+];
 
 export default function StoryReader({
   story,
@@ -22,12 +44,12 @@ export default function StoryReader({
   onAwardStars,
 }: StoryReaderProps) {
   const [currentNodeId, setCurrentNodeId] = useState<string>(story.startNodeId);
-  const [isNarrating, setIsNarrating] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoadingAudio, setIsLoadingAudio] = useState(false);
   const [hasCompleted, setHasCompleted] = useState(false);
-  const [voiceStyle, setVoiceStyle] = useState<VoiceStyle>("hada");
-  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
-  const [selectedVoice, setSelectedVoice] = useState<SpeechSynthesisVoice | null>(null);
+  const [selectedVoiceId, setSelectedVoiceId] = useState("es-MX-DaliaNeural");
 
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const currentNode: StoryNode = story.nodes[currentNodeId] || story.nodes[story.startNodeId];
 
   // Reemplazar nombres dinámicos
@@ -40,149 +62,107 @@ export default function StoryReader({
   const sentences = personalizedText.split(". ").filter(Boolean);
   const [activeSentenceIndex, setActiveSentenceIndex] = useState(0);
 
-  // Cargar y seleccionar la mejor voz femenina en español
+  // Detener audio al cambiar de escena o desmontar
   useEffect(() => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-
-    const findBestFemaleVoice = (voices: SpeechSynthesisVoice[]) => {
-      const spanishVoices = voices.filter((v) => v.lang.startsWith("es"));
-      if (spanishVoices.length === 0) return null;
-
-      // 1. Voces femeninas naturales de alta calidad (Microsoft Natural / Google)
-      const naturalFemale = spanishVoices.find((v) => {
-        const name = v.name.toLowerCase();
-        return (
-          (name.includes("natural") || name.includes("online") || name.includes("google")) &&
-          (name.includes("dalia") ||
-            name.includes("elvira") ||
-            name.includes("sabina") ||
-            name.includes("monica") ||
-            name.includes("laura") ||
-            name.includes("paulina") ||
-            name.includes("español"))
-        );
-      });
-      if (naturalFemale) return naturalFemale;
-
-      // 2. Nombres femeninos comunes de voces TTS en español
-      const femaleNames = [
-        "dalia",
-        "elvira",
-        "sabina",
-        "helena",
-        "laura",
-        "monica",
-        "paulina",
-        "lucia",
-        "penelope",
-        "conchita",
-        "maria",
-        "maría",
-        "rosa",
-        "carmen",
-        "zira",
-        "google español",
-      ];
-      const matched = spanishVoices.find((v) => {
-        const name = v.name.toLowerCase();
-        return femaleNames.some((fn) => name.includes(fn)) || name.includes("female") || name.includes("mujer");
-      });
-      if (matched) return matched;
-
-      // 3. Fallback: primera voz en español disponible
-      return spanishVoices[0];
-    };
-
-    const updateVoices = () => {
-      const voices = window.speechSynthesis.getVoices();
-      setAvailableVoices(voices);
-      const best = findBestFemaleVoice(voices);
-      if (best) {
-        setSelectedVoice(best);
-      }
-    };
-
-    updateVoices();
-    window.speechSynthesis.onvoiceschanged = updateVoices;
-
-    return () => {
-      if (window.speechSynthesis) {
-        window.speechSynthesis.onvoiceschanged = null;
-      }
-    };
-  }, []);
-
-  // Cancelar narración al cambiar de capítulo
-  useEffect(() => {
-    if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-      setIsNarrating(false);
-      setActiveSentenceIndex(0);
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
     }
+    setIsPlaying(false);
+    setIsLoadingAudio(false);
+    setActiveSentenceIndex(0);
     return () => {
-      if (typeof window !== "undefined" && "speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
       }
     };
   }, [currentNodeId]);
 
-  const toggleNarration = () => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) {
-      alert("La narración no está disponible en este navegador.");
+  const toggleNeuralAudio = async () => {
+    // Si ya está reproduciendo, pausar
+    if (isPlaying && audioRef.current) {
+      audioRef.current.pause();
+      setIsPlaying(false);
       return;
     }
 
-    if (isNarrating) {
-      window.speechSynthesis.cancel();
-      setIsNarrating(false);
-    } else {
-      const utterance = new SpeechSynthesisUtterance(personalizedText);
-      utterance.lang = "es-ES";
+    // Si ya existe el audio creado y está pausado, reanudar
+    if (audioRef.current && !isPlaying) {
+      audioRef.current.play();
+      setIsPlaying(true);
+      return;
+    }
 
-      // Asignar voz femenina dulce seleccionada
-      if (selectedVoice) {
-        utterance.voice = selectedVoice;
-      }
+    // Generar audio neuronal humano en tiempo real desde /api/tts
+    try {
+      setIsLoadingAudio(true);
+      const voiceConfig =
+        NEURAL_VOICES.find((v) => v.id === selectedVoiceId) || NEURAL_VOICES[0];
 
-      // Parámetros de voz según el estilo elegido para máxima dulzura infantil
-      if (voiceStyle === "hada") {
-        // Tono cantarino, dulce y cariñoso de hada de cuentos
-        utterance.pitch = 1.25;
-        utterance.rate = 0.85;
-      } else if (voiceStyle === "mama") {
-        // Tono cálido, protector y maternal
-        utterance.pitch = 1.12;
-        utterance.rate = 0.82;
-      } else {
-        // Nana relajante para dormir
-        utterance.pitch = 1.04;
-        utterance.rate = 0.78;
-      }
+      const res = await fetch("/api/tts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: personalizedText,
+          voice: voiceConfig.id,
+          rate: voiceConfig.rate,
+          pitch: voiceConfig.pitch,
+        }),
+      });
 
-      utterance.onboundary = (event) => {
-        if (event.name === "sentence" || event.charIndex > 0) {
-          const ratio = event.charIndex / personalizedText.length;
-          const idx = Math.min(Math.floor(ratio * sentences.length), sentences.length - 1);
+      if (!res.ok) throw new Error("Error generando audio");
+
+      const blob = await res.blob();
+      const audioUrl = URL.createObjectURL(blob);
+      const audio = new Audio(audioUrl);
+      audioRef.current = audio;
+
+      audio.ontimeupdate = () => {
+        if (audio.duration) {
+          const ratio = audio.currentTime / audio.duration;
+          const idx = Math.min(
+            Math.floor(ratio * sentences.length),
+            sentences.length - 1
+          );
           setActiveSentenceIndex(idx);
         }
       };
 
-      utterance.onend = () => {
-        setIsNarrating(false);
+      audio.onended = () => {
+        setIsPlaying(false);
         setActiveSentenceIndex(sentences.length - 1);
       };
-      utterance.onerror = () => setIsNarrating(false);
 
-      window.speechSynthesis.speak(utterance);
-      setIsNarrating(true);
+      await audio.play();
+      setIsPlaying(true);
+    } catch (err) {
+      console.warn("Fallo en TTS Neuronal, usando fallback local:", err);
+      // Fallback a speech synthesis del navegador si la red falla
+      fallbackBrowserSpeech();
+    } finally {
+      setIsLoadingAudio(false);
     }
   };
 
+  const fallbackBrowserSpeech = () => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(personalizedText);
+    utterance.lang = "es-ES";
+    utterance.pitch = 1.25;
+    utterance.rate = 0.85;
+    utterance.onend = () => setIsPlaying(false);
+    window.speechSynthesis.speak(utterance);
+    setIsPlaying(true);
+  };
+
   const handleChoice = (nextNodeId: string) => {
-    if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-      setIsNarrating(false);
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
     }
+    setIsPlaying(false);
 
     const nextNode = story.nodes[nextNodeId];
     if (nextNode && nextNode.isEnding && !hasCompleted) {
@@ -227,71 +207,75 @@ export default function StoryReader({
           </span>
         </div>
 
-        {/* Botón de Narración con Dulce Voz Femenina */}
+        {/* Botón de Narración con Voz Neuronal Humana */}
         <button
-          onClick={toggleNarration}
+          onClick={toggleNeuralAudio}
+          disabled={isLoadingAudio}
           className={`w-11 h-11 rounded-2xl flex items-center justify-center border-2 shadow-xs transition-all active:scale-95 relative ${
-            isNarrating
+            isPlaying
               ? "bg-[#FEF9EE] border-amber-400 text-amber-600 animate-pulse scale-105"
               : isNightMode
               ? "bg-[#1E243A] border-[#313B5E] text-slate-300"
               : "bg-white border-[#EFE6DA] text-[#6E6259]"
           }`}
-          title={isNarrating ? "Pausar narración" : "Escuchar voz dulce de cuentacuentos"}
+          title={isPlaying ? "Pausar narración" : "Escuchar con voz humana real"}
         >
-          {isNarrating ? (
+          {isLoadingAudio ? (
+            <Loader2 className="w-5 h-5 text-storybook-coral animate-spin" />
+          ) : isPlaying ? (
             <VolumeX className="w-5 h-5 text-storybook-coral" />
           ) : (
             <Volume2 className="w-5 h-5 text-storybook-coral" />
           )}
-          <span className="absolute -top-1 -right-1 text-xs">🧚‍♀️</span>
+          <span className="absolute -top-1 -right-1 text-xs">🎙️</span>
         </button>
       </div>
 
-      {/* Selector de Estilo de Voz Dulce Femenina */}
-      <div className="flex items-center justify-between gap-1.5 p-1.5 rounded-2xl bg-[#FAF7F2] dark:bg-[#15192B] border-2 border-[#EFE6DA] dark:border-[#2D3352] text-xs">
-        <span className="text-[11px] font-display font-bold pl-2 text-storybook-coral flex items-center gap-1">
-          <span>🧚‍♀️</span>
-          <span className="hidden sm:inline">Voz de Mujer:</span>
-        </span>
+      {/* Selector de Actriz de Doblaje / Voz Humana */}
+      <div className="p-2 rounded-2xl bg-[#FFFDF9] dark:bg-[#15192B] border-2 border-[#EFE6DA] dark:border-[#2D3352] space-y-1.5">
+        <div className="flex items-center justify-between px-1 text-[11px] font-display font-bold">
+          <span className="text-storybook-coral flex items-center gap-1">
+            <span>🎙️</span>
+            <span>Voz de Actriz (IA Neuronal Real):</span>
+          </span>
+          <span className="text-emerald-700 dark:text-emerald-400 font-bold">Calidad Estudio ✨</span>
+        </div>
 
-        <div className="flex items-center gap-1">
-          <button
-            onClick={() => setVoiceStyle("hada")}
-            className={`px-2.5 py-1 rounded-xl font-display font-bold text-[11px] transition-all ${
-              voiceStyle === "hada"
-                ? "bg-storybook-coral text-white shadow-2xs"
-                : "text-[#786C60] dark:text-slate-300 hover:text-[#2D231B]"
-            }`}
-          >
-            ✨ Dulce Hada
-          </button>
-
-          <button
-            onClick={() => setVoiceStyle("mama")}
-            className={`px-2.5 py-1 rounded-xl font-display font-bold text-[11px] transition-all ${
-              voiceStyle === "mama"
-                ? "bg-storybook-coral text-white shadow-2xs"
-                : "text-[#786C60] dark:text-slate-300 hover:text-[#2D231B]"
-            }`}
-          >
-            🌸 Mamá Sabia
-          </button>
-
-          <button
-            onClick={() => setVoiceStyle("nana")}
-            className={`px-2.5 py-1 rounded-xl font-display font-bold text-[11px] transition-all ${
-              voiceStyle === "nana"
-                ? "bg-storybook-coral text-white shadow-2xs"
-                : "text-[#786C60] dark:text-slate-300 hover:text-[#2D231B]"
-            }`}
-          >
-            🌙 Nana Relajante
-          </button>
+        <div className="grid grid-cols-3 gap-1.5">
+          {NEURAL_VOICES.map((v) => {
+            const isSelected = selectedVoiceId === v.id;
+            return (
+              <button
+                key={v.id}
+                onClick={() => {
+                  setSelectedVoiceId(v.id);
+                  if (audioRef.current) {
+                    audioRef.current.pause();
+                    audioRef.current = null;
+                    setIsPlaying(false);
+                  }
+                }}
+                className={`p-2 rounded-xl text-center border-2 transition-all flex flex-col items-center justify-center ${
+                  isSelected
+                    ? "bg-storybook-coral text-white border-[#D94524] shadow-xs"
+                    : isNightMode
+                    ? "bg-[#1E2238] border-[#2D3352] text-slate-300"
+                    : "bg-[#FAF7F2] border-[#EFE6DA] text-[#2D231B]"
+                }`}
+              >
+                <span className="font-display font-bold text-[11px] block line-clamp-1">
+                  {v.name.split(" ")[1]}
+                </span>
+                <span className="text-[9px] font-body opacity-90 line-clamp-1">
+                  {v.name.split("(")[1]?.replace(")", "") || "Dulce"}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* Escena Ilustrada Activa: Pantalla Vooks */}
+      {/* Escena Ilustrada Activa con Botón de Play Destacado */}
       <div
         className={`rounded-[36px] p-5 md:p-6 border-2 text-center space-y-4 shadow-storybook relative overflow-hidden transition-all ${
           isNightMode
@@ -299,21 +283,21 @@ export default function StoryReader({
             : "bg-gradient-to-b from-[#FFFDF9] to-[#FBF6ED] border-[#EFE6DA] text-[#2D231B]"
         }`}
       >
-        {/* Banner Ilustrado con Fondo de Color Vivo de la Historia */}
+        {/* Banner Ilustrado */}
         <div
           className={`w-full h-36 rounded-3xl bg-gradient-to-br ${story.gradientBg} flex items-center justify-center text-6xl shadow-md border-2 border-white/30 relative overflow-hidden sparkle-float`}
         >
           <span className="drop-shadow-lg transform hover:scale-110 transition-transform">
             {currentNode.sceneEmoji}
           </span>
-          {/* Badge Read-Along */}
-          <div className="absolute top-2.5 right-3 bg-black/35 backdrop-blur-md px-3 py-1 rounded-full text-white text-[10px] font-display font-bold flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>Voz Femenina Activa</span>
+          {/* Badge Audio Humano */}
+          <div className="absolute top-2.5 right-3 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full text-white text-[10px] font-display font-bold flex items-center gap-1.5">
+            <span className={`w-2 h-2 rounded-full ${isPlaying ? "bg-emerald-400 animate-ping" : "bg-emerald-400"}`}></span>
+            <span>{isPlaying ? "Reproduciendo Voz Real" : "Voz Humana Lista"}</span>
           </div>
         </div>
 
-        {/* Texto con Resaltado Guiado (Highlighted Read-Along Text de Vooks) */}
+        {/* Texto con Resaltado Guiado (Read-Along) */}
         <div className="space-y-3 text-left">
           <div className="flex items-center justify-between">
             <span
@@ -325,16 +309,33 @@ export default function StoryReader({
             >
               Héroe: {profile.name}
             </span>
-            <span className="text-[11px] font-display font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1">
-              <Sparkles className="w-3.5 h-3.5 fill-current" />
-              Tu turno de elegir
-            </span>
+            <button
+              onClick={toggleNeuralAudio}
+              className="text-xs font-display font-bold text-storybook-coral hover:underline flex items-center gap-1"
+            >
+              {isLoadingAudio ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <span>Cargando audio...</span>
+                </>
+              ) : isPlaying ? (
+                <>
+                  <VolumeX className="w-3.5 h-3.5" />
+                  <span>Pausar</span>
+                </>
+              ) : (
+                <>
+                  <Volume2 className="w-3.5 h-3.5" />
+                  <span>▶ Escuchar a la cuentacuentos</span>
+                </>
+              )}
+            </button>
           </div>
 
-          {/* Oraciones interactivas */}
+          {/* Oraciones */}
           <div className="space-y-1.5 text-base md:text-lg leading-relaxed font-body font-semibold">
             {sentences.map((sentence, idx) => {
-              const isHighlight = isNarrating && activeSentenceIndex === idx;
+              const isHighlight = isPlaying && activeSentenceIndex === idx;
               return (
                 <span
                   key={idx}
@@ -354,7 +355,7 @@ export default function StoryReader({
         </div>
       </div>
 
-      {/* Decisiones Táctiles Grandes Estilo Vooks */}
+      {/* Decisiones Táctiles Grandes */}
       {!currentNode.isEnding && currentNode.choices && (
         <div className="space-y-3 pt-2">
           <div
@@ -402,7 +403,7 @@ export default function StoryReader({
         </div>
       )}
 
-      {/* Pantalla Final: Moraleja y Estrellas */}
+      {/* Pantalla Final */}
       {currentNode.isEnding && (
         <div className="space-y-3.5 pt-2">
           {currentNode.moralLesson && (
