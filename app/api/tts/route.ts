@@ -1,24 +1,51 @@
 import { NextRequest, NextResponse } from "next/server";
 import { MsEdgeTTS, OUTPUT_FORMAT } from "msedge-tts";
 
+// Cache en memoria para reproducción instantánea y ahorro de recursos
+const audioCache = new Map<string, Buffer>();
+
 export async function POST(req: NextRequest) {
   try {
-    const { text, voice = "es-MX-DaliaNeural", rate = 0, pitch = 0 } = await req.json();
+    const {
+      text,
+      voice = "es-CO-SalomeNeural",
+      rate = "0%",
+      pitch = "0Hz",
+    } = await req.json();
 
     if (!text || typeof text !== "string") {
-      return NextResponse.json({ error: "El texto es obligatorio" }, { status: 400 });
+      return NextResponse.json(
+        { error: "El texto es obligatorio para la narración" },
+        { status: 400 }
+      );
+    }
+
+    const cleanText = text.trim();
+    const cacheKey = `${voice}_${rate}_${pitch}_${cleanText}`;
+
+    // Respuesta inmediata desde caché en memoria
+    if (audioCache.has(cacheKey)) {
+      const cached = audioCache.get(cacheKey)!;
+      return new NextResponse(new Uint8Array(cached), {
+        headers: {
+          "Content-Type": "audio/mpeg",
+          "Content-Length": cached.length.toString(),
+          "Cache-Control": "public, max-age=604800, immutable",
+        },
+      });
     }
 
     const tts = new MsEdgeTTS();
-    await tts.setMetadata(voice, OUTPUT_FORMAT.AUDIO_24KHZ_48KBITRATE_MONO_MP3);
+    // 96kbps mono MP3 de alta fidelidad para voz de estudio limpia sin compresión metálica
+    await tts.setMetadata(voice, OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3);
 
-    // Opciones de ritmo y tono para mayor dulzura infantil
+    // Sin distorsión artificial: preserva la acústica natural y humana de la locutora
     const options = {
-      rate: rate || "-5%",
-      pitch: pitch || "+8Hz",
+      rate: rate || "0%",
+      pitch: pitch || "0Hz",
     };
 
-    const { audioStream } = tts.toStream(text.trim(), options);
+    const { audioStream } = tts.toStream(cleanText, options);
 
     const chunks: Buffer[] = [];
     await new Promise<void>((resolve, reject) => {
@@ -29,17 +56,24 @@ export async function POST(req: NextRequest) {
 
     const audioBuffer = Buffer.concat(chunks);
 
-    return new NextResponse(audioBuffer, {
+    // Limitar tamaño de caché a 250 clips para no consumir memoria excesiva
+    if (audioCache.size > 250) {
+      const oldestKey = audioCache.keys().next().value;
+      if (oldestKey) audioCache.delete(oldestKey);
+    }
+    audioCache.set(cacheKey, audioBuffer);
+
+    return new NextResponse(new Uint8Array(audioBuffer), {
       headers: {
         "Content-Type": "audio/mpeg",
         "Content-Length": audioBuffer.length.toString(),
-        "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800",
+        "Cache-Control": "public, max-age=604800, immutable",
       },
     });
   } catch (error) {
-    console.error("Error en TTS Neural:", error);
+    console.error("Error al preparar la narración de audio:", error);
     return NextResponse.json(
-      { error: "Error al generar el audio neuronal" },
+      { error: "No se pudo reproducir la narración en este momento" },
       { status: 500 }
     );
   }

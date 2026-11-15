@@ -23,7 +23,7 @@ export default function StoryCreatorModal({
 }: StoryCreatorModalProps) {
   const [topic, setTopic] = useState("");
   const [valueCategory, setValueCategory] = useState<ValueCategory>("Valentía");
-  const [emoji, setEmoji] = useState("🤖");
+  const [emoji, setEmoji] = useState("🐻");
   const [isGenerating, setIsGenerating] = useState(false);
 
   if (!isOpen) return null;
@@ -53,6 +53,8 @@ export default function StoryCreatorModal({
         decisionsCount: 3,
         startNodeId: "c-node-1",
         isPremium: true,
+        collection: "popular",
+        gradientBg: "from-[#FF7A59] via-[#F05735] to-[#D94524]",
         nodes: {
           "c-node-1": {
             id: "c-node-1",
@@ -197,7 +199,7 @@ export default function StoryCreatorModal({
               required
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
-              placeholder="Ej: Un robot que hace amigos en la playa..."
+              placeholder="Ej: Un osito valiente que aprende a nadar en el lago..."
               className={`w-full p-3 rounded-2xl border-2 font-display font-bold text-sm outline-none transition-colors ${
                 isNightMode
                   ? "bg-[#141726] border-[#2D3352] text-white focus:border-storybook-coral"
@@ -229,7 +231,7 @@ export default function StoryCreatorModal({
             <div>
               <label className="block font-display font-bold text-xs mb-1">Emoji de portada:</label>
               <div className="flex gap-1.5">
-                {["🤖", "🐬", "🦖", "🛸", "🧙‍♂️"].map((item) => (
+                {["🐻", "🐬", "🦁", "🦉", "🦄"].map((item) => (
                   <button
                     key={item}
                     type="button"
@@ -253,7 +255,7 @@ export default function StoryCreatorModal({
             className="w-full py-4 rounded-3xl btn-toy-coral bg-storybook-coral hover:bg-[#F05735] text-white font-display font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2"
           >
             {isGenerating ? (
-              <span>Generando Aventura Mágica... 🪄</span>
+              <span>Escribiendo Aventura Mágica... 🪄</span>
             ) : (
               <>
                 <BookPlus className="w-4 h-4" />
