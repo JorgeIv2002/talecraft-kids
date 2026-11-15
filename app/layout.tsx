@@ -1,18 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans, Inter } from "next/font/google";
+import { Fredoka, Nunito } from "next/font/google";
 import "./globals.css";
 
-const jakarta = Plus_Jakarta_Sans({
+const fredoka = Fredoka({
   subsets: ["latin"],
-  variable: "--font-jakarta",
-  weight: ["500", "600", "700", "800"],
+  variable: "--font-fredoka",
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
-const inter = Inter({
+const nunito = Nunito({
   subsets: ["latin"],
-  variable: "--font-inter",
-  weight: ["400", "500", "600"],
+  variable: "--font-nunito",
+  weight: ["400", "600", "700", "800", "900"],
   display: "swap",
 });
 
@@ -47,13 +47,13 @@ export const metadata: Metadata = {
       "Historias donde tu hijo es el héroe y aprende valores en cada decisión.",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "/icon.svg",
   },
   manifest: "/manifest.json",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#D9532F",
+  themeColor: "#FF6B4A",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -66,8 +66,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" suppressHydrationWarning className={`${jakarta.variable} ${inter.variable}`}>
-      <body suppressHydrationWarning className="bg-[#F4F1EA] text-ink-primary min-h-screen antialiased selection:bg-[#FDE8B3]">
+    <html lang="es" suppressHydrationWarning className={`${fredoka.variable} ${nunito.variable}`}>
+      <body suppressHydrationWarning className="bg-[#FAF7F2] text-[#2C241D] min-h-screen antialiased selection:bg-[#FFE3B3] font-body">
         {children}
       </body>
     </html>

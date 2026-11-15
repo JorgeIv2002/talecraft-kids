@@ -3,18 +3,18 @@
 @tailwind utilities;
 
 :root {
-  --font-jakarta: 'Plus Jakarta Sans', sans-serif;
-  --font-inter: 'Inter', sans-serif;
+  --font-fredoka: 'Fredoka', cursive, sans-serif;
+  --font-nunito: 'Nunito', sans-serif;
 }
 
 body {
-  background-color: #FDFBF7;
-  color: #1F2421;
-  font-family: var(--font-inter);
+  background-color: #FAF7F2;
+  color: #2D231B;
+  font-family: var(--font-nunito);
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Scrollbar invisible para listas horizontales en móvil */
+/* Scrollbar invisible */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -23,10 +23,61 @@ body {
   scrollbar-width: none;
 }
 
-/* Efecto táctil suave para botones infantiles */
-.touch-press {
-  transition: transform 0.12s cubic-bezier(0.4, 0, 0.2, 1);
+/* Botones con sensación gomosa / física estilo Nintendo / Duolingo */
+.btn-toy-coral {
+  box-shadow: 0 4px 0 0 #D94524;
+  transition: all 0.1s ease;
 }
-.touch-press:active {
-  transform: scale(0.97);
+.btn-toy-coral:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 0 0 #D94524;
+}
+.btn-toy-coral:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 0 #D94524;
+}
+
+.btn-toy-mint {
+  box-shadow: 0 4px 0 0 #059669;
+  transition: all 0.1s ease;
+}
+.btn-toy-mint:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 0 0 #059669;
+}
+.btn-toy-mint:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 0 #059669;
+}
+
+.btn-toy-amber {
+  box-shadow: 0 4px 0 0 #B45309;
+  transition: all 0.1s ease;
+}
+.btn-toy-amber:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 0 0 #B45309;
+}
+.btn-toy-amber:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 0 #B45309;
+}
+
+.card-storybook {
+  box-shadow: 0 8px 24px -4px rgba(60, 45, 30, 0.07);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+}
+.card-storybook:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px -4px rgba(60, 45, 30, 0.12);
+}
+
+/* Decoraciones lúdicas */
+.sparkle-float {
+  animation: floatSlow 3s ease-in-out infinite;
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-4px) rotate(3deg); }
 }

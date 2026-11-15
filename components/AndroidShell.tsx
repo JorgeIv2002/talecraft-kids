@@ -36,112 +36,122 @@ export default function AndroidShell({
   }, []);
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center p-0 sm:p-4 md:p-8 bg-[#EAE6DF] dark:bg-[#0B0F17] transition-colors duration-300">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center p-0 sm:p-4 md:p-6 bg-[#EBE5DA] dark:bg-[#0D0F1A] transition-colors duration-300">
       
-      {/* Marco de Dispositivo Android (Desktop / Tablet view) */}
+      {/* Marco de Dispositivo Android (Estilo Libro de Aventuras) */}
       <div
-        className={`w-full max-w-[428px] h-screen sm:h-[860px] sm:max-h-[92vh] sm:rounded-[44px] border-0 sm:border-[10px] sm:border-[#1F2421] shadow-2xl relative flex flex-col overflow-hidden transition-colors duration-300 ${
+        className={`w-full max-w-[430px] h-screen sm:h-[860px] sm:max-h-[92vh] sm:rounded-[46px] border-0 sm:border-[9px] sm:border-[#352A20] shadow-[0_25px_60px_-15px_rgba(53,42,32,0.35)] relative flex flex-col overflow-hidden transition-colors duration-300 ${
           isNightMode
-            ? "bg-[#121824] text-[#E2E8F0] border-[#252E3E]"
-            : "bg-[#FDFBF7] text-[#1F2421]"
+            ? "bg-[#141726] text-[#F3F4F6] border-[#252840]"
+            : "bg-[#FAF7F2] text-[#2D231B]"
         }`}
       >
-        {/* Notch / Cámara Frontal Punch Hole */}
-        <div className="hidden sm:block absolute top-2.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-[#1F2421] z-50 pointer-events-none" />
+        {/* Notch / Cámara Punch Hole */}
+        <div className="hidden sm:block absolute top-2.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-[#352A20] z-50 pointer-events-none" />
 
         {/* Barra de Estado Android Superior */}
         <div
-          className={`pt-3 px-6 pb-2 flex items-center justify-between text-[11px] font-semibold tracking-tight z-40 select-none border-b transition-colors ${
+          className={`pt-3.5 px-6 pb-2 flex items-center justify-between text-[11px] font-bold tracking-tight z-40 select-none border-b transition-colors ${
             isNightMode
-              ? "border-[#1F2838] text-[#94A3B8]"
-              : "border-[#F0EBE1] text-[#635F59]"
+              ? "border-[#20253B] text-[#9CA3AF]"
+              : "border-[#EFE6DA] text-[#786C60]"
           }`}
         >
-          <span className="font-mono text-xs">{currentTime}</span>
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] uppercase font-bold tracking-wider">5G</span>
+          <span className="font-display text-xs">{currentTime}</span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-[10px] font-display">5G</span>
             <span>📶</span>
-            <span>🔋 92%</span>
+            <span>🔋 94%</span>
           </div>
         </div>
 
         {/* Área de Pantalla Principal con Scroll Suave */}
-        <main className="flex-1 overflow-y-auto px-4 pt-3 pb-20 no-scrollbar">
+        <main className="flex-1 overflow-y-auto px-4 pt-3 pb-24 no-scrollbar">
           {children}
         </main>
 
-        {/* Barra de Navegación Inferior Nativa Android */}
+        {/* Barra de Navegación Inferior Flotante y Lúdica */}
         <nav
-          className={`absolute bottom-0 left-0 right-0 h-16 px-4 flex items-center justify-around z-40 border-t backdrop-blur-md transition-colors ${
+          className={`absolute bottom-2.5 left-3.5 right-3.5 h-16 px-4 rounded-3xl flex items-center justify-around z-40 border shadow-lg backdrop-blur-md transition-all ${
             isNightMode
-              ? "bg-[#161F2E]/95 border-[#2D3748] text-[#94A3B8]"
-              : "bg-white/95 border-[#EFE9DF] text-[#635F59]"
+              ? "bg-[#1C2035]/95 border-[#2D3352] text-[#9CA3AF]"
+              : "bg-white/95 border-[#EFE6DA] text-[#786C60]"
           }`}
         >
           {/* Tab 1: Cuentos */}
           <button
             onClick={() => onTabChange("library")}
-            className={`flex flex-col items-center gap-1 touch-press ${
+            className={`flex flex-col items-center gap-1 transition-all ${
               activeTab === "library"
-                ? "text-storybook-coral font-bold"
-                : "hover:text-[#1F2421]"
+                ? "text-storybook-coral font-display font-bold scale-110"
+                : "hover:text-[#2D231B]"
             }`}
           >
-            <BookOpen className="w-5 h-5" strokeWidth={activeTab === "library" ? 2.2 : 1.75} />
+            <div className={`p-1.5 rounded-2xl ${activeTab === "library" ? "bg-storybook-coralLight" : ""}`}>
+              <BookOpen className="w-5 h-5" strokeWidth={activeTab === "library" ? 2.5 : 2} />
+            </div>
             <span className="text-[10px]">Cuentos</span>
           </button>
 
-          {/* Tab 2: Héroe / Crear */}
+          {/* Tab 2: Crear */}
           <button
             onClick={() => onTabChange("create")}
-            className={`flex flex-col items-center gap-1 touch-press ${
+            className={`flex flex-col items-center gap-1 transition-all ${
               activeTab === "create"
-                ? "text-storybook-coral font-bold"
-                : "hover:text-[#1F2421]"
+                ? "text-storybook-coral font-display font-bold scale-110"
+                : "hover:text-[#2D231B]"
             }`}
           >
-            <Sparkles className="w-5 h-5" strokeWidth={activeTab === "create" ? 2.2 : 1.75} />
+            <div className={`p-1.5 rounded-2xl ${activeTab === "create" ? "bg-storybook-coralLight" : ""}`}>
+              <Sparkles className="w-5 h-5" strokeWidth={activeTab === "create" ? 2.5 : 2} />
+            </div>
             <span className="text-[10px]">Crear</span>
           </button>
 
-          {/* Tab 3: Bazar de Estrellas */}
+          {/* Tab 3: Bazar */}
           <button
             onClick={() => onTabChange("shop")}
-            className={`flex flex-col items-center gap-1 touch-press ${
+            className={`flex flex-col items-center gap-1 transition-all ${
               activeTab === "shop"
-                ? "text-storybook-coral font-bold"
-                : "hover:text-[#1F2421]"
+                ? "text-[#D97706] font-display font-bold scale-110"
+                : "hover:text-[#2D231B]"
             }`}
           >
-            <ShoppingBag className="w-5 h-5" strokeWidth={activeTab === "shop" ? 2.2 : 1.75} />
+            <div className={`p-1.5 rounded-2xl ${activeTab === "shop" ? "bg-amber-100 dark:bg-amber-950" : ""}`}>
+              <ShoppingBag className="w-5 h-5 text-[#D97706]" strokeWidth={activeTab === "shop" ? 2.5 : 2} />
+            </div>
             <span className="text-[10px]">Bazar ⭐</span>
           </button>
 
-          {/* Botón Central: Modo Noche / Dormir */}
+          {/* Botón Central: Dormir / Día */}
           <button
             onClick={onToggleNightMode}
-            className={`flex flex-col items-center gap-1 touch-press ${
-              isNightMode ? "text-[#E5A93C] font-bold" : "hover:text-[#1F2421]"
+            className={`flex flex-col items-center gap-1 transition-all ${
+              isNightMode ? "text-[#FBBF24] font-display font-bold" : "hover:text-[#2D231B]"
             }`}
           >
-            {isNightMode ? (
-              <Sun className="w-5 h-5" strokeWidth={2} />
-            ) : (
-              <Moon className="w-5 h-5" strokeWidth={1.75} />
-            )}
+            <div className="p-1.5 rounded-2xl">
+              {isNightMode ? (
+                <Sun className="w-5 h-5 text-[#FBBF24] animate-spin-slow" strokeWidth={2.2} />
+              ) : (
+                <Moon className="w-5 h-5 text-[#4F46E5]" strokeWidth={2} />
+              )}
+            </div>
             <span className="text-[10px]">{isNightMode ? "Día" : "Noche"}</span>
           </button>
 
-          {/* Tab 4: Membresía Familiar */}
+          {/* Tab 4: Pase Pro */}
           <button
             onClick={() => onTabChange("pro")}
-            className={`flex flex-col items-center gap-1 touch-press ${
+            className={`flex flex-col items-center gap-1 transition-all ${
               activeTab === "pro"
-                ? "text-storybook-coral font-bold"
-                : "hover:text-[#1F2421]"
+                ? "text-storybook-coral font-display font-bold scale-110"
+                : "hover:text-[#2D231B]"
             }`}
           >
-            <Crown className="w-5 h-5" strokeWidth={activeTab === "pro" ? 2.2 : 1.75} />
+            <div className={`p-1.5 rounded-2xl ${activeTab === "pro" ? "bg-storybook-coralLight" : ""}`}>
+              <Crown className="w-5 h-5 text-storybook-coral" strokeWidth={activeTab === "pro" ? 2.5 : 2} />
+            </div>
             <span className="text-[10px]">Pase Pro</span>
           </button>
         </nav>

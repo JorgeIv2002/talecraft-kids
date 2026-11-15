@@ -47,58 +47,75 @@ export default function StoryCreatorModal({
         title,
         synopsis: `Un cuento interactivo especial creado para la familia sobre ${topic.trim()}, reforzando el valor de la ${valueCategory}.`,
         valueCategory,
-        estimatedMinutes: 5,
+        estimatedMinutes: 6,
         coverEmoji: emoji,
-        accentColor: "#D9532F",
-        decisionsCount: 2,
+        accentColor: "#FF6B4A",
+        decisionsCount: 3,
         startNodeId: "c-node-1",
         isPremium: true,
         nodes: {
           "c-node-1": {
             id: "c-node-1",
             chapterNumber: 1,
-            totalChapters: 2,
+            totalChapters: 3,
             sceneEmoji: emoji,
-            text: `Érase una vez una historia única sobre ${topic.trim()}. Al comenzar la mañana, surgió un dilema inesperado en el camino que requería poner a prueba la ${valueCategory}.`,
+            text: `Érase una vez una historia mágica sobre ${topic.trim()}. Al comenzar la mañana, surgió un dilema inesperado en el camino que requería poner a prueba la ${valueCategory}.`,
             choices: [
               {
                 id: "c-opt-1",
                 label: "Enfrentar el desafío con paciencia y una sonrisa",
-                hint: "Un corazón valiente siempre encuentra una salida.",
-                nextNodeId: "c-node-end-1",
+                hint: "Un corazón noble siempre encuentra una salida.",
+                nextNodeId: "c-node-2a",
               },
               {
                 id: "c-opt-2",
                 label: "Pedir consejo a los sabios del valle",
                 hint: "Escuchar a los demás enriquece nuestras decisiones.",
-                nextNodeId: "c-node-end-2",
+                nextNodeId: "c-node-2b",
               },
             ],
           },
-          "c-node-end-1": {
-            id: "c-node-end-1",
+          "c-node-2a": {
+            id: "c-node-2a",
             chapterNumber: 2,
-            totalChapters: 2,
+            totalChapters: 3,
             sceneEmoji: "✨",
-            text: `¡Fue un éxito rotundo! Al mantener la calma y actuar con ${valueCategory.toLowerCase()}, todo el bosque aplaudió su gran corazón.`,
-            isEnding: true,
-            moralLesson: {
-              title: `Lección de ${valueCategory}`,
-              description: `Cuando practicamos la ${valueCategory.toLowerCase()}, inspiramos a todos los que nos rodean a ser mejores.`,
-              starsAwarded: 3,
-            },
+            text: `Al mantener la calma, todo el sendero se llenó de luciérnagas y pequeños animales que aplaudieron su bondad.`,
+            choices: [
+              {
+                id: "c-2a1",
+                label: "Celebrar con un festín de néctar y cantar juntos",
+                hint: "La alegría se multiplica al compartirse.",
+                nextNodeId: "c-node-end",
+              },
+            ],
           },
-          "c-node-end-2": {
-            id: "c-node-end-2",
+          "c-node-2b": {
+            id: "c-node-2b",
             chapterNumber: 2,
-            totalChapters: 2,
-            sceneEmoji: "🌟",
-            text: `Los sabios quedaron maravillados con la humildad para escuchar. Juntos celebraron una fiesta iluminada por luciérnagas.`,
+            totalChapters: 3,
+            sceneEmoji: "🦉",
+            text: `Los ancianos del valle le entregaron un mapa de estrellas secretas que indicaba cómo resolver cualquier problema con amor.`,
+            choices: [
+              {
+                id: "c-2b1",
+                label: "Seguir la constelación dorada hasta el final del viaje",
+                hint: "La sabiduría guía los pasos más seguros.",
+                nextNodeId: "c-node-end",
+              },
+            ],
+          },
+          "c-node-end": {
+            id: "c-node-end",
+            chapterNumber: 3,
+            totalChapters: 3,
+            sceneEmoji: "🏆",
+            text: `¡Fue un triunfo memorable! Todo el reino aprendió que cuando actuamos con ${valueCategory.toLowerCase()}, el mundo entero se transforma en un lugar más feliz.`,
             isEnding: true,
             moralLesson: {
-              title: `Sabiduría y ${valueCategory}`,
-              description: `Aprender de los demás y actuar con ${valueCategory.toLowerCase()} nos hace verdaderos héroes.`,
-              starsAwarded: 3,
+              title: `Lección Mágica de ${valueCategory}`,
+              description: `Cuando practicamos la ${valueCategory.toLowerCase()}, inspiramos a todos los que nos rodean a ser mejores.`,
+              starsAwarded: 5,
             },
           },
         },
@@ -112,67 +129,67 @@ export default function StoryCreatorModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
       <div
-        className={`w-full max-w-sm rounded-3xl p-6 border shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150 ${
+        className={`w-full max-w-sm rounded-[36px] p-6 border-2 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150 ${
           isNightMode
-            ? "bg-[#1A2333] border-[#2D3748] text-white"
-            : "bg-white border-[#EFE9DF] text-ink-primary"
+            ? "bg-[#1C2035] border-[#2D3352] text-white"
+            : "bg-white border-[#EFE6DA] text-[#2D231B]"
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between pb-1 border-b border-inherit">
+        <div className="flex items-center justify-between pb-1.5 border-b border-inherit">
           <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-xl bg-storybook-coral/10 text-storybook-coral">
-              <Wand2 className="w-4 h-4" />
+            <span className="p-2 rounded-2xl bg-storybook-coralLight text-storybook-coral text-base">
+              🪄
             </span>
             <div className="flex items-center gap-1.5">
               <h2 className="font-display font-bold text-base">Crear Cuento Mágico</h2>
-              <span className="px-1.5 py-0.5 rounded-full bg-[#FEF3C7] text-[#92400E] text-[9px] font-bold flex items-center gap-0.5">
-                <Crown className="w-2.5 h-2.5 fill-current text-[#D97706]" />
+              <span className="px-2 py-0.5 rounded-full bg-[#FEF3C7] text-[#92400E] text-[10px] font-display font-bold flex items-center gap-0.5">
+                <Crown className="w-3 h-3 fill-current text-[#D97706]" />
                 PRO
               </span>
             </div>
           </div>
           <button
             onClick={onClose}
-            className={`p-1 rounded-full touch-press ${
-              isNightMode ? "text-slate-400 hover:text-white" : "text-ink-secondary hover:text-ink-primary"
+            className={`p-1.5 rounded-full transition-transform active:scale-95 ${
+              isNightMode ? "text-slate-400 hover:text-white" : "text-[#786C60] hover:text-[#2D231B]"
             }`}
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Explicación / Estado Pro */}
+        {/* Explicación Pro */}
         {!isPro ? (
-          <div className="p-3.5 rounded-2xl bg-[#FEF3C7] border border-[#FDE68A] text-[#92400E] text-xs space-y-2">
-            <p className="font-bold flex items-center gap-1">
-              <Crown className="w-3.5 h-3.5 fill-current text-[#D97706]" />
+          <div className="p-4 rounded-3xl bg-gradient-to-r from-[#FFFBEB] to-[#FEF3C7] border-2 border-[#FDE68A] text-[#92400E] text-xs space-y-2">
+            <p className="font-display font-bold flex items-center gap-1.5 text-xs">
+              <Crown className="w-4 h-4 fill-current text-[#D97706]" />
               Función Exclusiva del Pase Familiar Pro
             </p>
-            <p className="leading-snug">
-              Crea cuentos interactivos infinitos sobre cualquier personaje que tu hijo imagine.
+            <p className="font-body font-semibold leading-relaxed">
+              Crea cuentos interactivos infinitos sobre cualquier personaje o idea que tu hijo imagine.
             </p>
             <button
               type="button"
               onClick={onRequestPro}
-              className="w-full py-2 rounded-xl bg-storybook-coral text-white font-bold text-xs"
+              className="w-full py-2.5 rounded-xl btn-toy-coral bg-storybook-coral text-white font-display font-bold text-xs"
             >
               Desbloquear con Prueba Gratuita →
             </button>
           </div>
         ) : (
-          <p className="text-xs text-storybook-mint font-medium flex items-center gap-1">
-            <CheckCircle2 className="w-3.5 h-3.5" />
+          <p className="text-xs font-display font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+            <CheckCircle2 className="w-4 h-4" />
             <span>Generador ilimitado activo con tu Pase Familiar Pro.</span>
           </p>
         )}
 
         {/* Formulario */}
-        <form onSubmit={handleGenerate} className="space-y-3.5 text-xs">
+        <form onSubmit={handleGenerate} className="space-y-3.5 text-xs font-body font-semibold">
           <div>
-            <label className="block font-semibold mb-1">
+            <label className="block font-display font-bold text-xs mb-1">
               ¿De qué tratará el cuento de hoy?
             </label>
             <input
@@ -181,24 +198,24 @@ export default function StoryCreatorModal({
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
               placeholder="Ej: Un robot que hace amigos en la playa..."
-              className={`w-full p-2.5 rounded-xl border font-medium text-sm outline-none transition-colors ${
+              className={`w-full p-3 rounded-2xl border-2 font-display font-bold text-sm outline-none transition-colors ${
                 isNightMode
-                  ? "bg-[#121824] border-[#2D3748] text-white focus:border-storybook-coral"
-                  : "bg-[#FDFBF7] border-[#EFE9DF] text-ink-primary focus:border-storybook-coral"
+                  ? "bg-[#141726] border-[#2D3352] text-white focus:border-storybook-coral"
+                  : "bg-[#FAF7F2] border-[#EFE6DA] text-[#2D231B] focus:border-storybook-coral"
               }`}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-semibold mb-1">Valor principal:</label>
+              <label className="block font-display font-bold text-xs mb-1">Valor principal:</label>
               <select
                 value={valueCategory}
                 onChange={(e) => setValueCategory(e.target.value as ValueCategory)}
-                className={`w-full p-2.5 rounded-xl border font-medium text-xs outline-none ${
+                className={`w-full p-2.5 rounded-2xl border-2 font-display font-bold text-xs outline-none ${
                   isNightMode
-                    ? "bg-[#121824] border-[#2D3748] text-white focus:border-storybook-coral"
-                    : "bg-[#FDFBF7] border-[#EFE9DF] text-ink-primary focus:border-storybook-coral"
+                    ? "bg-[#141726] border-[#2D3352] text-white focus:border-storybook-coral"
+                    : "bg-[#FAF7F2] border-[#EFE6DA] text-[#2D231B] focus:border-storybook-coral"
                 }`}
               >
                 <option value="Valentía">🦁 Valentía</option>
@@ -210,17 +227,17 @@ export default function StoryCreatorModal({
             </div>
 
             <div>
-              <label className="block font-semibold mb-1">Emoji de portada:</label>
+              <label className="block font-display font-bold text-xs mb-1">Emoji de portada:</label>
               <div className="flex gap-1.5">
                 {["🤖", "🐬", "🦖", "🛸", "🧙‍♂️"].map((item) => (
                   <button
                     key={item}
                     type="button"
                     onClick={() => setEmoji(item)}
-                    className={`w-8 h-8 rounded-xl text-base flex items-center justify-center border transition-all ${
+                    className={`w-8.5 h-8.5 rounded-2xl text-lg flex items-center justify-center border-2 transition-all active:scale-95 ${
                       emoji === item
-                        ? "border-storybook-coral bg-storybook-coral/10 font-bold"
-                        : "border-slate-200 dark:border-slate-700"
+                        ? "border-storybook-coral bg-storybook-coralLight font-bold scale-110 shadow-xs"
+                        : "border-[#EFE6DA] dark:border-[#2D3352]"
                     }`}
                   >
                     {item}
@@ -233,7 +250,7 @@ export default function StoryCreatorModal({
           <button
             type="submit"
             disabled={isGenerating}
-            className="w-full py-3.5 rounded-2xl bg-storybook-coral hover:bg-storybook-coralHover text-white font-display font-bold text-xs shadow-md touch-press transition-all flex items-center justify-center gap-2"
+            className="w-full py-4 rounded-3xl btn-toy-coral bg-storybook-coral hover:bg-[#F05735] text-white font-display font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2"
           >
             {isGenerating ? (
               <span>Generando Aventura Mágica... 🪄</span>

@@ -40,16 +40,16 @@ export default function ProMembershipModal({
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
       <div
-        className={`w-full max-w-sm rounded-3xl p-6 border shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150 ${
+        className={`w-full max-w-sm rounded-[36px] p-6 border-2 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150 ${
           isNightMode
-            ? "bg-[#1A2333] border-[#2D3748] text-white"
-            : "bg-white border-[#EFE9DF] text-ink-primary"
+            ? "bg-[#1C2035] border-[#2D3352] text-white"
+            : "bg-white border-[#EFE6DA] text-[#2D231B]"
         }`}
       >
         {/* Cabecera */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-xl bg-storybook-amber/20 text-[#D97706]">
+            <span className="p-2 rounded-2xl bg-amber-100 text-[#D97706]">
               <Crown className="w-5 h-5 fill-current" />
             </span>
             <span className="font-display font-extrabold text-sm uppercase tracking-wide text-storybook-coral">
@@ -58,33 +58,33 @@ export default function ProMembershipModal({
           </div>
           <button
             onClick={onClose}
-            className={`p-1 rounded-full touch-press ${
-              isNightMode ? "text-slate-400 hover:text-white" : "text-ink-secondary hover:text-ink-primary"
+            className={`p-1.5 rounded-full transition-transform active:scale-95 ${
+              isNightMode ? "text-slate-400 hover:text-white" : "text-[#786C60] hover:text-[#2D231B]"
             }`}
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Título de la Oferta o Estado Activo */}
+        {/* Estado o Título */}
         {isPro ? (
-          <div className="p-4 rounded-2xl bg-[#ECFDF5] border border-[#A7F3D0] text-[#065F46] space-y-2 text-center">
-            <div className="w-10 h-10 rounded-full bg-[#10B981] text-white mx-auto flex items-center justify-center text-xl shadow-xs">
+          <div className="p-4 rounded-3xl bg-[#ECFDF5] border-2 border-[#A7F3D0] text-[#065F46] space-y-2 text-center">
+            <div className="w-12 h-12 rounded-2xl bg-[#10B981] text-white mx-auto flex items-center justify-center text-2xl shadow-sm">
               👑
             </div>
             <h3 className="font-display font-bold text-sm">¡Tu Pase Familiar Pro está ACTIVO!</h3>
-            <p className="text-xs leading-relaxed text-[#047857]">
-              Tienes acceso ilimitado a todos los cuentos exclusivos, perfiles para hasta 3 niños y el generador de historias personalizadas.
+            <p className="text-xs font-body font-semibold leading-relaxed text-[#047857]">
+              Tienes acceso ilimitado a todos los cuentos, perfiles para hasta 3 niños y el generador de historias mágicas.
             </p>
           </div>
         ) : (
           <div className="space-y-1 text-center">
-            <h2 className="font-display font-extrabold text-lg leading-tight">
+            <h2 className="font-display font-bold text-xl leading-tight">
               Club de Cuentos Mágicos
             </h2>
             <p
-              className={`text-xs ${
-                isNightMode ? "text-slate-300" : "text-ink-secondary"
+              className={`text-xs font-body font-semibold ${
+                isNightMode ? "text-slate-300" : "text-[#786C60]"
               }`}
             >
               Desbloquea todas las aventuras y funciones familiares para tus pequeños.
@@ -92,25 +92,25 @@ export default function ProMembershipModal({
           </div>
         )}
 
-        {/* Selector Mensual / Anual (sólo si no es Pro) */}
+        {/* Selector Mensual / Anual */}
         {!isPro && (
-          <div className="flex items-center justify-center gap-2 bg-[#F4F1EA] dark:bg-[#121824] p-1 rounded-2xl border border-[#EFE9DF] dark:border-[#2D3748]">
+          <div className="flex items-center justify-center gap-2 bg-[#FAF7F2] dark:bg-[#141726] p-1.5 rounded-2xl border-2 border-[#EFE6DA] dark:border-[#2D3352]">
             <button
               onClick={() => setBillingCycle("monthly")}
-              className={`flex-1 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`flex-1 py-2 rounded-xl text-xs font-display font-bold transition-all ${
                 billingCycle === "monthly"
-                  ? "bg-white dark:bg-[#1A2333] shadow-xs text-storybook-coral"
-                  : "text-ink-secondary dark:text-slate-400"
+                  ? "bg-white dark:bg-[#1E2238] shadow-xs text-storybook-coral"
+                  : "text-[#786C60] dark:text-slate-400"
               }`}
             >
               $6.99 / mes
             </button>
             <button
               onClick={() => setBillingCycle("yearly")}
-              className={`flex-1 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`flex-1 py-2 rounded-xl text-xs font-display font-bold transition-all ${
                 billingCycle === "yearly"
                   ? "bg-storybook-coral text-white shadow-xs"
-                  : "text-ink-secondary dark:text-slate-400"
+                  : "text-[#786C60] dark:text-slate-400"
               }`}
             >
               $49 / año (-40%)
@@ -118,11 +118,11 @@ export default function ProMembershipModal({
           </div>
         )}
 
-        {/* Beneficios Clave con Check */}
-        <ul className="space-y-2 text-xs">
+        {/* Beneficios */}
+        <ul className="space-y-2 text-xs font-body font-semibold">
           <li className="flex items-start gap-2">
             <span className="p-0.5 rounded-full bg-emerald-100 text-emerald-700 shrink-0 mt-0.5">
-              <Check className="w-3 h-3" />
+              <Check className="w-3.5 h-3.5" />
             </span>
             <span>
               <strong>Cuentos Exclusivos Desbloqueados:</strong> Acceso a toda la biblioteca sin candados.
@@ -130,36 +130,36 @@ export default function ProMembershipModal({
           </li>
           <li className="flex items-start gap-2">
             <span className="p-0.5 rounded-full bg-emerald-100 text-emerald-700 shrink-0 mt-0.5">
-              <Check className="w-3 h-3" />
+              <Check className="w-3.5 h-3.5" />
             </span>
             <span>
-              <strong>Multi-Hijo:</strong> Perfiles independientes para hasta 3 niños con sus propias estrellas.
+              <strong>Multi-Hijo:</strong> Hasta 3 niños con sus propias estrellas y avatares.
             </span>
           </li>
           <li className="flex items-start gap-2">
             <span className="p-0.5 rounded-full bg-emerald-100 text-emerald-700 shrink-0 mt-0.5">
-              <Check className="w-3 h-3" />
+              <Check className="w-3.5 h-3.5" />
             </span>
             <span>
-              <strong>Creador de Cuentos Mágicos:</strong> Genera cuentos interactivos a medida con cualquier valor.
+              <strong>Creador de Cuentos Mágicos:</strong> Historias infinitas con cualquier personaje.
             </span>
           </li>
         </ul>
 
-        {/* Botón de Acción */}
+        {/* Acciones */}
         {isPro ? (
           <div className="space-y-2">
             <button
               onClick={onClose}
-              className="w-full py-3 rounded-2xl bg-storybook-coral text-white font-display font-bold text-xs shadow-md touch-press"
+              className="w-full py-3.5 rounded-2xl btn-toy-coral bg-storybook-coral text-white font-display font-bold text-xs shadow-md"
             >
               Continuar Disfrutando de Pro ✨
             </button>
             <button
               onClick={handleDeactivatePro}
-              className="w-full py-2 rounded-xl text-xs text-slate-500 hover:text-red-600 transition-colors flex items-center justify-center gap-1"
+              className="w-full py-2 rounded-xl text-xs font-display font-bold text-slate-500 hover:text-red-500 transition-colors flex items-center justify-center gap-1"
             >
-              <RotateCcw className="w-3 h-3" />
+              <RotateCcw className="w-3.5 h-3.5" />
               <span>Volver al Modo Gratuito (para probar diferencias)</span>
             </button>
           </div>
@@ -167,7 +167,7 @@ export default function ProMembershipModal({
           <button
             onClick={handleActivatePro}
             disabled={justActivated}
-            className="w-full py-3.5 rounded-2xl bg-storybook-coral hover:bg-storybook-coralHover text-white font-display font-bold text-xs shadow-md touch-press transition-all flex items-center justify-center gap-2"
+            className="w-full py-4 rounded-2xl btn-toy-coral bg-storybook-coral hover:bg-[#F05735] text-white font-display font-bold text-xs shadow-md flex items-center justify-center gap-2"
           >
             {justActivated ? (
               <>
@@ -183,9 +183,9 @@ export default function ProMembershipModal({
           </button>
         )}
 
-        <p className="text-[10px] text-center text-ink-secondary dark:text-slate-400 flex items-center justify-center gap-1">
+        <p className="text-[11px] font-body text-center text-[#786C60] dark:text-slate-400 flex items-center justify-center gap-1">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-          <span>Sin compromisos: alterna o prueba libremente en cualquier momento.</span>
+          <span>Sin compromisos: cancela o alterna libremente cuando quieras.</span>
         </p>
       </div>
     </div>

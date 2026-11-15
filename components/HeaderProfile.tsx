@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Star, Crown, ChevronDown, Sparkles } from "lucide-react";
+import { Star, Crown, ChevronDown } from "lucide-react";
 import { ChildProfile } from "@/lib/types";
 
 interface HeaderProfileProps {
@@ -23,7 +23,6 @@ export default function HeaderProfile({
   onOpenPersonalize,
   onOpenShop,
 }: HeaderProfileProps) {
-  // Accesorio equipado
   const accessoryEmoji =
     profile.equippedAccessory === "acc-crown"
       ? "👑"
@@ -34,26 +33,26 @@ export default function HeaderProfile({
       : null;
 
   return (
-    <header className="flex items-center justify-between pb-3 pt-1">
-      {/* Información del Niño y Selector Multi-Hijo */}
+    <header className="flex items-center justify-between pb-2 pt-1">
+      {/* Información del Niño y Avatar Burbuja */}
       <div className="flex items-center gap-3">
         <div
           onClick={onOpenPersonalize}
-          className={`w-11 h-11 rounded-2xl flex items-center justify-center text-2xl shadow-xs transition-colors border cursor-pointer touch-press relative ${
+          className={`w-13 h-13 rounded-3xl flex items-center justify-center text-3xl shadow-sm transition-transform hover:scale-105 active:scale-95 cursor-pointer relative border-2 ${
             isNightMode
-              ? "bg-[#1E293B] border-[#334155]"
-              : "bg-[#EBF5F1] border-[#C5DDD2]"
+              ? "bg-[#202742] border-[#384168]"
+              : "bg-gradient-to-b from-[#FFF5EB] to-[#FFE8D6] border-[#FFD0B5]"
           }`}
-          title="Editar perfil infantil"
+          title="Editar perfil del pequeño héroe"
         >
-          {profile.avatarEmoji || "🦊"}
+          <span>{profile.avatarEmoji || "🦊"}</span>
           {accessoryEmoji && (
-            <div className="absolute -top-2 -left-1 text-sm drop-shadow">
+            <div className="absolute -top-2.5 -left-1 text-base drop-shadow animate-bounce">
               {accessoryEmoji}
             </div>
           )}
           {isPro && (
-            <div className="absolute -top-1 -right-1 bg-[#D97706] text-white p-0.5 rounded-full shadow-xs">
+            <div className="absolute -top-1.5 -right-1.5 bg-[#F59E0B] text-white p-1 rounded-full shadow-md border-2 border-white dark:border-[#202742]">
               <Crown className="w-2.5 h-2.5 fill-current" />
             </div>
           )}
@@ -61,79 +60,70 @@ export default function HeaderProfile({
 
         <div>
           <div className="flex items-center gap-1.5">
-            {/* Si es Pro y hay varios niños, permite cambiar de hijo */}
             {isPro && profilesList.length > 1 ? (
               <div className="relative inline-flex items-center">
                 <select
                   value={profile.id}
                   onChange={(e) => onSelectChild(e.target.value)}
-                  className={`font-display font-bold text-sm tracking-tight bg-transparent border-0 outline-none pr-4 cursor-pointer ${
-                    isNightMode ? "text-white" : "text-ink-primary"
+                  className={`font-display font-bold text-base tracking-normal bg-transparent border-0 outline-none pr-4 cursor-pointer ${
+                    isNightMode ? "text-white" : "text-[#2D231B]"
                   }`}
                 >
                   {profilesList.map((p) => (
                     <option
                       key={p.id}
                       value={p.id}
-                      className={isNightMode ? "bg-[#1A2333] text-white" : "bg-white text-ink-primary"}
+                      className={isNightMode ? "bg-[#1E2238] text-white" : "bg-white text-[#2D231B]"}
                     >
                       Aventuras de {p.name}
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="w-3.5 h-3.5 absolute right-0 pointer-events-none opacity-60" />
+                <ChevronDown className="w-4 h-4 absolute right-0 pointer-events-none opacity-60" />
               </div>
             ) : (
               <h1
                 onClick={onOpenPersonalize}
-                className={`font-display font-bold text-sm tracking-tight cursor-pointer hover:underline ${
-                  isNightMode ? "text-white" : "text-ink-primary"
+                className={`font-display font-bold text-base tracking-normal cursor-pointer hover:text-storybook-coral transition-colors ${
+                  isNightMode ? "text-white" : "text-[#2D231B]"
                 }`}
               >
                 Aventuras de {profile.name}
               </h1>
             )}
 
-            <span className="text-[10px] text-storybook-coral font-bold px-1.5 py-0.2 rounded-full bg-storybook-coral/10">
+            <span className="text-[11px] font-display font-bold px-2 py-0.5 rounded-full bg-[#FFEAE3] text-storybook-coral border border-[#FFD5C8]">
               {profile.age} años
             </span>
-
-            {isPro && (
-              <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] flex items-center gap-0.5">
-                <Crown className="w-2.5 h-2.5 fill-current text-[#D97706]" />
-                <span>PRO</span>
-              </span>
-            )}
           </div>
 
           <p
             onClick={onOpenPersonalize}
-            className={`text-[11px] flex items-center gap-1 cursor-pointer ${
-              isNightMode ? "text-slate-400" : "text-ink-secondary"
+            className={`text-xs font-semibold flex items-center gap-1 cursor-pointer ${
+              isNightMode ? "text-slate-400" : "text-[#786C60]"
             }`}
           >
             <span>Con {profile.petName}</span>
-            <span className="text-storybook-coral text-[9px]">✎ editar</span>
+            <span className="text-storybook-coral text-[10px] font-bold">✎ editar</span>
           </p>
         </div>
       </div>
 
-      {/* Botón Táctil: Bazar de Estrellas Mágicas */}
+      {/* Botón Táctil de Estrellas con Estilo de Botón de Juguete */}
       <button
         onClick={onOpenShop}
-        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border shadow-xs select-none touch-press transition-all hover:scale-105 ${
+        className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl border-2 shadow-sm select-none transition-all hover:scale-105 active:scale-95 ${
           isNightMode
-            ? "bg-[#282218] border-[#78541D] text-[#FBBF24] hover:bg-[#382B18]"
-            : "bg-[#FEF9EE] border-[#FDE8B3] text-[#B45309] hover:bg-[#FEF3C7]"
+            ? "bg-[#282218] border-[#78541D] text-[#FBBF24]"
+            : "bg-gradient-to-r from-[#FFFBEB] to-[#FEF3C7] border-[#FDE68A] text-[#B45309]"
         }`}
         title="Toca para abrir el Bazar de las Estrellas Mágicas"
       >
-        <Star className="w-4 h-4 fill-current animate-pulse text-[#E5A93C]" />
-        <span className="font-display font-bold text-xs tracking-tight">
+        <Star className="w-4 h-4 fill-current text-[#F59E0B] animate-spin-slow" />
+        <span className="font-display font-bold text-sm tracking-tight text-[#92400E] dark:text-[#FBBF24]">
           {profile.starsCount}
         </span>
-        <span className="text-[10px] opacity-80 font-semibold">★</span>
-        <span className="text-[9px] px-1 py-0.2 rounded-md bg-[#D97706]/20 text-[#B45309] font-bold">
+        <span className="text-[10px] font-display font-extrabold uppercase px-1.5 py-0.5 rounded-lg bg-[#F59E0B] text-white">
           Bazar
         </span>
       </button>

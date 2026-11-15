@@ -162,7 +162,6 @@ export default function Home() {
           unlockedRewards: updatedUnlocked,
         };
 
-        // Equipar automáticamente al comprar
         if (item.type === "pet") {
           updatedProfile.petName = item.name;
         } else if (item.type === "accessory") {
@@ -181,7 +180,7 @@ export default function Home() {
     });
   };
 
-  // Equipar un ítem ya desbloqueado
+  // Equipar ítem desbloqueado
   const handleEquipReward = (item: RewardItem) => {
     setProfilesList((prev) => {
       const next = prev.map((p) => {
@@ -257,7 +256,7 @@ export default function Home() {
       ) : (
         /* VISTA B: BIBLIOTECA Y EXPLORADOR DE CUENTOS */
         <div className="space-y-4">
-          {/* Header con Perfil del Niño, Avatar, Accesorio y Acceso al Bazar */}
+          {/* Header con Perfil del Niño y Botón del Bazar */}
           <HeaderProfile
             profile={currentProfile}
             profilesList={profilesList}
@@ -268,86 +267,86 @@ export default function Home() {
             onOpenShop={() => setIsShopOpen(true)}
           />
 
-          {/* Banner de Estado Pro o Promoción del Bazar */}
+          {/* Banner de Estado Pro Activo */}
           {isPro ? (
-            <div className="rounded-2xl p-3 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/40 dark:to-orange-950/30 border border-amber-200 dark:border-amber-800/50 flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2">
-                <span className="p-1.5 rounded-xl bg-amber-500 text-white shadow-xs">
+            <div className="rounded-3xl p-3.5 bg-gradient-to-r from-[#FEF3C7] to-[#FED7AA] dark:from-[#372614] dark:to-[#451A03] border-2 border-[#FDE68A] dark:border-[#78350F] flex items-center justify-between text-xs shadow-sm">
+              <div className="flex items-center gap-2.5">
+                <span className="p-2 rounded-2xl bg-[#F59E0B] text-white shadow-xs">
                   <Crown className="w-4 h-4 fill-current" />
                 </span>
                 <div>
-                  <span className="font-display font-bold text-amber-900 dark:text-amber-200 block">
+                  <span className="font-display font-bold text-amber-950 dark:text-amber-100 block text-xs">
                     Pase Familiar Pro Activo
                   </span>
-                  <span className="text-[10px] text-amber-700 dark:text-amber-300">
-                    Biblioteca completa y creador ilimitado desbloqueados
+                  <span className="text-[11px] font-body text-amber-900/80 dark:text-amber-200">
+                    Todos los cuentos y generador ilimitado desbloqueados
                   </span>
                 </div>
               </div>
               <button
                 onClick={() => setIsCreatorOpen(true)}
-                className="px-2.5 py-1 rounded-xl bg-storybook-coral text-white font-bold text-[11px] touch-press shadow-xs flex items-center gap-1"
+                className="btn-toy-coral px-3 py-1.5 rounded-xl bg-storybook-coral text-white font-display font-bold text-xs shadow-xs flex items-center gap-1"
               >
-                <Wand2 className="w-3 h-3" />
+                <Wand2 className="w-3.5 h-3.5" />
                 <span>Crear Cuento</span>
               </button>
             </div>
           ) : (
             <div
               onClick={() => setIsShopOpen(true)}
-              className="rounded-2xl p-2.5 bg-[#FEF9EE] dark:bg-[#1C180E] border border-[#FDE8B3] dark:border-[#78541D] flex items-center justify-between text-xs cursor-pointer touch-press"
+              className="rounded-3xl p-3 bg-gradient-to-r from-[#FFFBEB] to-[#FEF3C7] dark:from-[#231E12] dark:to-[#382D13] border-2 border-[#FDE68A] dark:border-[#78541D] flex items-center justify-between text-xs cursor-pointer shadow-xs transition-transform hover:scale-[1.01] active:scale-[0.99]"
             >
-              <div className="flex items-center gap-2">
-                <span className="text-lg">⭐</span>
+              <div className="flex items-center gap-2.5">
+                <span className="text-2xl animate-bounce">🎁</span>
                 <div>
-                  <span className="font-display font-bold text-[#B45309] dark:text-[#FBBF24] block text-xs">
+                  <span className="font-display font-bold text-[#92400E] dark:text-[#FBBF24] block text-xs">
                     ¡Tienes {currentProfile.starsCount} Estrellas Mágicas!
                   </span>
-                  <span className="text-[10px] text-[#92400E] dark:text-[#D97706]">
-                    Canjéalas por coronas, capas y nuevas mascotas
+                  <span className="text-[11px] font-body text-[#B45309] dark:text-amber-200">
+                    Canjea por coronas, capas y nuevas mascotas
                   </span>
                 </div>
               </div>
-              <span className="px-2.5 py-1 rounded-xl bg-[#D97706] text-white font-display font-bold text-[10px]">
+              <span className="btn-toy-amber px-3 py-1.5 rounded-xl bg-[#D97706] text-white font-display font-bold text-xs">
                 Abrir Bazar →
               </span>
             </div>
           )}
 
-          {/* Banner Cuento Recomendado de la Noche */}
+          {/* Banner Cuento Destacado Ilustrado */}
           <section
-            className={`rounded-3xl p-4 border shadow-xs relative overflow-hidden transition-all ${
+            className={`rounded-[32px] p-5 border-2 shadow-storybook relative overflow-hidden transition-all ${
               isNightMode
-                ? "bg-[#1A2333] border-[#2D3748] text-white"
-                : "bg-white border-[#EFE9DF] text-ink-primary"
+                ? "bg-gradient-to-b from-[#1C2035] to-[#15192B] border-[#2D3352] text-white"
+                : "bg-gradient-to-b from-[#FFFDF9] to-[#FFF5EB] border-[#FFDFD2] text-[#2D231B]"
             }`}
           >
             <div className="flex items-center justify-between pb-1.5">
               <span
-                className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                className={`px-3 py-1 rounded-full text-xs font-display font-bold uppercase tracking-wider border ${
                   isNightMode
-                    ? "bg-[#1E293B] text-[#34D399]"
-                    : "bg-storybook-mintLight text-storybook-mint"
+                    ? "bg-[#252C48] text-[#34D399] border-[#38436B]"
+                    : "bg-emerald-100 text-emerald-800 border-emerald-200"
                 }`}
               >
                 🌿 Cuento de 4 Capítulos
               </span>
               <span
-                className={`text-[10px] font-medium ${
-                  isNightMode ? "text-slate-400" : "text-ink-secondary"
+                className={`text-xs font-display font-bold ${
+                  isNightMode ? "text-slate-400" : "text-[#786C60]"
                 }`}
               >
-                ⏱ {featuredStory.estimatedMinutes} min • Noche
+                ⏱ {featuredStory.estimatedMinutes} min lectura
               </span>
             </div>
 
-            <div className="space-y-1 mt-2">
-              <h2 className="font-display font-extrabold text-base leading-tight">
+            <div className="space-y-1 mt-2.5">
+              <h2 className="font-display font-bold text-lg leading-tight">
                 {featuredStory.title}
               </h2>
               <p
-                className={`text-xs leading-relaxed ${
-                  isNightMode ? "text-slate-300" : "text-ink-secondary"
+                className={`text-xs leading-relaxed font-body font-medium ${
+                  isNightMode ? "text-slate-300" : "text-[#6E6259]"
                 }`}
               >
                 {featuredStory.synopsis}
@@ -356,26 +355,26 @@ export default function Home() {
 
             <button
               onClick={() => setSelectedStory(featuredStory)}
-              className="w-full mt-3.5 py-2.5 rounded-2xl bg-storybook-coral hover:bg-storybook-coralHover text-white font-display font-bold text-xs shadow-sm touch-press flex items-center justify-center gap-2"
+              className="w-full mt-4 py-3 rounded-2xl btn-toy-coral bg-storybook-coral hover:bg-[#F05735] text-white font-display font-bold text-xs shadow-sm flex items-center justify-center gap-2"
             >
               <span>Comenzar Aventura con {currentProfile.name}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-4 h-4" />
             </button>
           </section>
 
-          {/* Filtros por Categoría de Valor */}
+          {/* Filtros de Categorías Lúdicos */}
           <div className="space-y-2 pt-1">
             <div className="flex items-center justify-between">
               <h3
                 className={`font-display font-bold text-xs tracking-tight ${
-                  isNightMode ? "text-slate-300" : "text-ink-primary"
+                  isNightMode ? "text-slate-300" : "text-[#2D231B]"
                 }`}
               >
                 Elegir por valor o emoción
               </h3>
               <span
-                className={`text-[10px] ${
-                  isNightMode ? "text-slate-400" : "text-ink-secondary"
+                className={`text-xs font-display font-bold ${
+                  isNightMode ? "text-slate-400" : "text-[#786C60]"
                 }`}
               >
                 {filteredStories.length} cuentos
@@ -387,17 +386,17 @@ export default function Home() {
                 <button
                   key={cat}
                   onClick={() => setFilterCategory(cat)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all touch-press border ${
+                  className={`px-3.5 py-1.5 rounded-2xl text-xs font-display font-bold whitespace-nowrap transition-all border-2 active:scale-95 ${
                     filterCategory === cat
-                      ? "bg-storybook-coral text-white border-storybook-coral shadow-xs"
+                      ? "bg-storybook-coral text-white border-[#D94524] shadow-xs"
                       : isNightMode
-                      ? "bg-[#1A2333] border-[#2D3748] text-slate-300 hover:text-white"
-                      : "bg-white border-[#EFE9DF] text-ink-primary hover:border-storybook-coral"
+                      ? "bg-[#1C2035] border-[#2D3352] text-slate-300 hover:text-white"
+                      : "bg-white border-[#EFE6DA] text-[#6E6259] hover:border-storybook-coral"
                   }`}
                 >
                   {cat === "Todos" && "🌟 Todos"}
                   {cat === "Amistad" && "🤝 Amistad"}
-                  {cat === "Perseverancia" && "🦁 Perseverancia"}
+                  {cat === "Perseverancia" && "🚀 Perseverancia"}
                   {cat === "Naturaleza" && "🌿 Naturaleza"}
                   {cat === "Generosidad" && "🎁 Generosidad"}
                 </button>
@@ -406,7 +405,7 @@ export default function Home() {
           </div>
 
           {/* Listado de Cuentos */}
-          <div className="space-y-3 pt-1">
+          <div className="space-y-3.5 pt-1">
             {filteredStories.map((story) => (
               <StoryCard
                 key={story.id}
@@ -423,21 +422,21 @@ export default function Home() {
           {!isPro ? (
             <div
               onClick={() => setIsProOpen(true)}
-              className="rounded-3xl p-4 bg-[#1F2421] text-white border border-[#2F3732] shadow-md cursor-pointer touch-press flex items-center justify-between mt-2"
+              className="rounded-[30px] p-4.5 bg-[#1F2421] text-white border-2 border-[#38433B] shadow-md cursor-pointer transition-transform hover:scale-[1.01] flex items-center justify-between mt-2"
             >
               <div className="space-y-0.5">
-                <span className="text-[10px] font-extrabold uppercase tracking-wider text-storybook-coral flex items-center gap-1">
-                  <Crown className="w-3 h-3 fill-current" />
+                <span className="text-[11px] font-display font-extrabold uppercase tracking-wider text-storybook-coral flex items-center gap-1">
+                  <Crown className="w-3.5 h-3.5 fill-current" />
                   Club de Cuentos Mágicos
                 </span>
-                <h4 className="font-display font-bold text-xs">
+                <h4 className="font-display font-bold text-sm">
                   Desbloquea todos los cuentos y perfiles
                 </h4>
-                <p className="text-[10px] text-slate-300">
+                <p className="text-xs text-slate-300 font-body">
                   Prueba 7 días gratis. Alterna cuando quieras.
                 </p>
               </div>
-              <span className="px-2.5 py-1.5 rounded-xl bg-storybook-coral text-white font-display font-bold text-[11px] shrink-0">
+              <span className="btn-toy-coral px-3 py-1.5 rounded-xl bg-storybook-coral text-white font-display font-bold text-xs shrink-0">
                 Ver Pro →
               </span>
             </div>

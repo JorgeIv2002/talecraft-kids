@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Clock, Compass, ArrowRight, Lock, Crown } from "lucide-react";
+import { Clock, Compass, ArrowRight, Lock, Crown, Sparkles } from "lucide-react";
 import { Story } from "@/lib/types";
 
 interface StoryCardProps {
@@ -29,32 +29,43 @@ export default function StoryCard({
     }
   };
 
+  // Fondos pastel degradados según la categoría
+  const categoryGradients: Record<string, string> = {
+    Amistad: "from-[#FEF3C7] to-[#FDE68A]",
+    Perseverancia: "from-[#FFEDD5] to-[#FED7AA]",
+    Naturaleza: "from-[#DCFCE7] to-[#BBF7D0]",
+    Generosidad: "from-[#F3E8FF] to-[#E9D5FF]",
+    Curiosidad: "from-[#E0F2FE] to-[#BAE6FD]",
+  };
+
+  const bgGradient = categoryGradients[story.valueCategory] || "from-[#FEF3C7] to-[#FDE68A]";
+
   return (
     <article
       onClick={handleClick}
-      className={`rounded-3xl p-4 border transition-all cursor-pointer touch-press shadow-xs flex flex-col justify-between group relative overflow-hidden ${
+      className={`rounded-[30px] p-4.5 border-2 transition-all cursor-pointer card-storybook flex flex-col justify-between group relative overflow-hidden ${
         isNightMode
-          ? "bg-[#1A2333] border-[#2D3748] hover:border-[#D9532F] text-white"
-          : "bg-white border-[#EFE9DF] hover:border-[#D9532F] text-ink-primary"
+          ? "bg-[#1C2035] border-[#2D3352] hover:border-[#FF6B4A] text-white"
+          : "bg-white border-[#EFE6DA] hover:border-[#FF6B4A] text-[#2D231B]"
       }`}
     >
       <div>
-        {/* Metadatos superiores */}
-        <div className="flex items-center justify-between pb-2">
+        {/* Metadatos superiores con badges estilo sticker */}
+        <div className="flex items-center justify-between pb-2.5">
           <div className="flex items-center gap-1.5">
             <span
-              className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide border ${
+              className={`px-3 py-1 rounded-full text-xs font-display font-bold tracking-wide border ${
                 isNightMode
-                  ? "bg-[#1E293B] text-[#34D399] border-[#334155]"
-                  : "bg-storybook-mintLight text-storybook-mint border-[#C5DDD2]"
+                  ? "bg-[#252C48] text-[#34D399] border-[#38436B]"
+                  : "bg-emerald-50 text-emerald-700 border-emerald-200"
               }`}
             >
-              {story.valueCategory}
+              🌿 {story.valueCategory}
             </span>
 
             {story.isPremium && (
               <span
-                className={`px-2 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1 ${
+                className={`px-2.5 py-1 rounded-full text-xs font-display font-bold flex items-center gap-1 shadow-2xs ${
                   isPro
                     ? "bg-[#FEF3C7] text-[#B45309] border border-[#FDE68A]"
                     : "bg-[#FEE2E2] text-[#B91C1C] border border-[#FECACA]"
@@ -62,12 +73,12 @@ export default function StoryCard({
               >
                 {isPro ? (
                   <>
-                    <Crown className="w-3 h-3 fill-current text-[#D97706]" />
+                    <Crown className="w-3.5 h-3.5 fill-current text-[#D97706]" />
                     <span>👑 Desbloqueado</span>
                   </>
                 ) : (
                   <>
-                    <Lock className="w-3 h-3 text-[#B91C1C]" />
+                    <Lock className="w-3.5 h-3.5 text-[#B91C1C]" />
                     <span>Pase Pro</span>
                   </>
                 )}
@@ -76,38 +87,36 @@ export default function StoryCard({
           </div>
 
           <span
-            className={`text-[11px] font-medium flex items-center gap-1 ${
-              isNightMode ? "text-slate-400" : "text-ink-secondary"
+            className={`text-xs font-display font-semibold flex items-center gap-1 ${
+              isNightMode ? "text-slate-400" : "text-[#786C60]"
             }`}
           >
-            <Clock className="w-3 h-3" />
+            <Clock className="w-3.5 h-3.5 text-storybook-coral" />
             {story.estimatedMinutes} min
           </span>
         </div>
 
-        {/* Título y contenido principal con Avatar */}
-        <div className="flex items-start gap-3 mt-1.5">
+        {/* Título y contenido principal con Avatar Orgánico */}
+        <div className="flex items-start gap-3.5 mt-1">
           <div
-            className={`w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shrink-0 border relative ${
-              isNightMode
-                ? "bg-[#253248] border-[#334155]"
-                : "bg-[#FEF9EE] border-[#FDE8B3]"
-            }`}
+            className={`w-15 h-15 rounded-3xl flex items-center justify-center text-4xl shrink-0 border-2 bg-gradient-to-br ${bgGradient} border-white dark:border-[#2D3352] shadow-sm relative`}
           >
-            {story.coverEmoji}
+            <span className="transform group-hover:scale-110 transition-transform">
+              {story.coverEmoji}
+            </span>
             {isLocked && (
-              <div className="absolute inset-0 bg-black/40 rounded-2xl flex items-center justify-center backdrop-blur-2xs">
-                <Lock className="w-5 h-5 text-white drop-shadow" />
+              <div className="absolute inset-0 bg-black/40 rounded-3xl flex items-center justify-center backdrop-blur-2xs">
+                <Lock className="w-6 h-6 text-white drop-shadow" />
               </div>
             )}
           </div>
           <div className="space-y-1">
-            <h3 className="font-display font-bold text-sm leading-snug group-hover:text-storybook-coral transition-colors flex items-center gap-1.5">
+            <h3 className="font-display font-bold text-base leading-snug group-hover:text-storybook-coral transition-colors flex items-center gap-1.5">
               <span>{story.title}</span>
             </h3>
             <p
-              className={`text-[11px] line-clamp-2 leading-relaxed ${
-                isNightMode ? "text-slate-400" : "text-ink-secondary"
+              className={`text-xs leading-relaxed font-body ${
+                isNightMode ? "text-slate-300" : "text-[#6E6259]"
               }`}
             >
               {story.synopsis}
@@ -116,28 +125,28 @@ export default function StoryCard({
         </div>
       </div>
 
-      {/* Pie de tarjeta */}
+      {/* Pie de tarjeta con botón físico */}
       <div
-        className={`mt-3 pt-2.5 flex items-center justify-between border-t text-xs ${
-          isNightMode ? "border-[#253248]" : "border-[#F4F1EA]"
+        className={`mt-3.5 pt-3 flex items-center justify-between border-t text-xs ${
+          isNightMode ? "border-[#252C48]" : "border-[#F4ECE1]"
         }`}
       >
         <span
-          className={`text-[11px] flex items-center gap-1 font-medium ${
-            isNightMode ? "text-slate-400" : "text-ink-secondary"
+          className={`text-xs font-display font-bold flex items-center gap-1.5 ${
+            isNightMode ? "text-slate-400" : "text-[#786C60]"
           }`}
         >
-          <Compass className="w-3.5 h-3.5 text-storybook-coral" />
-          {story.decisionsCount} decisiones
+          <Compass className="w-4 h-4 text-storybook-coral" />
+          {story.decisionsCount} decisiones mágicas
         </span>
 
         {isLocked ? (
-          <span className="text-amber-700 dark:text-amber-400 font-bold text-xs flex items-center gap-1">
-            <span>Desbloquear con Pro</span>
-            <Lock className="w-3 h-3" />
+          <span className="text-amber-700 dark:text-amber-400 font-display font-bold text-xs flex items-center gap-1 bg-amber-100 dark:bg-amber-950/60 px-3 py-1.5 rounded-xl border border-amber-200">
+            <span>Desbloquear</span>
+            <Lock className="w-3.5 h-3.5" />
           </span>
         ) : (
-          <span className="text-storybook-coral font-bold font-display text-xs flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+          <span className="btn-toy-coral bg-storybook-coral hover:bg-[#F05735] text-white font-display font-bold text-xs px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shadow-sm">
             <span>Comenzar</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </span>

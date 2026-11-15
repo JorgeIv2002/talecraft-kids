@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Star, X, Check, Sparkles, ShoppingBag, Music, Shield, Heart } from "lucide-react";
+import { Star, X, Check, Sparkles, ShoppingBag } from "lucide-react";
 import { ChildProfile, RewardItem } from "@/lib/types";
 import { REWARD_ITEMS } from "@/lib/rewardsData";
 
@@ -31,38 +31,37 @@ export default function StarShopModal({
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
       <div
-        className={`w-full max-w-md rounded-3xl p-6 border shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150 flex flex-col max-h-[88vh] ${
+        className={`w-full max-w-md rounded-[36px] p-6 border-2 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150 flex flex-col max-h-[88vh] ${
           isNightMode
-            ? "bg-[#1A2333] border-[#2D3748] text-white"
-            : "bg-white border-[#EFE9DF] text-ink-primary"
+            ? "bg-[#1C2035] border-[#2D3352] text-white"
+            : "bg-white border-[#EFE6DA] text-[#2D231B]"
         }`}
       >
         {/* Cabecera del Bazar */}
         <div className="flex items-center justify-between pb-2 border-b border-inherit">
-          <div className="flex items-center gap-2">
-            <span className="p-2 rounded-2xl bg-[#FEF9EE] border border-[#FDE8B3] text-[#D97706]">
-              <ShoppingBag className="w-5 h-5" />
+          <div className="flex items-center gap-2.5">
+            <span className="p-2.5 rounded-2xl bg-amber-100 text-[#D97706] text-xl shadow-xs">
+              🎁
             </span>
             <div>
               <h2 className="font-display font-extrabold text-base leading-tight">
-                Bazar de las Estrellas Mágicas
+                Bazar de las Estrellas
               </h2>
-              <p className="text-[11px] text-storybook-coral font-bold">
+              <p className="text-xs font-display font-bold text-storybook-coral">
                 Para el héroe {profile.name}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Saldo de estrellas del niño */}
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FEF9EE] border border-[#FDE8B3] text-xs font-bold text-[#B45309]">
-              <Star className="w-4 h-4 fill-current text-[#E5A93C] animate-pulse" />
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-gradient-to-r from-[#FFFBEB] to-[#FEF3C7] border border-[#FDE68A] text-xs font-display font-bold text-[#B45309]">
+              <Star className="w-4 h-4 fill-current text-[#F59E0B] animate-pulse" />
               <span>{profile.starsCount} ⭐</span>
             </div>
             <button
               onClick={onClose}
-              className={`p-1 rounded-full touch-press ${
-                isNightMode ? "text-slate-400 hover:text-white" : "text-ink-secondary hover:text-ink-primary"
+              className={`p-1.5 rounded-full transition-transform active:scale-95 ${
+                isNightMode ? "text-slate-400 hover:text-white" : "text-[#786C60] hover:text-[#2D231B]"
               }`}
             >
               <X className="w-5 h-5" />
@@ -71,13 +70,13 @@ export default function StarShopModal({
         </div>
 
         {/* Pestañas de Categoría */}
-        <div className="flex items-center gap-1 bg-[#F4F1EA] dark:bg-[#121824] p-1 rounded-2xl border border-[#EFE9DF] dark:border-[#2D3748]">
+        <div className="flex items-center gap-1.5 bg-[#FAF7F2] dark:bg-[#141726] p-1.5 rounded-2xl border-2 border-[#EFE6DA] dark:border-[#2D3352]">
           <button
             onClick={() => setActiveTab("pet")}
-            className={`flex-1 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 ${
+            className={`flex-1 py-2 rounded-xl text-xs font-display font-bold transition-all flex items-center justify-center gap-1.5 ${
               activeTab === "pet"
-                ? "bg-white dark:bg-[#1A2333] shadow-xs text-storybook-coral"
-                : "text-ink-secondary dark:text-slate-400"
+                ? "bg-white dark:bg-[#1E2238] shadow-xs text-storybook-coral"
+                : "text-[#786C60] dark:text-slate-400"
             }`}
           >
             <span>🐶</span>
@@ -86,10 +85,10 @@ export default function StarShopModal({
 
           <button
             onClick={() => setActiveTab("accessory")}
-            className={`flex-1 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 ${
+            className={`flex-1 py-2 rounded-xl text-xs font-display font-bold transition-all flex items-center justify-center gap-1.5 ${
               activeTab === "accessory"
-                ? "bg-white dark:bg-[#1A2333] shadow-xs text-storybook-coral"
-                : "text-ink-secondary dark:text-slate-400"
+                ? "bg-white dark:bg-[#1E2238] shadow-xs text-storybook-coral"
+                : "text-[#786C60] dark:text-slate-400"
             }`}
           >
             <span>👑</span>
@@ -98,10 +97,10 @@ export default function StarShopModal({
 
           <button
             onClick={() => setActiveTab("sound")}
-            className={`flex-1 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 ${
+            className={`flex-1 py-2 rounded-xl text-xs font-display font-bold transition-all flex items-center justify-center gap-1.5 ${
               activeTab === "sound"
-                ? "bg-white dark:bg-[#1A2333] shadow-xs text-storybook-coral"
-                : "text-ink-secondary dark:text-slate-400"
+                ? "bg-white dark:bg-[#1E2238] shadow-xs text-storybook-coral"
+                : "text-[#786C60] dark:text-slate-400"
             }`}
           >
             <span>🌧️</span>
@@ -123,43 +122,43 @@ export default function StarShopModal({
             return (
               <div
                 key={item.id}
-                className={`p-3.5 rounded-2xl border transition-all flex items-center justify-between gap-3 ${
+                className={`p-4 rounded-3xl border-2 transition-all flex items-center justify-between gap-3 ${
                   isEquipped
-                    ? "bg-[#EBF5F1] border-[#3A7D6B] dark:bg-[#12231E] dark:border-[#3A7D6B]"
+                    ? "bg-[#ECFDF5] border-[#10B981] dark:bg-[#12231E] dark:border-[#059669]"
                     : isNightMode
-                    ? "bg-[#121824] border-[#2D3748]"
-                    : "bg-[#FDFBF7] border-[#EFE9DF]"
+                    ? "bg-[#141726] border-[#2D3352]"
+                    : "bg-[#FAF7F2] border-[#EFE6DA]"
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-white dark:bg-[#1A2333] border border-[#EFE9DF] dark:border-[#2D3748] flex items-center justify-center text-2xl shadow-xs shrink-0">
+                  <div className="w-13 h-13 rounded-2xl bg-white dark:bg-[#1E2238] border border-[#EFE6DA] dark:border-[#2D3352] flex items-center justify-center text-3xl shadow-xs shrink-0">
                     {item.emoji}
                   </div>
                   <div>
                     <div className="flex items-center gap-1.5">
                       <h4 className="font-display font-bold text-xs">{item.name}</h4>
                       {isEquipped && (
-                        <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-[#3A7D6B] text-white">
+                        <span className="text-[10px] font-display font-bold px-2 py-0.5 rounded-full bg-[#10B981] text-white">
                           En uso ✨
                         </span>
                       )}
                     </div>
-                    <p className="text-[11px] text-ink-secondary dark:text-slate-400 line-clamp-2 leading-tight mt-0.5">
+                    <p className="text-xs font-body font-semibold text-[#786C60] dark:text-slate-400 line-clamp-2 leading-snug mt-0.5">
                       {item.description}
                     </p>
                   </div>
                 </div>
 
-                {/* Acciones del Ítem */}
+                {/* Acciones */}
                 <div className="shrink-0">
                   {isUnlocked ? (
                     <button
                       onClick={() => onEquipItem(item)}
                       disabled={isEquipped}
-                      className={`px-3 py-1.5 rounded-xl font-display font-bold text-xs transition-all touch-press ${
+                      className={`px-3.5 py-1.5 rounded-xl font-display font-bold text-xs transition-all ${
                         isEquipped
-                          ? "bg-[#3A7D6B] text-white cursor-default"
-                          : "bg-storybook-coral hover:bg-storybook-coralHover text-white shadow-xs"
+                          ? "bg-[#10B981] text-white cursor-default"
+                          : "btn-toy-coral bg-storybook-coral text-white shadow-xs"
                       }`}
                     >
                       {isEquipped ? "Equipado ✓" : "Llevar"}
@@ -168,9 +167,9 @@ export default function StarShopModal({
                     <button
                       onClick={() => onUnlockItem(item)}
                       disabled={!canAfford}
-                      className={`px-3 py-1.5 rounded-xl font-display font-bold text-xs flex items-center gap-1 transition-all touch-press ${
+                      className={`px-3.5 py-2 rounded-xl font-display font-bold text-xs flex items-center gap-1 transition-all ${
                         canAfford
-                          ? "bg-[#D97706] hover:bg-[#B45309] text-white shadow-xs animate-pulse"
+                          ? "btn-toy-amber bg-[#D97706] text-white shadow-xs"
                           : "bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed"
                       }`}
                       title={!canAfford ? `Te faltan ${item.costStars - profile.starsCount} estrellas` : ""}
@@ -185,10 +184,10 @@ export default function StarShopModal({
           })}
         </div>
 
-        {/* Footer Informativo */}
-        <div className="pt-2 border-t border-inherit flex items-center justify-between text-[11px] text-ink-secondary dark:text-slate-400">
-          <span>📖 Lee más cuentos para ganar más estrellas.</span>
-          <span className="font-bold text-storybook-coral">¡Cada decisión cuenta!</span>
+        {/* Footer */}
+        <div className="pt-2 border-t border-inherit flex items-center justify-between text-xs font-display font-bold text-[#786C60] dark:text-slate-400">
+          <span>📖 Lee cuentos para ganar más estrellas</span>
+          <span className="text-storybook-coral">¡Cada noche una aventura!</span>
         </div>
       </div>
     </div>
