@@ -19,6 +19,7 @@ import { Crown, Sparkles, Wand2, Headphones, Star, Download } from "lucide-react
 export default function Home() {
   const { t, locale } = useLanguage();
   const [stories, setStories] = useState<Story[]>(INITIAL_STORIES);
+  const [communityStories, setCommunityStories] = useState<Story[]>([]);
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
   const [isNightMode, setIsNightMode] = useState(false);
   const [activeTab, setActiveTab] = useState<"library" | "create" | "pro" | "shop">("library");
@@ -116,6 +117,18 @@ export default function Home() {
         const customs = JSON.parse(savedCustomStories);
         setStories([...INITIAL_STORIES, ...customs]);
       }
+
+      // 3. Sincronizar cuentos comunitarios en línea creados por familias
+      fetch("/api/community-stories")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data && Array.isArray(data.stories)) {
+            setCommunityStories(data.stories);
+          }
+        })
+        .catch(() => {
+          // Fallback silencioso en caso de estar offline
+        });
     } catch {
       // Ignorar errores en SSR
     }
@@ -244,6 +257,7 @@ export default function Home() {
       } catch {}
       return next;
     });
+    setCommunityStories((prev) => [newStory, ...prev.filter((s) => s.id !== newStory.id)]);
     setSelectedStory(newStory);
   };
 
@@ -350,6 +364,19 @@ export default function Home() {
 
           {/* 3. Filas de Desplazamiento Horizontal estilo Vooks / Netflix Kids */}
           <div className="space-y-6 pt-1">
+            {/* Fila 0: Creados por la Comunidad (Sincronizados Online) */}
+            {communityStories.length > 0 && (
+              <VooksSectionRow
+                title={t.sections.communityTitle}
+                subtitle={t.sections.communitySub}
+                stories={communityStories}
+                isNightMode={isNightMode}
+                isPro={isPro}
+                onSelectStory={(s) => setSelectedStory(s)}
+                onRequestPro={() => setIsProOpen(true)}
+              />
+            )}
+
             {/* Fila 1: Populares y Destacados */}
             <VooksSectionRow
               title={t.sections.popularTitle}
@@ -477,6 +504,7 @@ export default function Home() {
         onClose={() => setIsCreatorOpen(false)}
         isNightMode={isNightMode}
         isPro={isPro}
+        profile={currentProfile}
         onRequestPro={() => {
           setIsCreatorOpen(false);
           setIsProOpen(true);

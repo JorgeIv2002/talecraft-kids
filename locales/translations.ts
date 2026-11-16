@@ -36,6 +36,8 @@ export const translations = {
       startAdventure: "Comenzar Aventura",
     },
     sections: {
+      communityTitle: "🌟 Creados por la Comunidad",
+      communitySub: "Historias inventadas por familias de todo el mundo",
       popularTitle: "Historias Populares",
       popularSub: "Las historias más queridas por los niños",
       bedtimeTitle: "Cuentos para Dormir",
@@ -184,6 +186,8 @@ export const translations = {
       startAdventure: "Start Adventure",
     },
     sections: {
+      communityTitle: "🌟 Created by the Community",
+      communitySub: "Bedtime stories invented by families worldwide",
       popularTitle: "Popular Stories",
       popularSub: "The stories children love the most",
       bedtimeTitle: "Bedtime Stories",

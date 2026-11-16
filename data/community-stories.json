@@ -1,0 +1,115 @@
+[
+  {
+    "id": "comunidad-zorro-faro",
+    "title": "El Pequeño Zorro y el Faro de Estrellas",
+    "synopsis": "Mateo y su zorrito exploran el archipiélago de la noche para encender la luz de los barcos dormidos. Un cuento comunitario sobre la perseverancia.",
+    "valueCategory": "Perseverancia",
+    "estimatedMinutes": 8,
+    "coverEmoji": "🦊",
+    "accentColor": "#F59E0B",
+    "decisionsCount": 3,
+    "startNodeId": "zf-node-1",
+    "isPremium": false,
+    "collection": "popular",
+    "gradientBg": "from-[#F59E0B] via-[#D97706] to-[#B45309]",
+    "nodes": {
+      "zf-node-1": {
+        "id": "zf-node-1",
+        "chapterNumber": 1,
+        "totalChapters": 4,
+        "sceneEmoji": "🦊",
+        "text": "La brisa nocturna acariciaba las colinas doradas mientras Mateo y su inseparable zorrito Chispas contemplaban el mar desde el acantilado. En la pequeña isla de enfrente, el viejo faro de las estrellas estaba apagado, y una suave niebla comenzaba a descender sobre las olas dormidas. Mateo sabía que los barquitos de papel que transportaban los sueños de los niños necesitaban esa luz para no perderse antes de dormir.",
+        "choices": [
+          {
+            "id": "zf-1a",
+            "label": "Construir un puente de piedras lisas saltando con agilidad y paciencia",
+            "hint": "Paso a paso, la constancia vence cualquier distancia.",
+            "nextNodeId": "zf-node-2a"
+          },
+          {
+            "id": "zf-1b",
+            "label": "Pedir ayuda a las gaviotas nocturnas que descansan en la torre de vigía",
+            "hint": "Compartir la misión con amigos la hace más hermosa.",
+            "nextNodeId": "zf-node-2b"
+          }
+        ]
+      },
+      "zf-node-2a": {
+        "id": "zf-node-2a",
+        "chapterNumber": 2,
+        "totalChapters": 4,
+        "sceneEmoji": "🌊",
+        "text": "Colocando cada piedra con sumo cuidado para no asustar a los caracoles marinos, Mateo y Chispas alcanzaron la orilla de la isla del faro. Pero la vieja puerta de madera de roble estaba cerrada con una enredadera de campanillas que dormían profundamente. Cualquier golpe fuerte despertaría a todo el valle de las mareas.",
+        "choices": [
+          {
+            "id": "zf-2a1",
+            "label": "Cantarle una suave canción de cuna a las campanillas para que se abran",
+            "hint": "La dulzura abre puertas que la fuerza jamás podría mover.",
+            "nextNodeId": "zf-node-3"
+          },
+          {
+            "id": "zf-2a2",
+            "label": "Buscar una ventana lateral trepando por las raíces de hiedra",
+            "hint": "El ingenio sereno encuentra caminos inesperados.",
+            "nextNodeId": "zf-node-3"
+          }
+        ]
+      },
+      "zf-node-2b": {
+        "id": "zf-node-2b",
+        "chapterNumber": 2,
+        "totalChapters": 4,
+        "sceneEmoji": "🕊️",
+        "text": "Las gaviotas plateadas batieron sus alas con suavidad y guiaron a Mateo a través del sendero secreto de arena blanca. 'El faro necesita aceite de chispas doradas', susurró la gaviota capitana. 'Se encuentra en lo más alto de la escalera de caracol, pero la escalera tiene cien escalones y la noche es larga'.",
+        "choices": [
+          {
+            "id": "zf-2b1",
+            "label": "Subir los escalones contando estrellas para mantener el ánimo alto",
+            "hint": "Cuando disfrutas el camino, el esfuerzo se transforma en alegría.",
+            "nextNodeId": "zf-node-3"
+          },
+          {
+            "id": "zf-2b2",
+            "label": "Tomarse de las manos y turnarse para animarse mutuamente",
+            "hint": "El aliento de un amigo renueva cualquier cansancio.",
+            "nextNodeId": "zf-node-3"
+          }
+        ]
+      },
+      "zf-node-3": {
+        "id": "zf-node-3",
+        "chapterNumber": 3,
+        "totalChapters": 4,
+        "sceneEmoji": "⭐",
+        "text": "En la cúpula de cristal del faro, una gran lente de cuarzo esperaba el destello. Mateo frotó suavemente la piedra mágica mientras Chispas acomodaba la mecha con su hociquito tibio. Con un chasquido suave como el crujir de una hoja seca, un haz de luz ámbar y sereno brotó girando hacia el horizonte, iluminando los veleros con un brillo reconfortante que invitaba a cerrar los ojos.",
+        "choices": [
+          {
+            "id": "zf-3a",
+            "label": "Acomodarse junto a la ventana para ver a los barquitos llegar a salvo al puerto",
+            "hint": "La satisfacción del deber cumplido regala el sueño más profundo.",
+            "nextNodeId": "zf-node-4"
+          },
+          {
+            "id": "zf-3b",
+            "label": "Susurrar una bendición de buenas noches a todos los niños del mar",
+            "hint": "Enviar buenos deseos abraza el corazón de quien los da.",
+            "nextNodeId": "zf-node-4"
+          }
+        ]
+      },
+      "zf-node-4": {
+        "id": "zf-node-4",
+        "chapterNumber": 4,
+        "totalChapters": 4,
+        "sceneEmoji": "🌙",
+        "text": "El faro giraba rítmicamente proyectando una caricia dorada sobre las aguas en calma. Mateo sintió cómo sus párpados se volvían pesados y su respiración se acompasaba con el susurro de las olas. Chispas se acurrucó en su regazo haciendo un ronroneo suave. En todo el archipiélago, las luces de las casas se apagaron una a una en perfecta paz. Habían demostrado que con perseverancia y ternura, ninguna noche es demasiado oscura.",
+        "isEnding": true,
+        "moralLesson": {
+          "title": "La Fuerza de la Constancia",
+          "description": "Mateo y su zorrito demostraron que los grandes desafíos se conquistan paso a paso, con paciencia y corazón bondadoso.",
+          "starsAwarded": 5
+        }
+      }
+    }
+  }
+]
