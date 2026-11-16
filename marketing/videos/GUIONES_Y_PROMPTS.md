@@ -1,71 +1,62 @@
-# Guiones de Video Viral y Prompts (TikTok, Reels, Shorts) - TaleCraft Kids
-
-**Formato:** Vertical (9:16)  
-**Duración:** 15 a 30 segundos  
-**Público:** Madres, padres y educadores de niños de 4 a 10 años  
-**Enfoque:** Cuentacuentos interactivo sin sobreestimulación, valores positivos y voz cálida de estudio  
+# 🎬 Guiones Verticales (9:16) y Prompts de Video
+## TaleCraft Kids · Campaña TikTok / Reels / YouTube Shorts
 
 ---
 
-## Guión 1: "El Secreto para la Hora de Dormir" (20 segundos)
-**Objetivo:** Captar a padres cansados de batallar a la hora de acostar a los niños.
-
-* **[0:00 - 0:03] Gancho (Hook):**  
-  *Visual:* Texto grande en pantalla: *"¿Tu hijo tarda 1 hora en dormirse viendo videos rápidos?"*  
-  *Audio / Locución:* "¿Cansada de la sobreestimulación antes de dormir? Mira este truco."
-* **[0:04 - 0:12] Demostración:**  
-  *Visual:* Se abre TaleCraft Kids en modo noche con luz tenue. Suena la voz suave de Tía Salomé leyendo *El Búho y la Linterna Mágica*. Las palabras se iluminan suavemente en dorado.  
-  *Audio / Locución:* "TaleCraft Kids convierte la cama en un momento de paz: cuentos interactivos con voz cálida de estudio donde tu pequeño decide el final."
-* **[0:13 - 0:17] Decisión interactiva:**  
-  *Visual:* Un dedito infantil toca la opción: *"Ayudar a la ardilla a encontrar su bufanda"* y aparece la lección de empatía con estrellas mágicas.  
-  *Audio / Locución:* "Aprende valores reales mientras concilia el sueño con una sonrisa."
-* **[0:18 - 0:20] Llamada a la Acción (CTA):**  
-  *Visual:* Portada de la app con botón *"Pruébalo gratis hoy en el enlace del perfil"*.  
-  *Audio / Locución:* "Pruébalo gratis hoy y devuélvele la magia a sus noches."
+## 🔗 Enlaces para la Bio y Call to Action (CTA)
+- **Web App:** [https://talecraft-kids.vercel.app](https://talecraft-kids.vercel.app)
+- **Descarga Directa Android (.apk):** [https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.0.0/app-android.apk](https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.0.0/app-android.apk)
 
 ---
 
-## Guión 2: "¿Y si tu hijo es el protagonista?" (25 segundos)
-**Objetivo:** Viralidad emocional destacando la personalización con el nombre y mascota del niño.
+## 📱 Guión 1: "La hora de dormir sin peleas" (20 Segundos)
+**Formato:** Vertical 9:16 (1080x1920) · **Ritmo:** Suave y acogedor · **Público:** Madres y padres de niños de 3 a 8 años.
 
-* **[0:00 - 0:03] Gancho (Hook):**  
-  *Visual:* Reacción real de un niño sonriendo al escuchar su nombre: *"¡Mira mamá, soy yo!"*  
-  *Audio / Locución:* "La cara de mi hijo cuando descubrió que el cuento hablaba de él..."
-* **[0:04 - 0:14] Demostración de Personalización:**  
-  *Visual:* Pantalla rápida escribiendo el nombre "Leo", su edad (6 años) y su perrito "Chispas". Al abrir el cuento, la narradora dice: *"Leo y su fiel amigo Chispas emprendieron el viaje por el bosque..."*  
-  *Audio / Locución:* "En TaleCraft Kids tú personalizas al héroe: tu hijo y su mascota viven aventuras donde cada elección les enseña perseverancia y bondad."
-* **[0:15 - 0:21] El Bazar de Estrellas:**  
-  *Visual:* El niño canjea sus estrellas mágicas ganadas por un búho acompañante y un gorrito de explorador.  
-  *Audio / Locución:* "Cada decisión correcta le da estrellas para desbloquear amiguitos mágicos en su diario de lectura."
-* **[0:22 - 0:25] Llamada a la Acción (CTA):**  
-  *Visual:* Animación del logo de TaleCraft Kids con el botón de prueba gratuita familiar.  
-  *Audio / Locución:* "Descarga la prueba gratuita y crea su primer cuento personalizado en 1 minuto."
+| Tiempo | Escena Visual | Texto en Pantalla (On-Screen Text) | Locución / Audio de Fondo |
+| :--- | :--- | :--- | :--- |
+| **0:00 - 0:03** | Mamá agotada intentando que su hijo deje el teléfono con caricaturas estridentes. Corte rápido a iluminación cálida. | *¿Batallando otra noche para que duerman? 😴* | "Si la hora de dormir en tu casa parece una batalla diaria..." |
+| **0:03 - 0:08** | Primer plano de la app TaleCraft Kids: se escribe el nombre del niño ("Lucas") y aparece su avatar de zorrito. | *Cuentos donde tu peque es el héroe ✨* | "...tienes que probar TaleCraft Kids. Aquí tu hijo es el héroe del cuento..." |
+| **0:08 - 0:14** | Dedo infantil tocando una decisión en pantalla grande: "¿Ayudar a la lechuza o volar al arroyo?". El texto se resalta suavemente al ritmo de la voz. | *Ellos eligen la historia y aprenden valores 🦉* | "...él toma las decisiones que enseñan valores como la amistad y la empatía..." |
+| **0:14 - 0:18** | El niño bosteza en su cama. Se muestra en pantalla la activación del **Temporizador de Sueño (15 min)** y la **Racha de Lectura (8 noches)**. | *Temporizador de cuna + Racha de lectura 🌙* | "...y con el temporizador de cuna, el cuento se apaga solito cuando se quedan dormidos." |
+| **0:18 - 0:20** | Logotipo de TaleCraft Kids con botones: "Disponible en Web y APK Android". | *Pruébalo gratis hoy en Web y Android 📲* | "Pruébalo gratis hoy en el enlace de nuestra bio." |
 
----
-
-## Guión 3: "La Alternativa a YouTube Kids" (30 segundos)
-**Objetivo:** Conversión directa por dolor parental ante contenidos tóxicos o hiperestimulantes.
-
-* **[0:00 - 0:04] Gancho (Hook):**  
-  *Visual:* Pantalla dividida: a la izquierda, animación hiperactiva con colores chillones tachada con una ❌; a la derecha, TaleCraft Kids con paleta cálida escandinava y ritmo pausado con un ✅.  
-  *Audio / Locución:* "Dejamos los videos hiperactivos de internet y cambiamos a esto. El cambio en su concentración fue brutal."
-* **[0:05 - 0:18] Beneficio Educativo:**  
-  *Visual:* Se muestra la biblioteca estilo Vooks con carruseles de cuentos (*El Cohete de Cartón*, *El Jardín de las Semillas Pacientes*). Al leer, el niño sigue las frases resaltadas (Read-Along) para aprender a leer.  
-  *Audio / Locución:* "Cero luces estridentes, cero anuncios. Solo historias ilustradas con narradoras dulces que fomentan la lectura guiada y la paciencia."
-* **[0:19 - 0:26] Función Familiar:**  
-  *Visual:* Cambio rápido entre perfiles de hermanos (hasta 3 niños) con el Pase Familiar Pro.  
-  *Audio / Locución:* "Hasta 3 perfiles para tus hijos con cuentos ilimitados y generador de aventuras familiares."
-* **[0:27 - 0:30] Llamada a la Acción (CTA):**  
-  *Visual:* Pantalla final: *"TaleCraft Kids — Lectura que inspira valores"*.  
-  *Audio / Locución:* "Empieza tu prueba gratuita de 7 días en el enlace de la bio."
+### 🎨 Prompts Visuales Guión 1:
+- **Escena 1:** *Cozy dim bedroom, exhausted mother smiling tenderly at toddler in bed, warm bedside lamp, cinematic 4k, soft glow, realistic.*
+- **Escena 2:** *Close up of smartphone screen displaying TaleCraft Kids app, colorful friendly toy UI, glowing avatar of fox, child finger tapping.*
+- **Escena 3:** *Peaceful toddler falling asleep under soft blanket, night light ambient stars, warm golden hour atmosphere, peaceful serene expression.*
 
 ---
 
-## Prompts para Generación de Clips de Apoyo (en caso de requerir video stock o animación)
+## 📱 Guión 2: "Cuentos interactivos con valores reales" (18 Segundos)
+**Formato:** Vertical 9:16 (1080x1920) · **Ritmo:** Mágico y motivador.
 
-1. **Clip 1 (Cálido familiar):**  
-   `Cinematic cozy bedtime scene, 4k, soft warm ambient night lamp, a loving mother and a 6-year-old child snuggled under blankets reading a tablet with calm soft smiles, Scandinavian minimal bedroom, pastel tones, soothing atmosphere, hyper-realistic, depth of field.`
-2. **Clip 2 (Ilustración estilo libro infantil):**  
-   `Gentle picture-book style 2D animation, cute owl wearing small glasses holding a glowing golden lantern in a magical enchanted forest, soft fireflies floating, Studio Ghibli inspired, warm earthy palette, peaceful bedtime vibe.`
-3. **Clip 3 (Niño celebrando):**  
-   `Close up shot of an adorable happy 5-year-old kid pointing excitedly at an illustrated tablet screen, genuine joyful expression, natural daytime window lighting, warm colors.`
+| Tiempo | Escena Visual | Texto en Pantalla | Locución / Voz en Off |
+| :--- | :--- | :--- | :--- |
+| **0:00 - 0:03** | Pantalla dividida: De un lado videos ruidosos y acelerados (táchalos con ❌). Del otro, TaleCraft Kids con luz tenue (con un gran check verde ✅). | *No más sobreestimulación en la noche 🚫* | "Deja de sobreestimular a tus hijos antes de dormir." |
+| **0:03 - 0:08** | Interfaz del cuento interactivo: "El Búho y la Linterna Mágica". Opciones grandes táctiles y voz dulce de la Tía Salomé. | *Historias ramificadas con decisiones éticas 📖* | "TaleCraft Kids tiene cuentos interactivos con voces cariñosas donde cada decisión enseña generosidad y valentía." |
+| **0:08 - 0:14** | Animación de estrellas mágicas ganadas ⭐ entrando al **Bazar de las Estrellas** para desbloquear un perrito compañero. Racha de lectura aumentando. | *Ganan estrellas siendo amables ⭐🐕* | "Ganan estrellas mágicas por sus buenas acciones y mantienen su racha de lectura cada noche." |
+| **0:14 - 0:18** | Niña durmiendo plácidamente con el teléfono en la mesita con la pantalla apagándose suavemente. | *Cero anuncios. 100% bilingüe (ES/EN) 🌙* | "100% libre de anuncios, seguro y bilingüe." |
+| **0:18 - 0:20** | Pantalla final con URL web y botón APK. | *Descarga directa: Web + Android APK 🚀* | "Juega en la web o descarga el APK para Android." |
+
+### 🎨 Prompts Visuales Guión 2:
+- **Escena 1:** *Split screen comparison, left frantic colorful noisy screen, right peaceful storybook interface with soft pastel colors.*
+- **Escena 2:** *Little girl with curly hair looking fascinated at illustrated owl on tablet, warm magical ambient sparkles.*
+- **Escena 3:** *Gentle fade to black with glowing stars and soft sleeping kitten plushie on bed, cinematic depth of field.*
+
+---
+
+## 📱 Guión 3: "Dormidos en menos de 10 minutos" (22 Segundos)
+**Formato:** Vertical 9:16 (1080x1920) · **Ritmo:** Susurrado, relajante (ASMR suave).
+
+| Tiempo | Escena Visual | Texto en Pantalla | Locución (Tono dulce y susurrado) |
+| :--- | :--- | :--- | :--- |
+| **0:00 - 0:03** | Reloj digital marcando las 8:30 PM. Luz suave de luna en la ventana. | *El secreto para que duerman en 10 min 🌙* | "¿Quieres que tus peques duerman plácidamente esta noche?" |
+| **0:03 - 0:09** | Enciende el **Modo Noche** de TaleCraft Kids: la app cambia a un tono azul noche profundo y relajante. Se selecciona la voz de la "Tía Salomé". | *Modo Noche + Voz Maternal dulce 🌸* | "Activa el Modo Noche de TaleCraft Kids y elige una de sus voces cuentacuentos maternales..." |
+| **0:09 - 0:15** | Se programa el **Temporizador de Sueño en 15 minutos**. Se muestra el contador regresivo de cuna y música ambiental con sonido de lluvia suave. | *Temporizador de cuna inteligente ⏳🌧️* | "...activa el temporizador de sueño con música suave de cuna..." |
+| **0:15 - 0:19** | El niño cierra los ojos sonriendo. Racha de 5 noches iluminada con estrellitas. | *Racha de lectura nocturna: 5 noches 🌟* | "...y mira cómo se duermen con una sonrisa sin necesidad de que te quedes una hora en su cama." |
+| **0:19 - 0:22** | Logotipo de TaleCraft Kids con insignias de Vercel Web y GitHub Releases Android APK. | *Prueba gratis TaleCraft Kids hoy ✨* | "Descárgalo gratis en tu Android o pruébalo en la web hoy mismo." |
+
+### 🎨 Prompts Visuales Guión 3:
+- **Escena 1:** *Soft moonlit window with sheer curtains, cozy nursery bedroom, slow floating dust motes in soft light.*
+- **Escena 2:** *Macro shot of smartphone UI toggling sleek dark mode with moon icon, amber ambient glow, cozy typography.*
+- **Escena 3:** *Child sleeping peacefully clutching teddy bear, soft breathing, slow push out, warm dreamlike visual.*

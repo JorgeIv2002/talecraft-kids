@@ -24,9 +24,32 @@ export default function AndroidShell({
   onTabChange,
 }: AndroidShellProps) {
   const [currentTime, setCurrentTime] = useState("19:45");
+  const [isInstalledApp, setIsInstalledApp] = useState(false);
   const { t } = useLanguage();
 
   useEffect(() => {
+    // Detectar si se está ejecutando dentro de la app nativa Android (Capacitor), WebView o PWA
+    try {
+      const isCapacitor = Boolean(
+        typeof window !== "undefined" &&
+          ((window as any).Capacitor?.isNativePlatform?.() ||
+            (window as any).Capacitor !== undefined ||
+            window.location.protocol === "capacitor:")
+      );
+      const isStandalone = Boolean(
+        typeof window !== "undefined" &&
+          (window.matchMedia("(display-mode: standalone)").matches ||
+            (window.navigator as any).standalone)
+      );
+      const isAndroidWebView =
+        typeof window !== "undefined" &&
+        /Android.*wv/.test(window.navigator.userAgent);
+
+      setIsInstalledApp(isCapacitor || isStandalone || isAndroidWebView);
+    } catch {
+      setIsInstalledApp(false);
+    }
+
     const updateTime = () => {
       const now = new Date();
       const hours = now.getHours().toString().padStart(2, "0");
@@ -41,21 +64,23 @@ export default function AndroidShell({
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center p-0 sm:p-4 md:p-6 bg-[#EBE5DA] dark:bg-[#0D0F1A] transition-colors duration-300">
       
-      {/* Barra de Descarga Externa para Navegador / Escritorio */}
-      <div className="hidden sm:flex items-center justify-between w-full max-w-[430px] mb-2 px-2 select-none">
-        <span className="text-xs font-display font-bold text-[#786C60] dark:text-slate-400 flex items-center gap-1.5">
-          <span>📱</span> TaleCraft Kids v1.0.0
-        </span>
-        <a
-          href="https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.0.0/app-android.apk"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-display font-bold text-[11px] shadow-sm transition-transform hover:scale-105 active:scale-95"
-        >
-          <Download className="w-3.5 h-3.5" />
-          <span>{t.header.downloadApp}</span>
-        </a>
-      </div>
+      {/* Barra de Descarga Externa para Navegador / Escritorio (Oculta si ya estás en la app) */}
+      {!isInstalledApp && (
+        <div className="hidden sm:flex items-center justify-between w-full max-w-[430px] mb-2 px-2 select-none">
+          <span className="text-xs font-display font-bold text-[#786C60] dark:text-slate-400 flex items-center gap-1.5">
+            <span>📱</span> TaleCraft Kids v1.0.0
+          </span>
+          <a
+            href="https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.0.0/app-android.apk"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-display font-bold text-[11px] shadow-sm transition-transform hover:scale-105 active:scale-95"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>{t.header.downloadApp}</span>
+          </a>
+        </div>
+      )}
 
       {/* Marco de Dispositivo Android (Estilo Libro de Aventuras) */}
       <div

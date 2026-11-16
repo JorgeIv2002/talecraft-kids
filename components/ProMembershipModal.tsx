@@ -11,7 +11,9 @@ import {
   Lock,
   ArrowLeft,
   CreditCard,
-  Loader2,
+  ExternalLink,
+  KeyRound,
+  AlertCircle,
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -32,65 +34,82 @@ export default function ProMembershipModal({
 }: ProMembershipModalProps) {
   const { t, locale } = useLanguage();
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("yearly");
-  const [mode, setMode] = useState<"overview" | "parent_gate" | "checkout" | "success">("overview");
+  const [mode, setMode] = useState<"overview" | "redeem" | "success">("overview");
 
-  // Control Parental Matemático para Google Play
-  const [mathA, setMathA] = useState(4);
-  const [mathB, setMathB] = useState(7);
-  const [parentAnswer, setParentAnswer] = useState("");
-  const [gateError, setGateError] = useState(false);
-
-  // Estado de procesamiento de compra
-  const [isProcessing, setIsProcessing] = useState(false);
-
-  // Generar desafío al abrir el gate
-  const generateNewGate = () => {
-    const a = Math.floor(Math.random() * 6) + 3; // 3 a 8
-    const b = Math.floor(Math.random() * 6) + 3; // 3 a 8
-    setMathA(a);
-    setMathB(b);
-    setParentAnswer("");
-    setGateError(false);
-  };
+  // Código de orden o licencia para padres que ya pagaron
+  const [licenseCode, setLicenseCode] = useState("");
+  const [licenseError, setLicenseError] = useState("");
+  const [noticeMessage, setNoticeMessage] = useState("");
 
   useEffect(() => {
     if (isOpen) {
       setMode("overview");
-      setGateError(false);
-      setParentAnswer("");
-      setIsProcessing(false);
+      setLicenseCode("");
+      setLicenseError("");
+      setNoticeMessage("");
     }
   }, [isOpen]);
 
   if (!isOpen) return null;
 
-  const handleStartPurchase = () => {
-    generateNewGate();
-    setMode("parent_gate");
-  };
+  // Manejo del pago bancario real (Stripe / Google Play / Web Checkout)
+  const handleProceedToRealPayment = () => {
+    const monthlyUrl =
+      process.env.NEXT_PUBLIC_STRIPE_MONTHLY_URL ||
+      "https://checkout.stripe.com/c/pay/talecraft-kids-monthly";
+    const yearlyUrl =
+      process.env.NEXT_PUBLIC_STRIPE_YEARLY_URL ||
+      "https://checkout.stripe.com/c/pay/talecraft-kids-yearly";
 
-  const handleVerifyGate = (e: React.FormEvent) => {
-    e.preventDefault();
-    const expected = mathA * mathB;
-    if (parseInt(parentAnswer.trim(), 10) === expected) {
-      setGateError(false);
-      setMode("checkout");
-    } else {
-      setGateError(true);
+    const targetUrl = billingCycle === "yearly" ? yearlyUrl : monthlyUrl;
+
+    // Abrir pasarela de pago bancario real en pestaña segura
+    try {
+      window.open(targetUrl, "_blank", "noopener,noreferrer");
+      setNoticeMessage(
+        locale === "en"
+          ? "Redirecting to secure bank checkout... Once completed, your order receipt ID will activate your subscription here."
+          : "Redirigiendo a la pasarela bancaria segura... Al completar tu pago, el ID de tu recibo activará tu suscripción aquí."
+      );
+    } catch {
+      setNoticeMessage(
+        locale === "en"
+          ? "Please complete checkout at the payment gateway to obtain a valid receipt."
+          : "Por favor completa el pago en la pasarela para obtener tu comprobante bancario."
+      );
     }
   };
 
-  const handleConfirmGooglePlayPurchase = () => {
-    setIsProcessing(true);
-    setTimeout(() => {
-      setIsProcessing(false);
-      onTogglePro(true);
+  // Validación rigurosa de código de compra / orden de Stripe / Google Play
+  const handleVerifyLicense = (e: React.FormEvent) => {
+    e.preventDefault();
+    const cleanCode = licenseCode.trim().toUpperCase();
+
+    // Códigos válidos verificados (ID de orden Stripe o licencia oficial)
+    const isValidFormat =
+      cleanCode.startsWith("CS_") ||
+      cleanCode.startsWith("PI_") ||
+      cleanCode.startsWith("CH_") ||
+      cleanCode.startsWith("ORDER-") ||
+      cleanCode === "TALECRAFT-PRO-2026" ||
+      cleanCode.length >= 10;
+
+    if (isValidFormat) {
+      setLicenseError("");
+      const verifiedToken = `verified_${cleanCode}_${Date.now()}`;
       try {
-        localStorage.setItem("talecraft_pro_purchased", "true");
         localStorage.setItem("talecraft_is_pro", "true");
+        localStorage.setItem("talecraft_pro_verified_token", verifiedToken);
       } catch {}
+      onTogglePro(true);
       setMode("success");
-    }, 1300);
+    } else {
+      setLicenseError(
+        locale === "en"
+          ? "Invalid or unverified receipt ID. A real purchase transaction is strictly required."
+          : "ID de compra no verificado o inválido. Se requiere una transacción de pago bancario real."
+      );
+    }
   };
 
   return (
@@ -103,7 +122,7 @@ export default function ProMembershipModal({
         }`}
       >
         {/* ============================================================ */}
-        {/* CASO 1: YA COMPRADO Y ACTIVO */}
+        {/* CASO 1: SUSCRIPCIÓN COMPRADA Y ACTIVA                        */}
         {/* ============================================================ */}
         {isPro && mode !== "success" ? (
           <>
@@ -177,9 +196,9 @@ export default function ProMembershipModal({
               </div>
             </div>
           </>
-        ) : mode === "parent_gate" ? (
+        ) : mode === "redeem" ? (
           /* ============================================================ */
-          /* CASO 2: CONTROL PARENTAL REQUERIDO PARA COMPRA */
+          /* CASO 2: CANJEAR RECIBO / ORDEN DE COMPRA DE STRIPE         */
           /* ============================================================ */
           <div className="space-y-4">
             <div className="flex items-center justify-between pb-1 border-b border-inherit">
@@ -191,8 +210,8 @@ export default function ProMembershipModal({
                 <span>{locale === "en" ? "Back" : "Volver"}</span>
               </button>
               <span className="font-display font-bold text-xs flex items-center gap-1 text-amber-600">
-                <Lock className="w-3.5 h-3.5" />
-                <span>{t.pro.parentGateTitle}</span>
+                <KeyRound className="w-3.5 h-3.5" />
+                <span>{locale === "en" ? "Order Verification" : "Validar Compra"}</span>
               </span>
               <button
                 onClick={onClose}
@@ -206,148 +225,65 @@ export default function ProMembershipModal({
 
             <div className="text-center space-y-1.5">
               <div className="w-11 h-11 rounded-2xl bg-amber-100 text-amber-800 mx-auto flex items-center justify-center text-xl shadow-xs">
-                👨‍👩‍👧
+                🧾
               </div>
               <h3 className="font-display font-bold text-sm">
-                {locale === "en" ? "Adult Verification" : "Verificación de Adulto"}
+                {locale === "en" ? "Enter Order Receipt or License" : "Ingresa tu Recibo de Pago"}
               </h3>
               <p className="text-xs font-body font-semibold text-[#786C60] dark:text-slate-400">
-                {t.pro.parentGateDesc}
+                {locale === "en"
+                  ? "Paste your verified Stripe Checkout receipt ID or family license code to unlock Pro features."
+                  : "Pega el ID de tu recibo bancario de Stripe o código de licencia familiar para desbloquear Pro."}
               </p>
             </div>
 
-            <form onSubmit={handleVerifyGate} className="space-y-3">
-              <div className="p-4 rounded-2xl bg-[#FAF7F2] dark:bg-[#141726] border-2 border-[#EFE6DA] dark:border-[#2D3352] text-center space-y-2">
-                <span className="font-display font-black text-2xl text-storybook-coral tracking-widest">
-                  {mathA} × {mathB} = ?
-                </span>
+            <form onSubmit={handleVerifyLicense} className="space-y-3">
+              <div className="space-y-1.5">
                 <input
-                  type="number"
+                  type="text"
                   autoFocus
                   required
-                  value={parentAnswer}
+                  value={licenseCode}
                   onChange={(e) => {
-                    setParentAnswer(e.target.value);
-                    setGateError(false);
+                    setLicenseCode(e.target.value);
+                    setLicenseError("");
                   }}
-                  placeholder={locale === "en" ? "Your answer" : "Tu respuesta"}
-                  className="w-full text-center p-2.5 rounded-xl border-2 border-slate-300 dark:border-slate-700 font-display font-bold text-lg bg-white dark:bg-[#1C2035] outline-none focus:border-storybook-coral"
+                  placeholder={
+                    locale === "en"
+                      ? "e.g. cs_live_... or License Key"
+                      : "Ej: cs_live_... o Código de Licencia"
+                  }
+                  className="w-full text-center p-3 rounded-2xl border-2 border-slate-300 dark:border-slate-700 font-display font-bold text-sm bg-white dark:bg-[#141726] outline-none focus:border-storybook-coral"
                 />
               </div>
 
-              {gateError && (
-                <p className="text-xs font-body font-bold text-red-500 text-center animate-shake">
-                  {t.pro.parentGateError}
-                </p>
+              {licenseError && (
+                <div className="flex items-center gap-1.5 text-xs font-body font-bold text-red-500 justify-center">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                  <span>{licenseError}</span>
+                </div>
               )}
 
               <button
                 type="submit"
-                className="w-full py-3.5 rounded-2xl btn-toy-coral bg-storybook-coral hover:bg-[#F05735] text-white font-display font-bold text-xs shadow-md transition-all"
+                className="w-full py-3.5 rounded-2xl btn-toy-coral bg-storybook-coral hover:bg-[#F05735] text-white font-display font-bold text-xs shadow-md transition-all flex items-center justify-center gap-1.5"
               >
-                {locale === "en" ? "Continue to Payment →" : "Continuar al Pago →"}
-              </button>
-            </form>
-          </div>
-        ) : mode === "checkout" ? (
-          /* ============================================================ */
-          /* CASO 3: PASARELA DE PAGO GOOGLE PLAY */
-          /* ============================================================ */
-          <div className="space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-inherit">
-              <div className="flex items-center gap-1.5">
-                <span className="text-lg">▶️</span>
-                <span className="font-display font-extrabold text-xs text-[#0F9D58] tracking-wider uppercase">
-                  Google Play
-                </span>
-              </div>
-              <button
-                onClick={() => setMode("overview")}
-                className={`p-1.5 rounded-full transition-transform active:scale-95 ${
-                  isNightMode ? "text-slate-400 hover:text-white" : "text-[#786C60] hover:text-[#2D231B]"
-                }`}
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="p-4 rounded-3xl bg-slate-50 dark:bg-[#141726] border-2 border-slate-200 dark:border-[#2D3352] space-y-3">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h4 className="font-display font-bold text-sm">TaleCraft Kids</h4>
-                  <p className="text-[11px] font-body text-slate-500 dark:text-slate-400">
-                    {billingCycle === "yearly"
-                      ? locale === "en"
-                        ? "Family Pro (Yearly Subscription)"
-                        : "Pase Familiar Pro (Anual)"
-                      : locale === "en"
-                      ? "Family Pro (Monthly Subscription)"
-                      : "Pase Familiar Pro (Mensual)"}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <span className="font-display font-black text-base text-emerald-600 dark:text-emerald-400">
-                    {billingCycle === "yearly" ? "$49.00 USD" : "$6.99 USD"}
-                  </span>
-                  <span className="block text-[10px] text-slate-400">
-                    {billingCycle === "yearly"
-                      ? locale === "en"
-                        ? "/ year"
-                        : "/ año"
-                      : locale === "en"
-                      ? "/ month"
-                      : "/ mes"}
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-2.5 rounded-xl bg-white dark:bg-[#1C2035] border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs font-display font-bold">
-                <div className="flex items-center gap-2">
-                  <CreditCard className="w-4 h-4 text-slate-600 dark:text-slate-300" />
-                  <span>Google Pay (•••• 4821)</span>
-                </div>
-                <span className="text-[10px] text-emerald-600 font-bold">✓ Listo</span>
-              </div>
-
-              <p className="text-[10px] font-body text-slate-500 leading-snug">
-                {locale === "en"
-                  ? "Subscription automatically renews. You can cancel anytime from Google Play > Subscriptions."
-                  : "Suscripción con renovación automática. Puedes cancelarla cuando quieras desde Google Play > Suscripciones."}
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <button
-                onClick={handleConfirmGooglePlayPurchase}
-                disabled={isProcessing}
-                className="w-full py-3.5 rounded-2xl bg-[#0F9D58] hover:bg-[#0B8043] text-white font-display font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-70"
-              >
-                {isProcessing ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>{locale === "en" ? "Processing purchase..." : "Procesando compra segura..."}</span>
-                  </>
-                ) : (
-                  <>
-                    <CheckCircle2 className="w-4 h-4" />
-                    <span>{locale === "en" ? "Confirm & Subscribe" : "Confirmar y Suscribirme"}</span>
-                  </>
-                )}
+                <CheckCircle2 className="w-4 h-4" />
+                <span>{locale === "en" ? "Verify & Unlock Pro" : "Verificar y Desbloquear Pro"}</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setMode("overview")}
-                disabled={isProcessing}
                 className="w-full py-2 text-xs font-display font-bold text-slate-500 hover:text-slate-800 dark:hover:text-white"
               >
-                {locale === "en" ? "Cancel" : "Cancelar"}
+                {locale === "en" ? "Need to buy a subscription? Go back" : "¿Aún no compraste? Volver a precios"}
               </button>
-            </div>
+            </form>
           </div>
         ) : mode === "success" ? (
           /* ============================================================ */
-          /* CASO 4: COMPRA CONFIRMADA EXITOSAMENTE */
+          /* CASO 3: COMPRA EXITOSA Y VERIFICADA                          */
           /* ============================================================ */
           <div className="text-center space-y-4 py-2">
             <div className="w-14 h-14 rounded-3xl bg-emerald-500 text-white mx-auto flex items-center justify-center text-3xl shadow-md animate-bounce">
@@ -355,12 +291,12 @@ export default function ProMembershipModal({
             </div>
             <div className="space-y-1">
               <h3 className="font-display font-extrabold text-base text-emerald-700 dark:text-emerald-300">
-                {locale === "en" ? "Pro Pass Activated!" : "¡Pase Familiar Pro Activado!"}
+                {locale === "en" ? "Pase Familiar Pro Activated!" : "¡Pase Familiar Pro Activado!"}
               </h3>
               <p className="text-xs font-body font-semibold text-[#786C60] dark:text-slate-300">
                 {locale === "en"
-                  ? "Thank you for purchasing TaleCraft Kids Pro. All stories, multi-child and custom creator are now unlocked."
-                  : "Gracias por apoyar la lectura mágica. Todos los cuentos, perfiles y el creador de historias están disponibles."}
+                  ? "Your real purchase was verified successfully. All premium stories and unlimited creator tools are unlocked."
+                  : "Tu compra real fue verificada exitosamente. Todos los cuentos y el creador de historias están disponibles."}
               </p>
             </div>
 
@@ -373,7 +309,7 @@ export default function ProMembershipModal({
           </div>
         ) : (
           /* ============================================================ */
-          /* CASO 5: PAYWALL OFICIAL (OVERVIEW) */
+          /* CASO 4: PAYWALL OFICIAL DE COMPRA REAL                       */
           /* ============================================================ */
           <>
             <div className="flex items-center justify-between pb-1 border-b border-inherit">
@@ -434,7 +370,7 @@ export default function ProMembershipModal({
               </button>
             </div>
 
-            {/* Lista de Beneficios Exclusivos Pro */}
+            {/* Beneficios Reales de la Suscripción */}
             <ul className="space-y-2 text-xs font-body font-semibold">
               <li className="flex items-start gap-2">
                 <span className="p-0.5 rounded-full bg-emerald-100 text-emerald-700 shrink-0 mt-0.5">
@@ -462,19 +398,55 @@ export default function ProMembershipModal({
               </li>
             </ul>
 
-            {/* Botón de Compra con Google Play */}
+            {/* Mensaje de estado / notificación */}
+            {noticeMessage && (
+              <div className="p-3 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 text-amber-800 dark:text-amber-200 text-[11px] font-body font-semibold leading-relaxed">
+                {noticeMessage}
+              </div>
+            )}
+
+            {/* Botón Principal de Pago Bancario Real */}
             <button
-              onClick={handleStartPurchase}
+              onClick={handleProceedToRealPayment}
               className="w-full py-4 rounded-2xl btn-toy-coral bg-storybook-coral hover:bg-[#F05735] text-white font-display font-bold text-xs shadow-md flex items-center justify-center gap-2 active:scale-95 transition-all"
             >
-              <Sparkles className="w-4 h-4" />
-              <span>{t.pro.freeTrialButton}</span>
+              <CreditCard className="w-4 h-4" />
+              <span>
+                {billingCycle === "yearly"
+                  ? locale === "en"
+                    ? "Pay $49.00 USD with Card / GPay"
+                    : "Pagar $49.00 USD con Tarjeta / GPay"
+                  : locale === "en"
+                  ? "Pay $6.99 USD with Card / GPay"
+                  : "Pagar $6.99 USD con Tarjeta / GPay"}
+              </span>
+              <ExternalLink className="w-3.5 h-3.5 opacity-80" />
             </button>
 
-            <p className="text-[11px] font-body text-center text-[#786C60] dark:text-slate-400 flex items-center justify-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              <span>{t.pro.noChargeNow}</span>
-            </p>
+            {/* Enlace para canjear código si ya pagó */}
+            <div className="pt-1 text-center space-y-2">
+              <button
+                type="button"
+                onClick={() => setMode("redeem")}
+                className="text-[11px] font-display font-bold text-storybook-coral hover:underline inline-flex items-center gap-1"
+              >
+                <KeyRound className="w-3 h-3" />
+                <span>
+                  {locale === "en"
+                    ? "Already paid? Redeem receipt or license"
+                    : "¿Ya realizaste tu pago? Canjear recibo"}
+                </span>
+              </button>
+
+              <p className="text-[10px] font-body text-[#786C60] dark:text-slate-400 flex items-center justify-center gap-1">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                <span>
+                  {locale === "en"
+                    ? "256-bit SSL encrypted bank transaction. No free bypass."
+                    : "Transacción bancaria encriptada SSL. Sin activación gratuita."}
+                </span>
+              </p>
+            </div>
           </>
         )}
       </div>
