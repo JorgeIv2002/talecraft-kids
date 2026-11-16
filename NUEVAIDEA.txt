@@ -1,0 +1,3 @@
+talecraftkids1+
+NEXT_PUBLIC_SUPABASE_URL=https://yswiunuavyfktgyzislo.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_Bmt508tiyndkPiK0Tiw-zQ_EqPhdgs6
