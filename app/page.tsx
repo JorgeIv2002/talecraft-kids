@@ -24,31 +24,20 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<"library" | "create" | "pro" | "shop">("library");
   const [activeFilterCategory, setActiveFilterCategory] = useState<string>("Todos");
 
-  // Estado del Pase Pro Familiar
+  // Estado del Pase Pro Familiar (Bloqueado por defecto hasta que se compre)
   const [isPro, setIsPro] = useState(false);
 
-  // Lista de perfiles familiares con inventario de recompensas
+  // Perfil inicial limpio para el niño del usuario que descarga la app
   const [profilesList, setProfilesList] = useState<ChildProfile[]>([
     {
       id: "child-1",
-      name: "Leo",
-      age: 7,
-      petName: "Chispas el perrito",
-      starsCount: 18,
+      name: "Mi Pequeño Héroe",
+      age: 6,
+      petName: "Chispas",
+      starsCount: 5,
       favoriteValue: "Amistad",
       avatarEmoji: "🦊",
       unlockedRewards: ["pet-dog"],
-    },
-    {
-      id: "child-2",
-      name: "Sofía",
-      age: 5,
-      petName: "Mishi el gatito",
-      starsCount: 24,
-      favoriteValue: "Generosidad",
-      avatarEmoji: "🦁",
-      unlockedRewards: ["pet-dog", "acc-crown"],
-      equippedAccessory: "acc-crown",
     },
   ]);
 
@@ -67,12 +56,38 @@ export default function Home() {
   useEffect(() => {
     try {
       const savedPro = localStorage.getItem("talecraft_is_pro");
-      if (savedPro) {
-        setIsPro(JSON.parse(savedPro));
+      const isPurchased = localStorage.getItem("talecraft_pro_purchased") === "true";
+      if (savedPro && isPurchased) {
+        setIsPro(true);
+      } else {
+        setIsPro(false);
+        localStorage.removeItem("talecraft_is_pro");
       }
+
       const savedProfiles = localStorage.getItem("talecraft_profiles_list");
       if (savedProfiles) {
-        setProfilesList(JSON.parse(savedProfiles));
+        const parsed = JSON.parse(savedProfiles);
+        // Si detecta datos residuales de prueba del desarrollador (Leo y Sofía), limpiar para el usuario final
+        const isOldDevData =
+          Array.isArray(parsed) &&
+          parsed.some((p: ChildProfile) => p.name === "Leo" || p.name === "Sofía");
+        if (isOldDevData) {
+          const freshProfile: ChildProfile = {
+            id: "child-1",
+            name: "Mi Pequeño Héroe",
+            age: 6,
+            petName: "Chispas",
+            starsCount: 5,
+            favoriteValue: "Amistad",
+            avatarEmoji: "🦊",
+            unlockedRewards: ["pet-dog"],
+          };
+          setProfilesList([freshProfile]);
+          localStorage.setItem("talecraft_profiles_list", JSON.stringify([freshProfile]));
+          setActiveChildId("child-1");
+        } else {
+          setProfilesList(parsed);
+        }
       }
       const savedActiveChild = localStorage.getItem("talecraft_active_child");
       if (savedActiveChild) {
