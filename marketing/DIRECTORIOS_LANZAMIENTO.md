@@ -16,6 +16,11 @@
 ### 1. Product Hunt
 - **Nombre:** TaleCraft Kids
 - **Tagline (60 caracteres):** Cuentos interactivos donde los niños eligen su propia aventura
+- **Website URL:** https://talecraft-kids.vercel.app
+- **Android App Link (.apk):** https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.0.0/app-android.apk
+- **Enlace Permanente Última Versión:** https://github.com/JorgeIv2002/talecraft-kids/releases/latest/download/app-android.apk
+- **Video Promocional (15s):** `marketing/videos/tiktok-promo.mp4`
+- **Galería de Imágenes (1270 × 760 px):** `marketing/galeria/` (4 capturas listas para arrastrar y soltar)
 - **Descripción Corta:** Una app mágica bilingüe (ES/EN) para que los niños amen la lectura antes de dormir con narración dulce, decisiones morales y racha de sueño.
 - **Descripción Larga:**
   TaleCraft Kids transforma la rutina nocturna de lectura en una experiencia inmersiva y tranquila. Los pequeños se convierten en los héroes de sus historias favoritas, tomando decisiones éticas que guían el desenlace del cuento, ganando estrellas mágicas en el Bazar y descansando con un temporizador de cuna y música suave.
@@ -75,6 +80,11 @@
 ### 1. Product Hunt
 - **Name:** TaleCraft Kids
 - **Tagline (60 characters):** Interactive bedtime stories where kids choose their adventure
+- **Website URL:** https://talecraft-kids.vercel.app
+- **Android App Link (.apk):** https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.0.0/app-android.apk
+- **Permanent Latest APK Link:** https://github.com/JorgeIv2002/talecraft-kids/releases/latest/download/app-android.apk
+- **Promo Video (15s):** `marketing/videos/tiktok-promo.mp4`
+- **Gallery Screenshots (1270 × 760 px):** `marketing/galeria/` (4 ready-to-upload PNG cards)
 - **Short Description:** A magical bilingual bedtime reading app where kids become the heroes of gentle, value-driven stories with soothing storyteller voices and a sleep timer.
 - **Long Description:**
   TaleCraft Kids turns bedtime into an immersive, calming ritual. Children make positive moral choices that shape the story's outcome, earn stars in the Magic Shop for patience and courage, and fall asleep peacefully with a built-in nursery sleep timer and gentle ambient music.
