@@ -1,0 +1,88 @@
+name: Build and Release Android APK
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-apk:
+    name: Build & Release APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Sync Capacitor Android
+        run: npx cap sync android
+
+      - name: Make gradlew executable
+        run: chmod +x android/gradlew
+
+      - name: Build Android Debug APK
+        run: |
+          cd android
+          ./gradlew assembleDebug
+
+      - name: Locate and Package APK
+        run: |
+          mkdir -p release-assets
+          APK_PATH=$(find android/app/build/outputs/apk -name "*.apk" | head -n 1)
+          if [ -z "$APK_PATH" ]; then
+            echo "Error: No APK found!"
+            exit 1
+          fi
+          echo "Found APK: $APK_PATH"
+          cp "$APK_PATH" release-assets/TaleCraft-Kids-${{ github.ref_name }}.apk
+          cp "$APK_PATH" release-assets/TaleCraft-Kids.apk
+
+      - name: Create GitHub Release and Upload APK
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "TaleCraft Kids ${{ github.ref_name }}"
+          tag_name: ${{ github.ref_name }}
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+          body: |
+            ## 🌟 TaleCraft Kids ${{ github.ref_name }} - Lanzamiento Oficial
+            
+            ¡Primera versión de **TaleCraft Kids** empaquetada para Android lista para instalar!
+            
+            ### ✨ Novedades y Funcionalidades:
+            - 🌍 **Soporte Bilingüe**: Alterna al instante entre Español e Inglés sin recargar.
+            - 📖 **Cuentos Interactivos**: Múltiples caminos, decisiones formativas y finales con lecciones morales.
+            - 🎙️ **Narración Cálida**: Voces profesionales de cuentacuentos (Tía Salomé, Tía Dalia, Tía Elvira).
+            - 🌙 **Modo Noche & Temporizador**: Iluminación suave y temporizador de apagado de cuna.
+            - ⭐ **Bazar de Estrellas Mágicas**: Canje de recompensas, mascotas y accesorios.
+            - 👨‍👩‍👧 **Pase Familiar Pro**: Generador ilimitado de historias y perfiles multi-hijo.
+            
+            ### 📲 Instrucciones de Instalación en Android:
+            1. Descarga el archivo `TaleCraft-Kids.apk` adjunto abajo en tu dispositivo móvil.
+            2. Toca la notificación de descarga o abre el archivo desde tu explorador de archivos.
+            3. Si el sistema te lo pide, autoriza la instalación de aplicaciones de origen desconocido para tu navegador.
+            4. ¡Abre TaleCraft Kids y disfruta de la magia de la lectura!
+          files: |
+            release-assets/TaleCraft-Kids-${{ github.ref_name }}.apk
+            release-assets/TaleCraft-Kids.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
