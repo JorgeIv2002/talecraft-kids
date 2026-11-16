@@ -5,7 +5,7 @@
 
 ## 🔗 Enlaces para Publicaciones / Post Links
 - **Web Oficial:** [https://talecraft-kids.vercel.app](https://talecraft-kids.vercel.app)
-- **Descargar APK Android:** [https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.0.0/app-android.apk](https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.0.0/app-android.apk)
+- **Descargar APK Android:** [https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.1.0/app-android.apk](https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.1.0/app-android.apk)
 
 ---
 
@@ -27,7 +27,7 @@
 >
 > 📲 **Pruébalo gratis hoy:**
 > 👉 En la web: https://talecraft-kids.vercel.app
-> 🤖 O descarga la app para Android (.apk): https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.0.0/app-android.apk
+> 🤖 O descarga la app para Android (.apk): https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.1.0/app-android.apk
 >
 > #CuentosInfantiles #HoraDeDormir #ParentingTips #LecturaParaNiños #CuentosParaDormir #Maternidad #Paternidad
 
@@ -46,7 +46,7 @@
 >
 > Disponible tanto en versión web accesible como en APK nativo para dispositivos Android:
 > 🔗 Web: https://talecraft-kids.vercel.app
-> 📦 APK v1.0.0: https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.0.0/app-android.apk
+> 📦 APK v1.0.0: https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.1.0/app-android.apk
 >
 > ¿Cómo gestionas el tiempo de lectura antes de dormir en tu hogar?
 
@@ -65,7 +65,7 @@ Para la noche incluye "Modo Noche": luz tenue, voces de cuentacuentos cariñosas
 **Post 4/4:**
 100% bilingüe (ES / EN) y sin anuncios.
 🌐 Pruébalo en tu navegador: https://talecraft-kids.vercel.app
-📱 O instala el APK en tu Android: https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.0.0/app-android.apk
+📱 O instala el APK en tu Android: https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.1.0/app-android.apk
 
 ---
 
@@ -79,7 +79,7 @@ Para la noche incluye "Modo Noche": luz tenue, voces de cuentacuentos cariñosas
 ---
 
 ### Publicación 5: Comunidad de Padres / WhatsApp
-> ¡Hola familias! Les comparto esta app que creamos para la rutina de dormir de los peques: **TaleCraft Kids**. Tiene cuentos interactivos con voces hermosas de abuela/tía cuentacuentos y un temporizador que apaga el audio solo. Lo mejor es que está en español e inglés y no tiene anuncios. Pueden abrirla directo en https://talecraft-kids.vercel.app o bajar la app en https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.0.0/app-android.apk ¡Ojalá les sea súper útil! 🌟🧸
+> ¡Hola familias! Les comparto esta app que creamos para la rutina de dormir de los peques: **TaleCraft Kids**. Tiene cuentos interactivos con voces hermosas de abuela/tía cuentacuentos y un temporizador que apaga el audio solo. Lo mejor es que está en español e inglés y no tiene anuncios. Pueden abrirla directo en https://talecraft-kids.vercel.app o bajar la app en https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.1.0/app-android.apk ¡Ojalá les sea súper útil! 🌟🧸
 
 ---
 
@@ -99,7 +99,7 @@ Para la noche incluye "Modo Noche": luz tenue, voces de cuentacuentos cariñosas
 >
 > 📲 **Experience it today:**
 > 👉 Web: https://talecraft-kids.vercel.app
-> 🤖 Android APK: https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.0.0/app-android.apk
+> 🤖 Android APK: https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.1.0/app-android.apk
 >
 > #BedtimeStories #ParentingHacks #KidsReading #AudiobooksForKids #MindfulParenting
 
@@ -116,7 +116,7 @@ Para la noche incluye "Modo Noche": luz tenue, voces de cuentacuentos cariñosas
 >
 > Try the live web version or install the lightweight Android APK:
 > 🔗 Web: https://talecraft-kids.vercel.app
-> 📦 Android APK v1.0.0: https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.0.0/app-android.apk
+> 📦 Android APK v1.0.0: https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.1.0/app-android.apk
 
 ---
 
@@ -133,4 +133,4 @@ Features a dedicated Night Mode: warm ambient lighting, sweet storyteller voices
 **Tweet 4/4:**
 100% bilingual (EN/ES) and completely ad-free.
 🌐 Web: https://talecraft-kids.vercel.app
-📱 Android APK: https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.0.0/app-android.apk
+📱 Android APK: https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.1.0/app-android.apk

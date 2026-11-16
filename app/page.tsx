@@ -24,8 +24,8 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<"library" | "create" | "pro" | "shop">("library");
   const [activeFilterCategory, setActiveFilterCategory] = useState<string>("Todos");
 
-  // Estado del Pase Pro Familiar (Bloqueado por defecto hasta que se compre)
-  const [isPro, setIsPro] = useState(false);
+  // Estado del Pase Pro Familiar: 100% Gratuito y Desbloqueado para todos
+  const [isPro, setIsPro] = useState(true);
 
   // Perfil inicial limpio para el niño del usuario que descarga la app
   const [profilesList, setProfilesList] = useState<ChildProfile[]>([
@@ -53,7 +53,7 @@ export default function Home() {
   const currentProfile =
     profilesList.find((p) => p.id === activeChildId) || profilesList[0];
 
-  // Cargar estado guardado al iniciar con validación estricta de pago real
+  // Cargar estado guardado al iniciar (Todo 100% Gratuito)
   useEffect(() => {
     try {
       // 1. Detectar si se ejecuta dentro de la app nativa instalada (Capacitor), WebView o PWA
@@ -74,32 +74,9 @@ export default function Home() {
 
       setIsInstalledApp(isCapacitor || isStandalone || isAndroidWebView);
 
-      // 2. Comprobar si proviene de una pasarela de pago real completada (ej. Stripe o checkout exitoso)
-      const searchParams = new URLSearchParams(window.location.search);
-      const isPaymentSuccess =
-        searchParams.get("pro_activated") === "true" ||
-        searchParams.get("payment_status") === "paid";
-
-      if (isPaymentSuccess) {
-        const verifiedToken = "verified_order_" + Date.now();
-        localStorage.setItem("talecraft_is_pro", "true");
-        localStorage.setItem("talecraft_pro_verified_token", verifiedToken);
-        setIsPro(true);
-        window.history.replaceState({}, document.title, window.location.pathname);
-      } else {
-        // Solo desbloquear si existe un token de compra verificado legítimo
-        const verifiedToken = localStorage.getItem("talecraft_pro_verified_token");
-        const isProStored = localStorage.getItem("talecraft_is_pro") === "true";
-
-        if (verifiedToken && isProStored) {
-          setIsPro(true);
-        } else {
-          // Bloqueo estricto por defecto: borrar cualquier bypass previo o falso
-          setIsPro(false);
-          localStorage.removeItem("talecraft_is_pro");
-          localStorage.removeItem("talecraft_pro_purchased");
-        }
-      }
+      // 2. Modelo 100% Gratuito: Desbloquear todas las funciones para todas las familias
+      setIsPro(true);
+      localStorage.setItem("talecraft_is_pro", "true");
 
       const savedProfiles = localStorage.getItem("talecraft_profiles_list");
       if (savedProfiles) {
@@ -339,7 +316,7 @@ export default function Home() {
             {!isInstalledApp && (
               <div className="flex justify-center pt-0.5">
                 <a
-                  href="https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.0.0/app-android.apk"
+                  href="https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.1.0/app-android.apk"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 active:scale-95 text-white font-display font-bold text-xs shadow-md border-2 border-emerald-400/50 transition-all hover:scale-105"
@@ -448,28 +425,25 @@ export default function Home() {
             />
           </div>
 
-          {/* Banner de Membresía Familiar Estilo Vooks ("Hundreds of stories kids love") */}
-          {!isPro ? (
-            <div
-              onClick={() => setIsProOpen(true)}
-              className="rounded-[34px] p-5 bg-gradient-to-br from-[#FF6B4A] via-[#F05735] to-[#D94524] text-white shadow-lg cursor-pointer transition-transform hover:scale-[1.01] flex items-center justify-between border-2 border-white/20 mt-3"
-            >
-              <div className="space-y-1 max-w-[240px]">
-                <span className="px-2.5 py-0.5 rounded-full bg-white/20 text-[10px] font-display font-bold uppercase tracking-wider">
-                  {t.pro.badge}
+          {/* Banner de Bienvenida: 100% Gratuito y de Acceso Abierto */}
+          <div className="rounded-[30px] p-4 bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-emerald-500/15 border-2 border-emerald-500/30 text-emerald-800 dark:text-emerald-200 shadow-xs flex items-center justify-between mt-3">
+            <div className="flex items-center gap-2.5">
+              <span className="text-2xl">✨</span>
+              <div>
+                <span className="font-display font-black text-xs block">
+                  {locale === "en" ? "100% Free Open Edition" : "Edición 100% Gratuita"}
                 </span>
-                <h4 className="font-display font-bold text-base leading-tight">
-                  {t.bannerPro.title}
-                </h4>
-                <p className="text-[11px] text-white/90 font-body">
-                  {t.bannerPro.subtitle}
-                </p>
+                <span className="text-[11px] font-body opacity-90 block">
+                  {locale === "en"
+                    ? "All bedtime stories, creator and voices unlocked."
+                    : "Todos los cuentos, voces y creador desbloqueados para todos."}
+                </span>
               </div>
-              <span className="btn-toy-coral px-3.5 py-2.5 rounded-2xl bg-white text-storybook-coral hover:bg-[#FFF5EB] font-display font-extrabold text-xs shrink-0 shadow-md">
-                {t.bannerPro.explore}
-              </span>
             </div>
-          ) : null}
+            <span className="px-2.5 py-1 rounded-full bg-emerald-600 text-white font-display font-black text-[10px] uppercase tracking-wider shrink-0">
+              Free
+            </span>
+          </div>
         </div>
       )}
 

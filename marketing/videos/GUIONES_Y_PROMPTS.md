@@ -5,7 +5,7 @@
 
 ## 🔗 Enlaces para la Bio y Call to Action (CTA)
 - **Web App:** [https://talecraft-kids.vercel.app](https://talecraft-kids.vercel.app)
-- **Descarga Directa Android (.apk):** [https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.0.0/app-android.apk](https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.0.0/app-android.apk)
+- **Descarga Directa Android (.apk):** [https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.1.0/app-android.apk](https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.1.0/app-android.apk)
 
 ---
 

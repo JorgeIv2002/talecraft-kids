@@ -68,10 +68,10 @@ export default function AndroidShell({
       {!isInstalledApp && (
         <div className="hidden sm:flex items-center justify-between w-full max-w-[430px] mb-2 px-2 select-none">
           <span className="text-xs font-display font-bold text-[#786C60] dark:text-slate-400 flex items-center gap-1.5">
-            <span>📱</span> TaleCraft Kids v1.0.0
+            <span>📱</span> TaleCraft Kids v1.1.0
           </span>
           <a
-            href="https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.0.0/app-android.apk"
+            href="https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.1.0/app-android.apk"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-display font-bold text-[11px] shadow-sm transition-transform hover:scale-105 active:scale-95"
