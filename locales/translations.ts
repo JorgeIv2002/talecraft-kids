@@ -19,6 +19,7 @@ export const translations = {
       shop: "Bazar",
       shopTooltip: "Toca para abrir el Bazar de las Estrellas Mágicas",
       streakTooltip: "Racha de lectura antes de dormir",
+      downloadApp: "Descargar App Android (.apk)",
     },
     categories: {
       all: "Todos",
@@ -161,6 +162,7 @@ export const translations = {
       shop: "Shop",
       shopTooltip: "Tap to open the Magic Star Shop",
       streakTooltip: "Bedtime reading streak",
+      downloadApp: "Download Android App (.apk)",
     },
     categories: {
       all: "All",

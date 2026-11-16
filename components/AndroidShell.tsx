@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Sparkles, Moon, Sun, BookOpen, Crown, ShoppingBag } from "lucide-react";
+import { Sparkles, Moon, Sun, BookOpen, Crown, ShoppingBag, Download } from "lucide-react";
 import { ChildProfile } from "@/lib/types";
 import { useLanguage } from "@/context/LanguageContext";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -41,6 +41,22 @@ export default function AndroidShell({
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center p-0 sm:p-4 md:p-6 bg-[#EBE5DA] dark:bg-[#0D0F1A] transition-colors duration-300">
       
+      {/* Barra de Descarga Externa para Navegador / Escritorio */}
+      <div className="hidden sm:flex items-center justify-between w-full max-w-[430px] mb-2 px-2 select-none">
+        <span className="text-xs font-display font-bold text-[#786C60] dark:text-slate-400 flex items-center gap-1.5">
+          <span>📱</span> TaleCraft Kids v1.0.0
+        </span>
+        <a
+          href="https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.0.0/app-android.apk"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-display font-bold text-[11px] shadow-sm transition-transform hover:scale-105 active:scale-95"
+        >
+          <Download className="w-3.5 h-3.5" />
+          <span>{t.header.downloadApp}</span>
+        </a>
+      </div>
+
       {/* Marco de Dispositivo Android (Estilo Libro de Aventuras) */}
       <div
         className={`w-full max-w-[430px] h-screen sm:h-[860px] sm:max-h-[92vh] sm:rounded-[46px] border-0 sm:border-[9px] sm:border-[#352A20] shadow-[0_25px_60px_-15px_rgba(53,42,32,0.35)] relative flex flex-col overflow-hidden transition-colors duration-300 ${

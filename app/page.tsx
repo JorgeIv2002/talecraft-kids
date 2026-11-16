@@ -14,7 +14,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import StarShopModal from "@/components/StarShopModal";
 import { INITIAL_STORIES } from "@/lib/storiesData";
 import { Story, ChildProfile, RewardItem } from "@/lib/types";
-import { Crown, Sparkles, Wand2, Headphones, Star } from "lucide-react";
+import { Crown, Sparkles, Wand2, Headphones, Star, Download } from "lucide-react";
 
 export default function Home() {
   const { t, locale } = useLanguage();
@@ -273,13 +273,28 @@ export default function Home() {
           </div>
 
           {/* Logo Central de la Marca Estilo Vooks */}
-          <div className="text-center py-0.5">
-            <span className="font-display font-black text-2xl tracking-wider text-storybook-coral uppercase drop-shadow-2xs">
-              TALECRAFT
-            </span>
-            <span className="block text-[10px] font-display font-bold text-[#786C60] dark:text-slate-400 tracking-wide uppercase">
-              Cuentos que cobran vida
-            </span>
+          <div className="text-center py-0.5 space-y-2">
+            <div>
+              <span className="font-display font-black text-2xl tracking-wider text-storybook-coral uppercase drop-shadow-2xs">
+                TALECRAFT
+              </span>
+              <span className="block text-[10px] font-display font-bold text-[#786C60] dark:text-slate-400 tracking-wide uppercase">
+                {locale === "en" ? "Stories that come alive" : "Cuentos que cobran vida"}
+              </span>
+            </div>
+
+            {/* Botón Visible de Descarga App Android (.apk) */}
+            <div className="flex justify-center pt-0.5">
+              <a
+                href="https://github.com/JorgeIv2002/talecraft-kids/releases/download/v1.0.0/app-android.apk"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 active:scale-95 text-white font-display font-bold text-xs shadow-md border-2 border-emerald-400/50 transition-all hover:scale-105"
+              >
+                <Download className="w-4 h-4 text-emerald-200 animate-bounce" />
+                <span>{t.header.downloadApp}</span>
+              </a>
+            </div>
           </div>
 
           {/* 1. Tarjeta Cinematográfica Hero Estilo Vooks */}
