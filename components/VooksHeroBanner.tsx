@@ -3,6 +3,7 @@
 import React from "react";
 import { Play, Sparkles, Clock, Compass, ArrowRight } from "lucide-react";
 import { Story, ChildProfile } from "@/lib/types";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface VooksHeroBannerProps {
   story: Story;
@@ -17,6 +18,8 @@ export default function VooksHeroBanner({
   isNightMode,
   onStartStory,
 }: VooksHeroBannerProps) {
+  const { t } = useLanguage();
+
   return (
     <section className="relative group cursor-pointer" onClick={() => onStartStory(story)}>
       {/* Tarjeta Cinematográfica Estilo Vooks */}
@@ -33,12 +36,12 @@ export default function VooksHeroBanner({
         <div className="flex items-center justify-between z-10">
           <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md font-display font-bold text-xs uppercase tracking-wider border border-white/30 flex items-center gap-1.5 shadow-2xs">
             <Sparkles className="w-3.5 h-3.5 fill-current text-yellow-300" />
-            <span>Cuento Recomendado de Hoy</span>
+            <span>{t.hero.featuredBadge}</span>
           </span>
 
           <span className="px-3 py-1 rounded-full bg-black/25 backdrop-blur-md font-display font-bold text-xs flex items-center gap-1">
             <Clock className="w-3.5 h-3.5" />
-            <span>{story.estimatedMinutes} min</span>
+            <span>{story.estimatedMinutes} {t.hero.min}</span>
           </span>
         </div>
 
@@ -56,12 +59,12 @@ export default function VooksHeroBanner({
         <div className="z-10 flex items-center justify-between pt-1">
           <div className="flex items-center gap-1.5 text-xs font-display font-bold bg-black/20 px-3 py-1.5 rounded-xl backdrop-blur-xs">
             <Compass className="w-3.5 h-3.5 text-yellow-300" />
-            <span>{story.decisionsCount} decisiones con {profile.name}</span>
+            <span>{story.decisionsCount} {t.sections.decisions} · {profile.name}</span>
           </div>
 
           <button className="btn-toy-coral px-4 py-2 rounded-2xl bg-white text-storybook-coral hover:bg-[#FFF5EB] font-display font-extrabold text-xs shadow-md flex items-center gap-1.5 transition-transform group-hover:scale-105">
             <Play className="w-4 h-4 fill-current" />
-            <span>Leer Ahora</span>
+            <span>{t.hero.startAdventure}</span>
           </button>
         </div>
       </div>

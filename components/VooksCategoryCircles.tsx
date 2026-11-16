@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Sparkles, Moon, Heart, Headphones, ShoppingBag } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface VooksCategoryCirclesProps {
   activeCategory: string;
@@ -18,38 +19,40 @@ export default function VooksCategoryCircles({
   onOpenAudio,
   isNightMode,
 }: VooksCategoryCirclesProps) {
+  const { t, locale } = useLanguage();
+
   const categories = [
     {
       id: "Todos",
-      label: "Todos",
+      label: t.categories.all,
       icon: "🌟",
       bg: "bg-gradient-to-tr from-[#FF6B4A] to-[#FF8E75]",
       border: "border-[#D94524]",
     },
     {
       id: "bedtime",
-      label: "Dormir",
+      label: locale === "en" ? "Bedtime" : "Dormir",
       icon: "🌙",
       bg: "bg-gradient-to-tr from-[#6366F1] to-[#818CF8]",
       border: "border-[#4338CA]",
     },
     {
       id: "values",
-      label: "Valores",
+      label: locale === "en" ? "Values" : "Valores",
       icon: "🦁",
       bg: "bg-gradient-to-tr from-[#10B981] to-[#34D399]",
       border: "border-[#059669]",
     },
     {
       id: "audio",
-      label: "Audioteca",
+      label: locale === "en" ? "Audio Library" : "Audioteca",
       icon: "🎧",
       bg: "bg-gradient-to-tr from-[#0EA5E9] to-[#38BDF8]",
       border: "border-[#0284C7]",
     },
     {
       id: "shop",
-      label: "Bazar ⭐",
+      label: `${t.shop.title.split(" ")[0]} ⭐`,
       icon: "🎁",
       bg: "bg-gradient-to-tr from-[#F59E0B] to-[#FBBF24]",
       border: "border-[#D97706]",

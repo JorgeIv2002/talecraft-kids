@@ -3,6 +3,7 @@
 import React from "react";
 import { ChevronRight } from "lucide-react";
 import { Story } from "@/lib/types";
+import { useLanguage } from "@/context/LanguageContext";
 import VooksBookCard from "./VooksBookCard";
 
 interface VooksSectionRowProps {
@@ -26,6 +27,7 @@ export default function VooksSectionRow({
   onRequestPro,
   onViewAll,
 }: VooksSectionRowProps) {
+  const { t } = useLanguage();
   if (stories.length === 0) return null;
 
   return (
@@ -53,7 +55,7 @@ export default function VooksSectionRow({
           onClick={onViewAll}
           className="text-xs font-display font-bold text-storybook-coral hover:underline"
         >
-          Ver todos
+          {t.sections.seeAll}
         </button>
       </div>
 

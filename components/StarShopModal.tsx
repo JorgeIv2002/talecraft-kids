@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Star, X, Check, Sparkles, ShoppingBag } from "lucide-react";
 import { ChildProfile, RewardItem } from "@/lib/types";
 import { REWARD_ITEMS } from "@/lib/rewardsData";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface StarShopModalProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ export default function StarShopModal({
   onUnlockItem,
   onEquipItem,
 }: StarShopModalProps) {
+  const { t, locale } = useLanguage();
   const [activeTab, setActiveTab] = useState<"pet" | "accessory" | "sound">("pet");
 
   if (!isOpen) return null;
@@ -45,10 +47,10 @@ export default function StarShopModal({
             </span>
             <div>
               <h2 className="font-display font-extrabold text-base leading-tight">
-                Bazar de las Estrellas
+                {t.shop.title}
               </h2>
               <p className="text-xs font-display font-bold text-storybook-coral">
-                Para el héroe {profile.name}
+                {locale === "en" ? `For little hero ${profile.name}` : `Para el héroe ${profile.name}`}
               </p>
             </div>
           </div>
@@ -80,7 +82,7 @@ export default function StarShopModal({
             }`}
           >
             <span>🐶</span>
-            <span>Mascotas</span>
+            <span>{t.shop.petsTab}</span>
           </button>
 
           <button
@@ -92,7 +94,7 @@ export default function StarShopModal({
             }`}
           >
             <span>👑</span>
-            <span>Accesorios</span>
+            <span>{t.shop.accTab}</span>
           </button>
 
           <button
@@ -104,7 +106,7 @@ export default function StarShopModal({
             }`}
           >
             <span>🌧️</span>
-            <span>Sonidos</span>
+            <span>{t.shop.soundsTab}</span>
           </button>
         </div>
 
@@ -161,7 +163,7 @@ export default function StarShopModal({
                           : "btn-toy-coral bg-storybook-coral text-white shadow-xs"
                       }`}
                     >
-                      {isEquipped ? "Equipado ✓" : "Llevar"}
+                      {isEquipped ? `${t.shop.equipped} ✓` : t.shop.equip}
                     </button>
                   ) : (
                     <button
@@ -172,9 +174,9 @@ export default function StarShopModal({
                           ? "btn-toy-amber bg-[#D97706] text-white shadow-xs"
                           : "bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed"
                       }`}
-                      title={!canAfford ? `Te faltan ${item.costStars - profile.starsCount} estrellas` : ""}
+                      title={!canAfford ? `${t.shop.needStars} ${item.costStars - profile.starsCount} ${t.shop.stars}` : ""}
                     >
-                      <span>Canjear</span>
+                      <span>{t.shop.unlock}</span>
                       <span>⭐ {item.costStars}</span>
                     </button>
                   )}
@@ -186,8 +188,10 @@ export default function StarShopModal({
 
         {/* Footer */}
         <div className="pt-2 border-t border-inherit flex items-center justify-between text-xs font-display font-bold text-[#786C60] dark:text-slate-400">
-          <span>📖 Lee cuentos para ganar más estrellas</span>
-          <span className="text-storybook-coral">¡Cada noche una aventura!</span>
+          <span>{locale === "en" ? "📖 Read stories to earn stars" : "📖 Lee cuentos para ganar más estrellas"}</span>
+          <span className="text-storybook-coral">
+            {locale === "en" ? "Every night an adventure!" : "¡Cada noche una aventura!"}
+          </span>
         </div>
       </div>
     </div>

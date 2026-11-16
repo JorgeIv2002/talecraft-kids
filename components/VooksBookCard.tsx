@@ -3,6 +3,7 @@
 import React from "react";
 import { Clock, Lock, Crown, Headphones, Sparkles, Play } from "lucide-react";
 import { Story } from "@/lib/types";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface VooksBookCardProps {
   story: Story;
@@ -19,6 +20,7 @@ export default function VooksBookCard({
   onSelect,
   onRequestPro,
 }: VooksBookCardProps) {
+  const { t } = useLanguage();
   const isLocked = story.isPremium && !isPro;
 
   const handleClick = () => {
@@ -93,7 +95,7 @@ export default function VooksBookCard({
               <Lock className="w-4 h-4 text-white" />
             </div>
             <span className="font-display font-bold text-[10px] bg-black/60 px-2 py-0.5 rounded-full">
-              Pase Pro
+              {t.nav.pro}
             </span>
           </div>
         )}
@@ -109,7 +111,7 @@ export default function VooksBookCard({
           {story.title}
         </h3>
         <p className="text-[11px] font-body text-[#786C60] dark:text-slate-400 line-clamp-1">
-          {story.decisionsCount} decisiones interactivas
+          {story.decisionsCount} {t.sections.decisions}
         </p>
       </div>
     </div>

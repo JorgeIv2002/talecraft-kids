@@ -3,6 +3,7 @@
 import React from "react";
 import { Star, Crown, ChevronDown } from "lucide-react";
 import { ChildProfile } from "@/lib/types";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface HeaderProfileProps {
   profile: ChildProfile;
@@ -23,6 +24,7 @@ export default function HeaderProfile({
   onOpenPersonalize,
   onOpenShop,
 }: HeaderProfileProps) {
+  const { t } = useLanguage();
   const accessoryEmoji =
     profile.equippedAccessory === "acc-crown"
       ? "👑"
@@ -75,7 +77,7 @@ export default function HeaderProfile({
                       value={p.id}
                       className={isNightMode ? "bg-[#1E2238] text-white" : "bg-white text-[#2D231B]"}
                     >
-                      Aventuras de {p.name}
+                      {t.header.adventuresOf} {p.name}
                     </option>
                   ))}
                 </select>
@@ -88,19 +90,19 @@ export default function HeaderProfile({
                   isNightMode ? "text-white" : "text-[#2D231B]"
                 }`}
               >
-                Aventuras de {profile.name}
+                {t.header.adventuresOf} {profile.name}
               </h1>
             )}
 
             <span className="text-[11px] font-display font-bold px-2 py-0.5 rounded-full bg-[#FFEAE3] text-storybook-coral border border-[#FFD5C8]">
-              {profile.age} años
+              {profile.age} {t.header.years}
             </span>
             <span
               className="text-[10px] font-display font-bold px-2 py-0.5 rounded-full bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] flex items-center gap-0.5 shadow-2xs"
-              title="Racha de lectura antes de dormir"
+              title={t.header.streakTooltip}
             >
               <span>🔥</span>
-              <span>3 noches</span>
+              <span>3 {t.header.nights}</span>
             </span>
           </div>
 
@@ -110,8 +112,8 @@ export default function HeaderProfile({
               isNightMode ? "text-slate-400" : "text-[#786C60]"
             }`}
           >
-            <span>Con {profile.petName}</span>
-            <span className="text-storybook-coral text-[10px] font-bold">✎ editar</span>
+            <span>{t.header.with} {profile.petName}</span>
+            <span className="text-storybook-coral text-[10px] font-bold">✎ {t.header.edit}</span>
           </p>
         </div>
       </div>
@@ -124,14 +126,14 @@ export default function HeaderProfile({
             ? "bg-[#282218] border-[#78541D] text-[#FBBF24]"
             : "bg-gradient-to-r from-[#FFFBEB] to-[#FEF3C7] border-[#FDE68A] text-[#B45309]"
         }`}
-        title="Toca para abrir el Bazar de las Estrellas Mágicas"
+        title={t.header.shopTooltip}
       >
         <Star className="w-4 h-4 fill-current text-[#F59E0B] animate-spin-slow" />
         <span className="font-display font-bold text-sm tracking-tight text-[#92400E] dark:text-[#FBBF24]">
           {profile.starsCount}
         </span>
         <span className="text-[10px] font-display font-extrabold uppercase px-1.5 py-0.5 rounded-lg bg-[#F59E0B] text-white">
-          Bazar
+          {t.header.shop}
         </span>
       </button>
     </header>

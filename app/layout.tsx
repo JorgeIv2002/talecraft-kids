@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fredoka, Nunito } from "next/font/google";
 import "./globals.css";
+import { LanguageProvider } from "@/context/LanguageContext";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -68,7 +69,7 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning className={`${fredoka.variable} ${nunito.variable}`}>
       <body suppressHydrationWarning className="bg-[#FAF7F2] text-[#2C241D] min-h-screen antialiased selection:bg-[#FFE3B3] font-body">
-        {children}
+        <LanguageProvider>{children}</LanguageProvider>
         <script
           dangerouslySetInnerHTML={{
             __html: `

@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { Sparkles, Moon, Sun, BookOpen, Crown, ShoppingBag } from "lucide-react";
 import { ChildProfile } from "@/lib/types";
+import { useLanguage } from "@/context/LanguageContext";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 interface AndroidShellProps {
   children: React.ReactNode;
@@ -22,6 +24,7 @@ export default function AndroidShell({
   onTabChange,
 }: AndroidShellProps) {
   const [currentTime, setCurrentTime] = useState("19:45");
+  const { t } = useLanguage();
 
   useEffect(() => {
     const updateTime = () => {
@@ -51,13 +54,16 @@ export default function AndroidShell({
 
         {/* Barra de Estado Android Superior */}
         <div
-          className={`pt-3.5 px-6 pb-2 flex items-center justify-between text-[11px] font-bold tracking-tight z-40 select-none border-b transition-colors ${
+          className={`pt-3 px-5 pb-2 flex items-center justify-between text-[11px] font-bold tracking-tight z-40 select-none border-b transition-colors ${
             isNightMode
               ? "border-[#20253B] text-[#9CA3AF]"
               : "border-[#EFE6DA] text-[#786C60]"
           }`}
         >
-          <span className="font-display text-xs">{currentTime}</span>
+          <div className="flex items-center gap-2">
+            <span className="font-display text-xs">{currentTime}</span>
+            <LanguageSwitcher isNightMode={isNightMode} />
+          </div>
           <div className="flex items-center gap-1.5">
             <span className="text-[10px] font-display">5G</span>
             <span>📶</span>
@@ -90,7 +96,7 @@ export default function AndroidShell({
             <div className={`p-1.5 rounded-2xl ${activeTab === "library" ? "bg-storybook-coralLight" : ""}`}>
               <BookOpen className="w-5 h-5" strokeWidth={activeTab === "library" ? 2.5 : 2} />
             </div>
-            <span className="text-[10px]">Cuentos</span>
+            <span className="text-[10px]">{t.nav.stories}</span>
           </button>
 
           {/* Tab 2: Crear */}
@@ -105,7 +111,7 @@ export default function AndroidShell({
             <div className={`p-1.5 rounded-2xl ${activeTab === "create" ? "bg-storybook-coralLight" : ""}`}>
               <Sparkles className="w-5 h-5" strokeWidth={activeTab === "create" ? 2.5 : 2} />
             </div>
-            <span className="text-[10px]">Crear</span>
+            <span className="text-[10px]">{t.nav.create}</span>
           </button>
 
           {/* Tab 3: Bazar */}
@@ -120,7 +126,7 @@ export default function AndroidShell({
             <div className={`p-1.5 rounded-2xl ${activeTab === "shop" ? "bg-amber-100 dark:bg-amber-950" : ""}`}>
               <ShoppingBag className="w-5 h-5 text-[#D97706]" strokeWidth={activeTab === "shop" ? 2.5 : 2} />
             </div>
-            <span className="text-[10px]">Bazar ⭐</span>
+            <span className="text-[10px]">{t.nav.shop} ⭐</span>
           </button>
 
           {/* Botón Central: Dormir / Día */}
@@ -137,7 +143,7 @@ export default function AndroidShell({
                 <Moon className="w-5 h-5 text-[#4F46E5]" strokeWidth={2} />
               )}
             </div>
-            <span className="text-[10px]">{isNightMode ? "Día" : "Noche"}</span>
+            <span className="text-[10px]">{isNightMode ? t.nav.dayMode : t.nav.nightMode}</span>
           </button>
 
           {/* Tab 4: Pase Pro */}
@@ -152,7 +158,7 @@ export default function AndroidShell({
             <div className={`p-1.5 rounded-2xl ${activeTab === "pro" ? "bg-storybook-coralLight" : ""}`}>
               <Crown className="w-5 h-5 text-storybook-coral" strokeWidth={activeTab === "pro" ? 2.5 : 2} />
             </div>
-            <span className="text-[10px]">Pase Pro</span>
+            <span className="text-[10px]">{t.nav.pro}</span>
           </button>
         </nav>
       </div>

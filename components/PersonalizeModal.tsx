@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { X, Sparkles, Plus, Crown, UserCheck } from "lucide-react";
 import { ChildProfile, ValueCategory } from "@/lib/types";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface PersonalizeModalProps {
   isOpen: boolean;
@@ -29,6 +30,7 @@ export default function PersonalizeModal({
   isPro,
   onRequestPro,
 }: PersonalizeModalProps) {
+  const { t, locale } = useLanguage();
   const [name, setName] = useState(profile.name);
   const [age, setAge] = useState(profile.age);
   const [petName, setPetName] = useState(profile.petName);
@@ -75,7 +77,7 @@ export default function PersonalizeModal({
       return;
     }
     if (profilesList.length >= 3) {
-      alert("Has alcanzado el límite de 3 perfiles infantiles familiares.");
+      alert(t.personalize.limitReached);
       return;
     }
     setName("");
@@ -101,7 +103,13 @@ export default function PersonalizeModal({
               ✨
             </span>
             <h2 className="font-display font-bold text-base">
-              {isAddingNew ? "Añadir Pequeño Héroe" : `Perfil de ${profile.name}`}
+              {isAddingNew
+                ? locale === "en"
+                  ? "Add Little Hero"
+                  : "Añadir Pequeño Héroe"
+                : locale === "en"
+                ? `${profile.name}'s Profile`
+                : `Perfil de ${profile.name}`}
             </h2>
           </div>
           <button
@@ -119,7 +127,7 @@ export default function PersonalizeModal({
           <div className="space-y-1.5 pb-1">
             <div className="flex items-center justify-between text-xs font-display font-bold">
               <span className={isNightMode ? "text-slate-300" : "text-[#786C60]"}>
-                Perfiles de la familia:
+                {t.personalize.siblingsLabel}
               </span>
               <button
                 type="button"
@@ -127,7 +135,7 @@ export default function PersonalizeModal({
                 className="text-storybook-coral font-bold flex items-center gap-1 hover:underline"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>Añadir hermanito/a</span>
+                <span>{t.personalize.addSibling}</span>
                 {!isPro && <Crown className="w-3 h-3 fill-current text-amber-500" />}
               </button>
             </div>
@@ -165,7 +173,9 @@ export default function PersonalizeModal({
         <form onSubmit={handleSubmit} className="space-y-3.5 text-xs font-body font-semibold">
           {/* Avatar Selector */}
           <div>
-            <label className="block font-display font-bold text-xs mb-1.5">Avatar del héroe:</label>
+            <label className="block font-display font-bold text-xs mb-1.5">
+              {t.personalize.avatarLabel}
+            </label>
             <div className="flex gap-2">
               {["🦊", "🦁", "🐼", "🦄", "🚀", "🐲"].map((emoji) => (
                 <button
@@ -187,7 +197,9 @@ export default function PersonalizeModal({
           </div>
 
           <div>
-            <label className="block font-display font-bold text-xs mb-1">Nombre del pequeño héroe:</label>
+            <label className="block font-display font-bold text-xs mb-1">
+              {t.personalize.nameLabel}
+            </label>
             <input
               type="text"
               required
@@ -204,7 +216,9 @@ export default function PersonalizeModal({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-display font-bold text-xs mb-1">Edad del niño:</label>
+              <label className="block font-display font-bold text-xs mb-1">
+                {t.personalize.ageLabel}
+              </label>
               <select
                 value={age}
                 onChange={(e) => setAge(Number(e.target.value))}
@@ -216,14 +230,16 @@ export default function PersonalizeModal({
               >
                 {[4, 5, 6, 7, 8, 9, 10].map((num) => (
                   <option key={num} value={num}>
-                    {num} años
+                    {num} {t.header.years}
                   </option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label className="block font-display font-bold text-xs mb-1">Mascota o amigo:</label>
+              <label className="block font-display font-bold text-xs mb-1">
+                {t.personalize.petLabel}
+              </label>
               <input
                 type="text"
                 value={petName}
@@ -239,7 +255,9 @@ export default function PersonalizeModal({
           </div>
 
           <div>
-            <label className="block font-display font-bold text-xs mb-1">Valor favorito a reforzar:</label>
+            <label className="block font-display font-bold text-xs mb-1">
+              {t.personalize.valueLabel}
+            </label>
             <select
               value={favoriteValue}
               onChange={(e) => setFavoriteValue(e.target.value as ValueCategory)}
@@ -249,11 +267,21 @@ export default function PersonalizeModal({
                   : "bg-[#FAF7F2] border-[#EFE6DA] text-[#2D231B] focus:border-storybook-coral"
               }`}
             >
-              <option value="Amistad">🤝 Amistad y Compañerismo</option>
-              <option value="Perseverancia">🦁 Perseverancia y Paciencia</option>
-              <option value="Naturaleza">🌿 Respeto a la Naturaleza</option>
-              <option value="Generosidad">🎁 Generosidad y Empatía</option>
-              <option value="Curiosidad">🚀 Curiosidad y Creatividad</option>
+              <option value="Amistad">
+                {locale === "en" ? "🤝 Friendship & Teamwork" : "🤝 Amistad y Compañerismo"}
+              </option>
+              <option value="Perseverancia">
+                {locale === "en" ? "🦁 Perseverance & Patience" : "🦁 Perseverancia y Paciencia"}
+              </option>
+              <option value="Naturaleza">
+                {locale === "en" ? "🌿 Respect for Nature" : "🌿 Respeto a la Naturaleza"}
+              </option>
+              <option value="Generosidad">
+                {locale === "en" ? "🎁 Generosity & Empathy" : "🎁 Generosidad y Empatía"}
+              </option>
+              <option value="Curiosidad">
+                {locale === "en" ? "🚀 Curiosity & Creativity" : "🚀 Curiosidad y Creatividad"}
+              </option>
             </select>
           </div>
 
@@ -264,14 +292,20 @@ export default function PersonalizeModal({
                 onClick={() => setIsAddingNew(false)}
                 className="py-3 px-4 rounded-2xl border-2 border-slate-300 text-xs font-display font-bold"
               >
-                Cancelar
+                {locale === "en" ? "Cancel" : "Cancelar"}
               </button>
             )}
             <button
               type="submit"
               className="flex-1 py-3.5 rounded-2xl btn-toy-coral bg-storybook-coral hover:bg-[#F05735] text-white font-display font-bold text-xs shadow-md transition-all"
             >
-              {isAddingNew ? "Guardar Nuevo Perfil ✨" : `Guardar Cambios para ${name || "el Héroe"}`}
+              {isAddingNew
+                ? locale === "en"
+                  ? "Save New Profile ✨"
+                  : "Guardar Nuevo Perfil ✨"
+                : locale === "en"
+                ? `Save Changes for ${name || "Hero"}`
+                : `Guardar Cambios para ${name || "el Héroe"}`}
             </button>
           </div>
         </form>

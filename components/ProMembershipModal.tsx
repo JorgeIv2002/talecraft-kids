@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Check, Crown, Sparkles, X, ShieldCheck, CheckCircle2, RotateCcw } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface ProMembershipModalProps {
   isOpen: boolean;
@@ -18,6 +19,7 @@ export default function ProMembershipModal({
   isPro,
   onTogglePro,
 }: ProMembershipModalProps) {
+  const { t, locale } = useLanguage();
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("yearly");
   const [justActivated, setJustActivated] = useState(false);
 
@@ -53,7 +55,7 @@ export default function ProMembershipModal({
               <Crown className="w-5 h-5 fill-current" />
             </span>
             <span className="font-display font-extrabold text-sm uppercase tracking-wide text-storybook-coral">
-              Pase Familiar Pro
+              {t.pro.badge}
             </span>
           </div>
           <button
@@ -72,22 +74,22 @@ export default function ProMembershipModal({
             <div className="w-12 h-12 rounded-2xl bg-[#10B981] text-white mx-auto flex items-center justify-center text-2xl shadow-sm">
               👑
             </div>
-            <h3 className="font-display font-bold text-sm">¡Tu Pase Familiar Pro está ACTIVO!</h3>
+            <h3 className="font-display font-bold text-sm">{t.pro.activeTitle}</h3>
             <p className="text-xs font-body font-semibold leading-relaxed text-[#047857]">
-              Tienes acceso ilimitado a todos los cuentos, perfiles para hasta 3 niños y el generador de historias mágicas.
+              {t.pro.activeDesc}
             </p>
           </div>
         ) : (
           <div className="space-y-1 text-center">
             <h2 className="font-display font-bold text-xl leading-tight">
-              Club de Cuentos Mágicos
+              {t.pro.title}
             </h2>
             <p
               className={`text-xs font-body font-semibold ${
                 isNightMode ? "text-slate-300" : "text-[#786C60]"
               }`}
             >
-              Desbloquea todas las aventuras y funciones familiares para tus pequeños.
+              {t.pro.subtitle}
             </p>
           </div>
         )}
@@ -103,7 +105,7 @@ export default function ProMembershipModal({
                   : "text-[#786C60] dark:text-slate-400"
               }`}
             >
-              $6.99 / mes
+              {locale === "en" ? "$6.99 / mo" : "$6.99 / mes"}
             </button>
             <button
               onClick={() => setBillingCycle("yearly")}
@@ -113,7 +115,7 @@ export default function ProMembershipModal({
                   : "text-[#786C60] dark:text-slate-400"
               }`}
             >
-              $49 / año (-40%)
+              {locale === "en" ? "$49 / yr (-40%)" : "$49 / año (-40%)"}
             </button>
           </div>
         )}
@@ -125,7 +127,7 @@ export default function ProMembershipModal({
               <Check className="w-3.5 h-3.5" />
             </span>
             <span>
-              <strong>Cuentos Exclusivos Desbloqueados:</strong> Acceso a toda la biblioteca sin candados.
+              <strong>{t.pro.feat1Title}</strong> {t.pro.feat1Desc}
             </span>
           </li>
           <li className="flex items-start gap-2">
@@ -133,7 +135,7 @@ export default function ProMembershipModal({
               <Check className="w-3.5 h-3.5" />
             </span>
             <span>
-              <strong>Multi-Hijo:</strong> Hasta 3 niños con sus propias estrellas y avatares.
+              <strong>{t.pro.feat2Title}</strong> {t.pro.feat2Desc}
             </span>
           </li>
           <li className="flex items-start gap-2">
@@ -141,7 +143,7 @@ export default function ProMembershipModal({
               <Check className="w-3.5 h-3.5" />
             </span>
             <span>
-              <strong>Creador de Cuentos Mágicos:</strong> Historias infinitas con cualquier personaje.
+              <strong>{t.pro.feat3Title}</strong> {t.pro.feat3Desc}
             </span>
           </li>
         </ul>
@@ -153,14 +155,14 @@ export default function ProMembershipModal({
               onClick={onClose}
               className="w-full py-3.5 rounded-2xl btn-toy-coral bg-storybook-coral text-white font-display font-bold text-xs shadow-md"
             >
-              Continuar Disfrutando de Pro ✨
+              {locale === "en" ? "Continue Enjoying Pro ✨" : "Continuar Disfrutando de Pro ✨"}
             </button>
             <button
               onClick={handleDeactivatePro}
               className="w-full py-2 rounded-xl text-xs font-display font-bold text-slate-500 hover:text-red-500 transition-colors flex items-center justify-center gap-1"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>Volver al Modo Gratuito (para probar diferencias)</span>
+              <span>{t.pro.switchFree}</span>
             </button>
           </div>
         ) : (
@@ -172,12 +174,16 @@ export default function ProMembershipModal({
             {justActivated ? (
               <>
                 <CheckCircle2 className="w-4 h-4 text-white animate-bounce" />
-                <span>¡Pase Pro Activado! Disfrútalo 🎉</span>
+                <span>
+                  {locale === "en" ? "Pro Pass Activated! Enjoy 🎉" : "¡Pase Pro Activado! Disfrútalo 🎉"}
+                </span>
               </>
             ) : (
               <>
                 <Sparkles className="w-4 h-4" />
-                <span>Activar Prueba Gratuita de 7 Días</span>
+                <span>
+                  {locale === "en" ? "Start 7-Day Free Trial" : "Activar Prueba Gratuita de 7 Días"}
+                </span>
               </>
             )}
           </button>
@@ -185,7 +191,7 @@ export default function ProMembershipModal({
 
         <p className="text-[11px] font-body text-center text-[#786C60] dark:text-slate-400 flex items-center justify-center gap-1">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-          <span>Sin compromisos: cancela o alterna libremente cuando quieras.</span>
+          <span>{t.pro.noChargeNow}</span>
         </p>
       </div>
     </div>

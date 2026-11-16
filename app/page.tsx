@@ -10,12 +10,14 @@ import StoryReader from "@/components/StoryReader";
 import PersonalizeModal from "@/components/PersonalizeModal";
 import ProMembershipModal from "@/components/ProMembershipModal";
 import StoryCreatorModal from "@/components/StoryCreatorModal";
+import { useLanguage } from "@/context/LanguageContext";
 import StarShopModal from "@/components/StarShopModal";
 import { INITIAL_STORIES } from "@/lib/storiesData";
 import { Story, ChildProfile, RewardItem } from "@/lib/types";
 import { Crown, Sparkles, Wand2, Headphones, Star } from "lucide-react";
 
 export default function Home() {
+  const { t, locale } = useLanguage();
   const [stories, setStories] = useState<Story[]>(INITIAL_STORIES);
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
   const [isNightMode, setIsNightMode] = useState(false);
@@ -304,8 +306,8 @@ export default function Home() {
           <div className="space-y-6 pt-1">
             {/* Fila 1: Populares y Destacados */}
             <VooksSectionRow
-              title="Cuentos Populares"
-              subtitle="Las historias más queridas por los niños"
+              title={t.sections.popularTitle}
+              subtitle={t.sections.popularSub}
               stories={popularStories}
               isNightMode={isNightMode}
               isPro={isPro}
@@ -315,8 +317,8 @@ export default function Home() {
 
             {/* Fila 2: Cuentos para Dormir (Bedtime Stories) */}
             <VooksSectionRow
-              title="Para la Hora de Dormir"
-              subtitle="Historias relajantes con luz suave para descansar"
+              title={t.sections.bedtimeTitle}
+              subtitle={t.sections.bedtimeSub}
               stories={bedtimeStories}
               isNightMode={isNightMode}
               isPro={isPro}
@@ -330,14 +332,16 @@ export default function Home() {
                 <div className="flex items-center gap-2">
                   <span className="p-2 rounded-2xl bg-white/20 text-xl">🎧</span>
                   <div>
-                    <h3 className="font-display font-bold text-sm">Audioteca Mágica</h3>
+                    <h3 className="font-display font-bold text-sm">
+                      {locale === "en" ? "Magic Audio Library" : "Audioteca Mágica"}
+                    </h3>
                     <p className="text-[11px] text-white/80 font-body">
-                      Escucha con los ojos cerrados antes de dormir
+                      {locale === "en" ? "Listen with eyes closed before sleeping" : "Escucha con los ojos cerrados antes de dormir"}
                     </p>
                   </div>
                 </div>
                 <span className="px-2.5 py-1 rounded-full bg-yellow-400 text-yellow-950 font-display font-black text-[10px] uppercase">
-                  NUEVO
+                  {locale === "en" ? "NEW" : "NUEVO"}
                 </span>
               </div>
 
@@ -351,7 +355,9 @@ export default function Home() {
                     <span className="text-2xl">{audioStory.coverEmoji}</span>
                     <div>
                       <h4 className="font-display font-bold text-xs">{audioStory.title}</h4>
-                      <span className="text-[10px] text-white/80 font-body">⏱ 10 min • Sonido de bosque y arpa</span>
+                      <span className="text-[10px] text-white/80 font-body">
+                        {locale === "en" ? "⏱ 10 min • Forest & harp sounds" : "⏱ 10 min • Sonido de bosque y arpa"}
+                      </span>
                     </div>
                   </div>
                   <span className="w-8 h-8 rounded-full bg-white text-[#0284C7] flex items-center justify-center font-display font-bold text-xs shadow-sm">
@@ -363,8 +369,8 @@ export default function Home() {
 
             {/* Fila 4: Aventuras y Valores */}
             <VooksSectionRow
-              title="Aventuras de Valentía y Empatía"
-              subtitle="Decisiones que despiertan el gran corazón de los niños"
+              title={t.sections.forestTitle}
+              subtitle={t.sections.forestSub}
               stories={valueStories}
               isNightMode={isNightMode}
               isPro={isPro}
@@ -381,17 +387,17 @@ export default function Home() {
             >
               <div className="space-y-1 max-w-[240px]">
                 <span className="px-2.5 py-0.5 rounded-full bg-white/20 text-[10px] font-display font-bold uppercase tracking-wider">
-                  Membresía Familiar Pro
+                  {t.pro.badge}
                 </span>
                 <h4 className="font-display font-bold text-base leading-tight">
-                  Cientos de Cuentos que a tus Hijos les Encantarán
+                  {t.bannerPro.title}
                 </h4>
                 <p className="text-[11px] text-white/90 font-body">
-                  Biblioteca ilimitada, multi-hijo y creador mágico. Prueba 7 días gratis.
+                  {t.bannerPro.subtitle}
                 </p>
               </div>
               <span className="btn-toy-coral px-3.5 py-2.5 rounded-2xl bg-white text-storybook-coral hover:bg-[#FFF5EB] font-display font-extrabold text-xs shrink-0 shadow-md">
-                Ver Pro →
+                {t.bannerPro.explore}
               </span>
             </div>
           ) : null}
